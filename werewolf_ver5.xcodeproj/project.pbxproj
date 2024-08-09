@@ -1,0 +1,411 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */; };
+		1749BD1A2BEBB9E6005E9560 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1749BD192BEBB9E6005E9560 /* Assets.xcassets */; };
+		1749BD252BEBBA9D005E9560 /* BeforeGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */; };
+		1749BD272BEBBABB005E9560 /* HomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD262BEBBABB005E9560 /* HomeScreenView.swift */; };
+		1749BD292BEBBAD7005E9560 /* GameSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD282BEBBAD7005E9560 /* GameSettingView.swift */; };
+		1749BD2B2BEBBAE9005E9560 /* Theme_Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD2A2BEBBAE9005E9560 /* Theme_Config.swift */; };
+		1749BD2D2BEBBAFD005E9560 /* CardViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD2C2BEBBAFD005E9560 /* CardViews.swift */; };
+		1749BD302BEBBB33005E9560 /* AssignRoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */; };
+		1749BD322BEBBB44005E9560 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD312BEBBB44005E9560 /* ContentView.swift */; };
+		1749BD342BEBBB5A005E9560 /* EachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD332BEBBB5A005E9560 /* EachView.swift */; };
+		1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */; };
+		1749BD382BEBBB80005E9560 /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD372BEBBB80005E9560 /* GameSettings.swift */; };
+		1749BD3A2BEBBB97005E9560 /* GameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD392BEBBB97005E9560 /* GameViews.swift */; };
+		1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */; };
+		1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1749BD102BEBB9E5005E9560 /* werewolf_ver5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = werewolf_ver5.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = werewolf_ver5App.swift; sourceTree = "<group>"; };
+		1749BD192BEBB9E6005E9560 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeGameView.swift; sourceTree = "<group>"; };
+		1749BD262BEBBABB005E9560 /* HomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenView.swift; sourceTree = "<group>"; };
+		1749BD282BEBBAD7005E9560 /* GameSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettingView.swift; sourceTree = "<group>"; };
+		1749BD2A2BEBBAE9005E9560 /* Theme_Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme_Config.swift; sourceTree = "<group>"; };
+		1749BD2C2BEBBAFD005E9560 /* CardViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViews.swift; sourceTree = "<group>"; };
+		1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignRoleView.swift; sourceTree = "<group>"; };
+		1749BD312BEBBB44005E9560 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1749BD332BEBBB5A005E9560 /* EachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EachView.swift; sourceTree = "<group>"; };
+		1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraModifiers.swift; sourceTree = "<group>"; };
+		1749BD372BEBBB80005E9560 /* GameSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettings.swift; sourceTree = "<group>"; };
+		1749BD392BEBBB97005E9560 /* GameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViews.swift; sourceTree = "<group>"; };
+		1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightTimeView.swift; sourceTree = "<group>"; };
+		1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayingView.swift; sourceTree = "<group>"; };
+		1749BD3F2BEBBC86005E9560 /* sample_video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = sample_video.mp4; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		1749BD0D2BEBB9E5005E9560 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		1749BD072BEBB9E5005E9560 = {
+			isa = PBXGroup;
+			children = (
+				1749BD122BEBB9E5005E9560 /* werewolf_ver5 */,
+				1749BD112BEBB9E5005E9560 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1749BD112BEBB9E5005E9560 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD102BEBB9E5005E9560 /* werewolf_ver5.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		1749BD122BEBB9E5005E9560 /* werewolf_ver5 */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */,
+				1749BD2E2BEBBB1A005E9560 /* main */,
+				1749BD232BEBBA80005E9560 /* home_sctreen */,
+				1749BD192BEBB9E6005E9560 /* Assets.xcassets */,
+				1749BD3F2BEBBC86005E9560 /* sample_video.mp4 */,
+				1749BD402BEBBE4E005E9560 /* Preview Content */,
+			);
+			path = werewolf_ver5;
+			sourceTree = "<group>";
+		};
+		1749BD232BEBBA80005E9560 /* home_sctreen */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */,
+				1749BD262BEBBABB005E9560 /* HomeScreenView.swift */,
+				1749BD282BEBBAD7005E9560 /* GameSettingView.swift */,
+				1749BD2A2BEBBAE9005E9560 /* Theme_Config.swift */,
+				1749BD2C2BEBBAFD005E9560 /* CardViews.swift */,
+			);
+			path = home_sctreen;
+			sourceTree = "<group>";
+		};
+		1749BD2E2BEBBB1A005E9560 /* main */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */,
+				1749BD312BEBBB44005E9560 /* ContentView.swift */,
+				1749BD332BEBBB5A005E9560 /* EachView.swift */,
+				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
+				1749BD372BEBBB80005E9560 /* GameSettings.swift */,
+				1749BD392BEBBB97005E9560 /* GameViews.swift */,
+				1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */,
+				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
+			);
+			path = main;
+			sourceTree = "<group>";
+		};
+		1749BD402BEBBE4E005E9560 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1749BD0F2BEBB9E5005E9560 /* werewolf_ver5 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1749BD202BEBB9E6005E9560 /* Build configuration list for PBXNativeTarget "werewolf_ver5" */;
+			buildPhases = (
+				1749BD0C2BEBB9E5005E9560 /* Sources */,
+				1749BD0D2BEBB9E5005E9560 /* Frameworks */,
+				1749BD0E2BEBB9E5005E9560 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = werewolf_ver5;
+			productName = werewolf_ver5;
+			productReference = 1749BD102BEBB9E5005E9560 /* werewolf_ver5.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		1749BD082BEBB9E5005E9560 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1510;
+				LastUpgradeCheck = 1510;
+				TargetAttributes = {
+					1749BD0F2BEBB9E5005E9560 = {
+						CreatedOnToolsVersion = 15.1;
+					};
+				};
+			};
+			buildConfigurationList = 1749BD0B2BEBB9E5005E9560 /* Build configuration list for PBXProject "werewolf_ver5" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 1749BD072BEBB9E5005E9560;
+			productRefGroup = 1749BD112BEBB9E5005E9560 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1749BD0F2BEBB9E5005E9560 /* werewolf_ver5 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		1749BD0E2BEBB9E5005E9560 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1749BD1A2BEBB9E6005E9560 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		1749BD0C2BEBB9E5005E9560 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1749BD252BEBBA9D005E9560 /* BeforeGameView.swift in Sources */,
+				1749BD302BEBBB33005E9560 /* AssignRoleView.swift in Sources */,
+				1749BD3A2BEBBB97005E9560 /* GameViews.swift in Sources */,
+				1749BD2B2BEBBAE9005E9560 /* Theme_Config.swift in Sources */,
+				1749BD342BEBBB5A005E9560 /* EachView.swift in Sources */,
+				1749BD292BEBBAD7005E9560 /* GameSettingView.swift in Sources */,
+				1749BD322BEBBB44005E9560 /* ContentView.swift in Sources */,
+				1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */,
+				1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */,
+				1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */,
+				1749BD382BEBBB80005E9560 /* GameSettings.swift in Sources */,
+				1749BD2D2BEBBAFD005E9560 /* CardViews.swift in Sources */,
+				1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */,
+				1749BD272BEBBABB005E9560 /* HomeScreenView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1749BD1E2BEBB9E6005E9560 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		1749BD1F2BEBB9E6005E9560 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		1749BD212BEBB9E6005E9560 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"werewolf_ver5/Preview Content\"";
+				DEVELOPMENT_TEAM = TPDN26498X;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.masa.werewolf-ver5";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		1749BD222BEBB9E6005E9560 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"werewolf_ver5/Preview Content\"";
+				DEVELOPMENT_TEAM = TPDN26498X;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.masa.werewolf-ver5";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1749BD0B2BEBB9E5005E9560 /* Build configuration list for PBXProject "werewolf_ver5" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1749BD1E2BEBB9E6005E9560 /* Debug */,
+				1749BD1F2BEBB9E6005E9560 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1749BD202BEBB9E6005E9560 /* Build configuration list for PBXNativeTarget "werewolf_ver5" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1749BD212BEBB9E6005E9560 /* Debug */,
+				1749BD222BEBB9E6005E9560 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 1749BD082BEBB9E5005E9560 /* Project object */;
+}
