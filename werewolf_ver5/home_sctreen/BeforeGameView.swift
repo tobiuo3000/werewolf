@@ -22,7 +22,7 @@ struct BeforeGameView: View {
 				Button(action: {
 					showAllText.toggle()
 				}) {
-					Text("文章を表示 a")
+					Text("文章を表示 abcd")
 					Image(systemName: "arrow.triangle.2.circlepath.circle")
 				}
 				.textFrameSimple()
