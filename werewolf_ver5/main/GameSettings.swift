@@ -180,6 +180,7 @@ class GameProgress: ObservableObject {
 	@Published var players: [Player] = []
 	@Published var roundNumber: Int = 0
 	@Published var discussion_time: Int = 10
+	@Published var game_start_flag: Bool = false
 	@Published var stage: String = "夜時間" // 例: "夜時間", "議論時間"など
 	@Published var game_result: Int = 0
 	

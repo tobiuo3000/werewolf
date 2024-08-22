@@ -24,7 +24,6 @@ struct HomeScreenView: View {
 	@State private var offset1: CGFloat = 100
 	@State private var offset2: CGFloat = 100
 	@State private var offset3: CGFloat = 100
-	@State var gameStartFlag = false
 	@State var showingSettings = false
 	var thresholdIcon: CGFloat
 	
@@ -55,7 +54,7 @@ struct HomeScreenView: View {
 		ZStack{
 			VStack(spacing: 0){
 				
-				HomeScreenMenu(showingSettings: $showingSettings, gameStartFlag: $gameStartFlag)
+				HomeScreenMenu(showingSettings: $showingSettings)
 				
 				TabView(selection: $currentTab) {
 					GameSettingView()
@@ -67,7 +66,7 @@ struct HomeScreenView: View {
 							self.offset1 = offset
 						}
 					
-					BeforeGameView(beforeGameViewOffset: $offset2, gameStartFlag: $gameStartFlag)
+					BeforeGameView(beforeGameViewOffset: $offset2)
 						.tag(1)
 						.overlay(
 							OffsetProxy()
@@ -88,7 +87,7 @@ struct HomeScreenView: View {
 				.tabViewStyle(.page(indexDisplayMode: .never))
 				.animation(.easeInOut, value: currentTab)
 				
-				ScrollBarView(currentTab: $currentTab, offset1: $offset1, offset2: $offset2, offset3: $offset3, gameStartFlag: $gameStartFlag, iconOffset1: iconOffset1, iconOffset2: iconOffset2, iconOffset3: iconOffset3)
+				ScrollBarView(currentTab: $currentTab, offset1: $offset1, offset2: $offset2, offset3: $offset3, iconOffset1: iconOffset1, iconOffset2: iconOffset2, iconOffset3: iconOffset3)
 					.frame(height: 50)
 			}
 			.disabled(showingSettings)
@@ -133,11 +132,11 @@ struct SettingsView: View {
 
 struct HomeScreenMenu: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
 	@State var isGearPushed = false
 	@State var isAlertShown = false
 	@State var gearImageName = "gearshape"
 	@Binding var showingSettings: Bool
-	@Binding var gameStartFlag: Bool
 	
 	var body: some View{
 		HStack{
@@ -176,12 +175,12 @@ struct HomeScreenMenu: View{
 		}
 		.padding()
 		.background(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.5))
-		.uiAnimationRToL(animationFlag: $gameStartFlag, delay: 0.2)
+		.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.2)
 		
 		Rectangle()  // a bar below TITLE, CONFIG UI
 			.foregroundColor(Color(red: 0.95, green: 0.9, blue: 0.80, opacity: 1.0))
 			.frame(height: 2)
-			.uiAnimationRToL(animationFlag: $gameStartFlag, delay: 0.1)
+			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.1)
 		
 	}
 }
@@ -189,11 +188,11 @@ struct HomeScreenMenu: View{
 
 struct ScrollBarView: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var currentTab: Int
 	@Binding var offset1: CGFloat
 	@Binding var offset2: CGFloat
 	@Binding var offset3: CGFloat
-	@Binding var gameStartFlag: Bool
 	var iconOffset1: CGFloat
 	var iconOffset2: CGFloat
 	var iconOffset3: CGFloat
@@ -261,7 +260,7 @@ struct ScrollBarView: View{
 				.frame(width: 30, height: 30)
 				.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffset3)
 		}
-		.uiAnimationRToL(animationFlag: $gameStartFlag, delay: 0.4)
+		.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.4)
 	}
 }
 

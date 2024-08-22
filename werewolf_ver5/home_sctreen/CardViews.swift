@@ -4,7 +4,6 @@ struct CardGalleryView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@Binding var beforeGameViewOffset: CGFloat
 	@Binding var showAllText: Bool
-	@Binding var gameStartFlag: Bool
 	private let spacing: CGFloat = 8
 	private let numberOfColumn: CGFloat = 4
 	
@@ -22,7 +21,7 @@ struct CardGalleryView: View {
 							ForEach(0..<numberOfRows, id: \.self) { rowIndex in
 								HStack(spacing: spacing) {
 									ForEach(0..<numberOfImagesInRow, id: \.self) { columnIndex in
-										CardFlippingAnimation(showAllText: $showAllText, gameStartFlag: $gameStartFlag, beforeGameViewOffset: $beforeGameViewOffset, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
+										CardFlippingAnimation(showAllText: $showAllText, beforeGameViewOffset: $beforeGameViewOffset, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
 									}
 								}
 							}
@@ -41,7 +40,6 @@ struct CardFlippingAnimation: View{
 	@State var cardScale: CGFloat = 1.0
 	@State var isCardFlipped: Bool = false
 	@Binding var showAllText: Bool
-	@Binding var gameStartFlag: Bool
 	@Binding var beforeGameViewOffset: CGFloat
 	
 	let rowIndex: Int
@@ -67,7 +65,7 @@ struct CardFlippingAnimation: View{
 		}
 		.scaleEffect(cardScale)
 		.cardAnimationLToR(beforeGameViewOffset: $beforeGameViewOffset, imageIndex: imageIndex)
-		.cardFlippedAndPiled(gameStartFlag: $gameStartFlag, isCardFlipped: $isCardFlipped, cardScale: $cardScale, imageIndex: imageIndex)
+		.cardFlippedAndPiled(isCardFlipped: $isCardFlipped, cardScale: $cardScale, imageIndex: imageIndex)
 	}
 }
 

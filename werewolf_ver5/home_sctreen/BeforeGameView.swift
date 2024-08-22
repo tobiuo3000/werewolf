@@ -6,7 +6,6 @@ struct BeforeGameView: View {
 	@EnvironmentObject var gameProgress: GameProgress
 	@State private var isAlertShown = false
 	@Binding var beforeGameViewOffset: CGFloat
-	@Binding var gameStartFlag: Bool
 	@State var showAllText: Bool = false
 	
 	private let columns: [GridItem] = Array(repeating: .init(), count: 2)
@@ -15,7 +14,7 @@ struct BeforeGameView: View {
 	
 	var body: some View {
 		VStack{
-			CardGalleryView(beforeGameViewOffset: $beforeGameViewOffset, showAllText: $showAllText, gameStartFlag: $gameStartFlag)
+			CardGalleryView(beforeGameViewOffset: $beforeGameViewOffset, showAllText: $showAllText)
 
 			HStack{
 				Spacer()
@@ -28,7 +27,7 @@ struct BeforeGameView: View {
 				.textFrameSimple()
 				.myButtonBounce()
 			}
-			.uiAnimationRToL(animationFlag: $gameStartFlag, delay: 0.2)
+			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.2)
 			
 			Button("ゲームスタート"){
 				isAlertShown = true
@@ -39,17 +38,17 @@ struct BeforeGameView: View {
 				Button("ゲームスタート"){
 					gameProgress.players = gameStatusData.players_CONFIG
 					gameProgress.assignRoles(wolfNum: gameStatusData.werewolf_Count_CONFIG, seerNum: gameStatusData.seer_Count_CONFIG)
-					gameStartFlag = true
+					gameProgress.game_start_flag = true
 					showAllText = false
 					DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
 						gameStatusData.game_status = .gameScreen
-						gameStartFlag = false
+						gameProgress.game_start_flag = false
 					}
 				}
 				Button("キャンセル", role: .cancel){
 				}
 			}
-			.uiAnimationRToL(animationFlag: $gameStartFlag, delay: 0.3)
+			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
 			
 			Spacer()
 		}

@@ -180,8 +180,8 @@ struct CardFlippingWhenAssigningRole: ViewModifier{
 
 
 struct CardFlippedAndPiled: ViewModifier{
+	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var isCardFlipped: Bool
-	@Binding var gameStartFlag: Bool
 	@Binding var cardScale: CGFloat
 	var imageIndex: Int
 	
@@ -189,7 +189,7 @@ struct CardFlippedAndPiled: ViewModifier{
 		ZStack{
 			content
 				.rotation3DEffect(Angle(degrees: isCardFlipped ? 180 : 360), axis: (x: 0, y: 1, z: 0))
-				.onChange(of: gameStartFlag){new_value in
+				.onChange(of: gameProgress.game_start_flag){new_value in
 					performAnimation(imageIndex: imageIndex)
 				}
 		}
@@ -301,8 +301,8 @@ extension View {
 		self.modifier(CardFlippingWhenAssigningRole(isCardFlipped: isCardFlipped, isCardTapped: isCardTapped, isRoleNameShown: isRoleNameShown, isRoleNameChecked: isRoleNameChecked, cardScale: cardScale, textScale: textScale, textOpacity: textOpacity))
 	}
 	
-	func cardFlippedAndPiled(gameStartFlag: Binding<Bool>, isCardFlipped: Binding<Bool>, cardScale: Binding<CGFloat>, imageIndex: Int) -> some View {
-		self.modifier(CardFlippedAndPiled(isCardFlipped: isCardFlipped, gameStartFlag: gameStartFlag, cardScale: cardScale, imageIndex: imageIndex))
+	func cardFlippedAndPiled(isCardFlipped: Binding<Bool>, cardScale: Binding<CGFloat>, imageIndex: Int) -> some View {
+		self.modifier(CardFlippedAndPiled(isCardFlipped: isCardFlipped, cardScale: cardScale, imageIndex: imageIndex))
 	}
 	
 	func cardAnimationLToR(beforeGameViewOffset: Binding<CGFloat>, imageIndex: Int) -> some View {
