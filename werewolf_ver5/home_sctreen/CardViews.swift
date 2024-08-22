@@ -93,7 +93,6 @@ struct CardView: View {
 							showText.toggle()
 						}
 					}
-					.myButtonBounce()
 				if showText == true{
 					VStack{
 						Spacer()
@@ -111,6 +110,7 @@ struct CardView: View {
 					.frame(width: imageWidth, height: imageHeight)
 			}
 		}
+		.myButtonBounce()
 	}
 }
 

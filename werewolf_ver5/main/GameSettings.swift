@@ -149,7 +149,6 @@ class GameStatusData: ObservableObject {
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存
-		// ^^^^
 		if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
 			if let mainWindow = windowScene.windows.first {
 				self.fullScreenSize = mainWindow.bounds.size

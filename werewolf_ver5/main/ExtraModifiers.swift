@@ -39,7 +39,6 @@ struct TextBackgroundModifier: ViewModifier {
 
 
 struct ButtonAnimationModifier: ViewModifier {
-	@EnvironmentObject var GameStatusData: GameStatusData
 	@State private var isPressed = false
 	
 	func body(content: Content) -> some View {
