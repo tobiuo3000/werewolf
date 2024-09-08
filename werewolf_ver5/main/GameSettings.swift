@@ -28,6 +28,22 @@ enum AppTheme: String, CaseIterable {
 		}
 	}
 	
+	var transitionBackground: String {
+		switch self {
+		case .std_theme: return "large_dark_forest"
+		case .simple_theme: return "Theme2_TitleScreen"
+		case .theme3: return "Theme3_TitleScreen"
+		}
+	}
+	
+	var loghouseBackground: String {
+		switch self {
+		case .std_theme: return "loghouse_1"
+		case .simple_theme: return "Theme2_TitleScreen"
+		case .theme3: return "Theme3_TitleScreen"
+		}
+	}
+	
 	var cardBackSide: String {
 		switch self {
 		case .std_theme: return "card_backside"

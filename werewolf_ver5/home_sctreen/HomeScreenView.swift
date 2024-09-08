@@ -18,6 +18,78 @@ struct OffsetKey: PreferenceKey {
 }
 
 
+struct LoopTransitionBackGround: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@State var offset: CGSize
+	@State private var opacity: Double = 1.0
+	@State private var count: Int = 0
+	
+	var body: some View{
+		HStack{}
+		.onAppear(){
+			if count<1 {
+				startScrolling()
+				count = 1
+			}
+		}
+		
+		ZStack{
+			HStack(spacing: 0){
+				ForEach(0...12, id: \.self){ _ in
+					Image(gameStatusData.currentTheme.transitionBackground)
+						.resizable()
+						.ignoresSafeArea()
+						.frame(width: gameStatusData.fullScreenSize.width,
+							   height: gameStatusData.fullScreenSize.height)
+						.offset(offset)
+				}
+			}
+			
+			Rectangle()
+				.fill(Color.black)
+				.opacity(opacity)
+				.ignoresSafeArea()
+		}
+	}
+	
+	func startScrolling() {
+		withAnimation(Animation.easeIn(duration: 1.4).repeatForever(autoreverses: false)) {
+			offset.width =  -gameStatusData.fullScreenSize.width*12
+		}
+		withAnimation(Animation.easeInOut(duration: 0.2)) {
+			opacity = 0
+		}
+		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+			withAnimation(.easeInOut(duration: 0.4)) {
+				opacity = 1.0
+			}
+		}
+	}
+}
+
+/*
+struct UIGatheringHomeScreen: View{
+	
+	var body: some View{
+		
+	}
+}
+*/
+
+struct BeforeHomeScreen: View {
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@State var isAnimeDone: Bool = false
+	
+	var body: some View {
+		ZStack {
+			LoopTransitionBackGround(offset: CGSize(width: 0,
+													height: 0))
+			
+		}
+	}
+}
+
+
 struct HomeScreenView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var currentTab = 0
@@ -53,7 +125,6 @@ struct HomeScreenView: View {
 	var body: some View {
 		ZStack{
 			VStack(spacing: 0){
-				
 				HomeScreenMenu(showingSettings: $showingSettings)
 				
 				TabView(selection: $currentTab) {

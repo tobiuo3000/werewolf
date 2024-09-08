@@ -179,8 +179,9 @@ struct CardFlippingWhenAssigningRole: ViewModifier{
 }
 
 
-struct CardFlippedAndPiled: ViewModifier{
+struct CardFlippedAndRtoL: ViewModifier{
 	@EnvironmentObject var gameProgress: GameProgress
+	@State var card_offset: CGSize = CGSize(width: 0, height: 0)
 	@Binding var isCardFlipped: Bool
 	@Binding var cardScale: CGFloat
 	var imageIndex: Int
@@ -188,6 +189,7 @@ struct CardFlippedAndPiled: ViewModifier{
 	func body(content: Content) -> some View {
 		ZStack{
 			content
+				.offset(card_offset)
 				.rotation3DEffect(Angle(degrees: isCardFlipped ? 180 : 360), axis: (x: 0, y: 1, z: 0))
 				.onChange(of: gameProgress.game_start_flag){new_value in
 					performAnimation(imageIndex: imageIndex)
@@ -196,18 +198,23 @@ struct CardFlippedAndPiled: ViewModifier{
 	}
 	private func performAnimation(imageIndex: Int) {
 		let delay = CGFloat(imageIndex) * 0.05
-	
-		
-		withAnimation(.easeInOut(duration: 0.1 + delay)) {
+		let first_duration = CGFloat(0.1)
+		let second_duration = CGFloat(0.2)
+		let duration_untill_flipping = CGFloat(0.3)
+		let duration_before_RtoL = 1.0
+		let duration_RtoL = 0.60
+		withAnimation(.easeInOut(duration: first_duration + delay)) {
 			cardScale = 1.2 // 最初に小さくバウンド
 		}
-		withAnimation(.easeInOut(duration: 0.1).delay(0.1 + delay)) {
+		withAnimation(.easeInOut(duration: first_duration).delay(first_duration + delay)) {
 			cardScale = 1.0 // 最初に小さくバウンド
 		}
-		withAnimation(.easeInOut(duration: 0.3).delay(0.2 + delay)){
+		withAnimation(.easeInOut(duration: duration_untill_flipping).delay(second_duration + delay)){
 			self.isCardFlipped.toggle()
 		}
-		
+		withAnimation(.easeInOut(duration: duration_RtoL).delay(duration_before_RtoL + delay)){
+			self.card_offset = CGSize(width: 400, height: 0)
+		}
 	}
 	
 	
@@ -249,7 +256,7 @@ struct UIAnimationRToL: ViewModifier {
 struct UIAnimationLToR: ViewModifier {
 	@Binding var animationFlag: Bool
 	@State var offset: CGFloat = -400
-	var delay: CGFloat
+	var delay: CGFloat = 0
 	
 	func body(content: Content) -> some View {
 		ZStack{
@@ -302,7 +309,7 @@ extension View {
 	}
 	
 	func cardFlippedAndPiled(isCardFlipped: Binding<Bool>, cardScale: Binding<CGFloat>, imageIndex: Int) -> some View {
-		self.modifier(CardFlippedAndPiled(isCardFlipped: isCardFlipped, cardScale: cardScale, imageIndex: imageIndex))
+		self.modifier(CardFlippedAndRtoL(isCardFlipped: isCardFlipped, cardScale: cardScale, imageIndex: imageIndex))
 	}
 	
 	func cardAnimationLToR(beforeGameViewOffset: Binding<CGFloat>, imageIndex: Int) -> some View {
@@ -313,7 +320,7 @@ extension View {
 		self.modifier(UIAnimationRToL(animationFlag: animationFlag, delay: delay))
 	}
 	
-	func uiAnimationLToR(animationFlag: Binding<Bool>, delay: CGFloat) -> some View {
+	func uiAnimationLToR(animationFlag: Binding<Bool>, delay: CGFloat = 0) -> some View {
 		self.modifier(UIAnimationRToL(animationFlag: animationFlag, delay: delay))
 	}
 }

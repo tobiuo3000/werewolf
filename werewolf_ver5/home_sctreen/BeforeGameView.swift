@@ -5,8 +5,8 @@ struct BeforeGameView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@State private var isAlertShown = false
-	@Binding var beforeGameViewOffset: CGFloat
 	@State var showAllText: Bool = false
+	@Binding var beforeGameViewOffset: CGFloat
 	
 	private let columns: [GridItem] = Array(repeating: .init(), count: 2)
 	private let cardScale = 0.3

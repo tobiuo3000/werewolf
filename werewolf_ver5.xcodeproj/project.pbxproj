@@ -76,6 +76,7 @@
 			children = (
 				1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */,
 				1749BD2E2BEBBB1A005E9560 /* main */,
+				177585212C7EE49C0007D386 /* game_views */,
 				1749BD232BEBBA80005E9560 /* home_sctreen */,
 				1749BD192BEBB9E6005E9560 /* Assets.xcassets */,
 				1749BD3F2BEBBC86005E9560 /* sample_video.mp4 */,
@@ -87,8 +88,8 @@
 		1749BD232BEBBA80005E9560 /* home_sctreen */ = {
 			isa = PBXGroup;
 			children = (
-				1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */,
 				1749BD262BEBBABB005E9560 /* HomeScreenView.swift */,
+				1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */,
 				1749BD282BEBBAD7005E9560 /* GameSettingView.swift */,
 				1749BD2A2BEBBAE9005E9560 /* Theme_Config.swift */,
 				1749BD2C2BEBBAFD005E9560 /* CardViews.swift */,
@@ -99,13 +100,9 @@
 		1749BD2E2BEBBB1A005E9560 /* main */ = {
 			isa = PBXGroup;
 			children = (
-				1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */,
 				1749BD312BEBBB44005E9560 /* ContentView.swift */,
-				1749BD332BEBBB5A005E9560 /* EachView.swift */,
 				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
 				1749BD372BEBBB80005E9560 /* GameSettings.swift */,
-				1749BD392BEBBB97005E9560 /* GameViews.swift */,
-				1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */,
 				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
 			);
 			path = main;
@@ -116,6 +113,17 @@
 			children = (
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		177585212C7EE49C0007D386 /* game_views */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */,
+				1749BD392BEBBB97005E9560 /* GameViews.swift */,
+				1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */,
+				1749BD332BEBBB5A005E9560 /* EachView.swift */,
+			);
+			path = game_views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
