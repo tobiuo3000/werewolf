@@ -153,6 +153,8 @@ class GameStatusData: ObservableObject {
 	@Published var players_CONFIG: [Player] = []
 	@Published var roundNumber_CONFIG: Int = 0
 	@Published var view_status_CONFIG: Int = 0
+	@Published var discussion_minutes_CONFIG: Int = 0
+	@Published var discussion_seconds_CONFIG: Int = 0
 	@Published var discussion_time_CONFIG: Int = 30
 	@Published var villager_Count_CONFIG: Int = 0
 	@Published var werewolf_Count_CONFIG: Int = 1
@@ -178,6 +180,10 @@ class GameStatusData: ObservableObject {
 	
 	func init_player_CONFIG(){
 		self.players_CONFIG = []
+	}
+	
+	func calcDiscussionTime(){
+		self.discussion_time_CONFIG = self.discussion_seconds_CONFIG + 60 * self.discussion_minutes_CONFIG
 	}
 }
 

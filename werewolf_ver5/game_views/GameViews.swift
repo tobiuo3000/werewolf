@@ -52,6 +52,9 @@ struct GameView: View {
 				
 			}else if TempView == .Vote_time{
 				VoteTime(TempView: $TempView, player_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
+					.onAppear(){
+						gameProgress.discussion_time = gameStatusData.discussion_time_CONFIG
+					}
 				
 			}else if TempView == .Vote_result{
 				VoteResult(TempView: $TempView)

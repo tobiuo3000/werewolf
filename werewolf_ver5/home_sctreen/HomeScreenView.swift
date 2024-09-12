@@ -9,6 +9,7 @@ struct OffsetProxy: View {
 	}
 }
 
+
 struct OffsetKey: PreferenceKey {
 	static var defaultValue: CGFloat = 0
 	
@@ -56,7 +57,7 @@ struct LoopTransitionBackGround: View{
 		withAnimation(Animation.easeIn(duration: 1.4).repeatForever(autoreverses: false)) {
 			offset.width =  -gameStatusData.fullScreenSize.width*12
 		}
-		withAnimation(Animation.easeInOut(duration: 0.2)) {
+		withAnimation(Animation.easeInOut(duration: 0.4)) {
 			opacity = 0
 		}
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -67,6 +68,7 @@ struct LoopTransitionBackGround: View{
 	}
 }
 
+
 /*
 struct UIGatheringHomeScreen: View{
 	
@@ -76,46 +78,33 @@ struct UIGatheringHomeScreen: View{
 }
 */
 
-struct BeforeHomeScreen: View {
-	@EnvironmentObject var gameStatusData: GameStatusData
-	@State var isAnimeDone: Bool = false
-	
-	var body: some View {
-		ZStack {
-			LoopTransitionBackGround(offset: CGSize(width: 0,
-													height: 0))
-			
-		}
-	}
-}
-
 
 struct HomeScreenView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
-	@State var currentTab = 0
-	@State private var offset1: CGFloat = 100
-	@State private var offset2: CGFloat = 100
-	@State private var offset3: CGFloat = 100
+	@State var currentTab = 1  // decide first appearance tab
+	@State private var offsetTab0: CGFloat = -1000
+	@State private var offsetTab1: CGFloat = 0
+	@State private var offsetTab2: CGFloat = 1000
 	@State var showingSettings = false
 	var thresholdIcon: CGFloat
 	
-	var iconOffset1: CGFloat {
-		if (-thresholdIcon <= offset1) && (offset1 <= thresholdIcon) {
-			return (abs(offset1)/thresholdIcon)*15 - 15
+	var iconOffsetTab0: CGFloat {
+		if (-thresholdIcon <= offsetTab0) && (offsetTab0 <= thresholdIcon) {
+			return (abs(offsetTab0)/thresholdIcon)*15 - 15
 		} else {
 			return 0
 		}
 	}
-	var iconOffset2: CGFloat {
-		if (-thresholdIcon <= offset2) && (offset2 <= thresholdIcon) {
-			return (abs(offset2)/thresholdIcon)*15 - 15
+	var iconOffsetTab1: CGFloat {
+		if (-thresholdIcon <= offsetTab1) && (offsetTab1 <= thresholdIcon) {
+			return (abs(offsetTab1)/thresholdIcon)*15 - 15
 		} else {
 			return 0
 		}
 	}
-	var iconOffset3: CGFloat {
-		if (-thresholdIcon <= offset3) && (offset3 <= thresholdIcon) {
-			return (abs(offset3)/thresholdIcon)*15 - 15
+	var iconOffsetTab2: CGFloat {
+		if (-thresholdIcon <= offsetTab2) && (offsetTab2 <= thresholdIcon) {
+			return (abs(offsetTab2)/thresholdIcon)*15 - 15
 		} else {
 			return 0
 		}
@@ -134,16 +123,16 @@ struct HomeScreenView: View {
 							OffsetProxy()
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
-							self.offset1 = offset
+							self.offsetTab0 = offset
 						}
 					
-					BeforeGameView(beforeGameViewOffset: $offset2)
+					BeforeGameView(beforeGameViewOffset: $offsetTab1)
 						.tag(1)
 						.overlay(
 							OffsetProxy()
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
-							self.offset2 = offset
+							self.offsetTab1 = offset
 						}
 					
 					Theme_Config()
@@ -152,13 +141,13 @@ struct HomeScreenView: View {
 							OffsetProxy()
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
-							self.offset3 = offset
+							self.offsetTab2 = offset
 						}
 				}
 				.tabViewStyle(.page(indexDisplayMode: .never))
 				.animation(.easeInOut, value: currentTab)
 				
-				ScrollBarView(currentTab: $currentTab, offset1: $offset1, offset2: $offset2, offset3: $offset3, iconOffset1: iconOffset1, iconOffset2: iconOffset2, iconOffset3: iconOffset3)
+				ScrollBarView(currentTab: $currentTab, offsetTab0: $offsetTab0, offsetTab1: $offsetTab1, offsetTab2: $offsetTab2, iconOffsetTab0: iconOffsetTab0, iconOffsetTab1: iconOffsetTab1, iconOffsetTab2: iconOffsetTab2)
 					.frame(height: 50)
 			}
 			.disabled(showingSettings)
@@ -176,7 +165,6 @@ struct HomeScreenView: View {
 		
 	}
 }
-
 
 
 struct SettingsView: View {
@@ -199,8 +187,6 @@ struct SettingsView: View {
 }
 
 
-
-
 struct HomeScreenMenu: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
@@ -219,11 +205,11 @@ struct HomeScreenMenu: View{
 					.frame(height: 30)
 					.font(.title)
 			}
+			.textFrameSimple()
 			.alert("タイトルに戻りますか？", isPresented: $isAlertShown){
 				Button("はい"){
 					gameStatusData.game_status = .titleScreen
 					isAlertShown = false
-					
 				}
 				Button("いいえ", role:.cancel){}
 			}
@@ -261,12 +247,12 @@ struct ScrollBarView: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var currentTab: Int
-	@Binding var offset1: CGFloat
-	@Binding var offset2: CGFloat
-	@Binding var offset3: CGFloat
-	var iconOffset1: CGFloat
-	var iconOffset2: CGFloat
-	var iconOffset3: CGFloat
+	@Binding var offsetTab0: CGFloat
+	@Binding var offsetTab1: CGFloat
+	@Binding var offsetTab2: CGFloat
+	var iconOffsetTab0: CGFloat
+	var iconOffsetTab1: CGFloat
+	var iconOffsetTab2: CGFloat
 	
 	var body: some View{
 		ZStack{
@@ -294,44 +280,82 @@ struct ScrollBarView: View{
 			}
 			
 			
-			if -(gameStatusData.fullScreenSize.width/2) < offset1 {  // -392.66 < offset < 392.66
+			if -(gameStatusData.fullScreenSize.width/2) < offsetTab0 {  // -392.66 < offset < 392.66
 				
 				Rectangle()
 					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				//.position(x: (GameStatusData.fullScreenSize.width / 4))
-					.offset(x: -(gameStatusData.fullScreenSize.width/3) - (offset1/3))
+					.offset(x: -(gameStatusData.fullScreenSize.width/3) - (offsetTab0/3))
 				
-			}else if -(gameStatusData.fullScreenSize.width/2) < offset2{
+			}else if -(gameStatusData.fullScreenSize.width/2) < offsetTab1{
 				Rectangle()
 					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				//.position(x: (GameStatusData.fullScreenSize.width / 4))
-					.offset(x: -(offset2/3))
+					.offset(x: -(offsetTab1/3))
 			}else{
 				Rectangle()
 					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				//.position(x: (GameStatusData.fullScreenSize.width / 4))
-					.offset(x: (gameStatusData.fullScreenSize.width/3) - (offset3/3))
+					.offset(x: (gameStatusData.fullScreenSize.width/3) - (offsetTab2/3))
 			}
 			Image(systemName: "square.and.pencil")
 				.resizable()
 				.foregroundColor(.white)
 				.frame(width: 30, height: 30)
-				.offset(x: -(gameStatusData.fullScreenSize.width/6)*2, y: iconOffset1)
+				.offset(x: -(gameStatusData.fullScreenSize.width/6)*2, y: iconOffsetTab0)
 			Image(systemName: "gamecontroller")
 				.resizable()
 				.foregroundColor(.white)
 				.frame(width: 30, height: 30)
-				.offset(y: iconOffset2)
+				.offset(y: iconOffsetTab1)
 			Image(systemName: "gamecontroller")
 				.resizable()
 				.foregroundColor(.white)
 				.frame(width: 30, height: 30)
-				.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffset3)
+				.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffsetTab2)
 		}
 		.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.4)
 	}
 }
 
+
+struct BeforeHomeScreen: View {
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@State var isAnimeDone: Bool = false
+	private let delay: Double = 1.4
+	
+	var body: some View {
+		ZStack {
+			if isAnimeDone == false{
+				LoopTransitionBackGround(offset: CGSize(width: 0,
+														height: 0))
+				.onAppear(){
+					startScrolling()
+				}
+			}else{
+				ZStack{
+					Rectangle()
+						.foregroundColor(.black)
+						.ignoresSafeArea()
+					Image(gameStatusData.currentTheme.loghouseBackground)
+						.resizable()
+						.scaledToFit()
+						.ignoresSafeArea()
+						.frame(width: gameStatusData.fullScreenSize.width,
+							   height: gameStatusData.fullScreenSize.height)
+						.clipped()
+					HomeScreenView(thresholdIcon: gameStatusData.fullScreenSize.width/3)
+				}
+			}
+		}
+	}
+	
+	func startScrolling() {
+		DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+				isAnimeDone = true
+			}
+	}
+}

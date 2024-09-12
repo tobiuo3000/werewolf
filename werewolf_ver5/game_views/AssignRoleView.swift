@@ -63,7 +63,6 @@ struct OnePlayerRole: View {
 	@State private var textScale: CGFloat = 0
 	@State private var textOpacity: CGFloat = 0.0
 	
-	
 	var body: some View {
 		ScrollView{
 			VStack{

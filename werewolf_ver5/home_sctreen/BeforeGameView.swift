@@ -36,10 +36,8 @@ struct BeforeGameView: View {
 			.myButtonBounce()
 			.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
 				Button("ゲームスタート"){
-					gameProgress.players = gameStatusData.players_CONFIG
-					gameProgress.assignRoles(wolfNum: gameStatusData.werewolf_Count_CONFIG, seerNum: gameStatusData.seer_Count_CONFIG)
-					gameProgress.game_start_flag = true
-					showAllText = false
+					gameStatusData.calcDiscussionTime()
+					initiateGameProgress()
 					DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
 						gameStatusData.game_status = .gameScreen
 						gameProgress.game_start_flag = false
@@ -52,5 +50,15 @@ struct BeforeGameView: View {
 			
 			Spacer()
 		}
+	}
+	
+	func initiateGameProgress(){
+		
+		gameProgress.init_player()
+		gameProgress.players = gameStatusData.players_CONFIG  // initiate players property
+		gameProgress.discussion_time = gameStatusData.discussion_time_CONFIG
+		gameProgress.assignRoles(wolfNum: gameStatusData.werewolf_Count_CONFIG, seerNum: gameStatusData.seer_Count_CONFIG)
+		gameProgress.game_start_flag = true
+		showAllText = false
 	}
 }
