@@ -196,6 +196,7 @@ struct CardFlippedAndRtoL: ViewModifier{
 				}
 		}
 	}
+	
 	private func performAnimation(imageIndex: Int) {
 		let delay = CGFloat(imageIndex) * 0.05
 		let first_duration = CGFloat(0.1)
@@ -216,7 +217,6 @@ struct CardFlippedAndRtoL: ViewModifier{
 			self.card_offset = CGSize(width: 400, height: 0)
 		}
 	}
-	
 	
 }
 

@@ -64,7 +64,6 @@ struct NightTime: View {
 								Button(player.player_name) {
 									temp_action_target = player
 									werewolf_target = player
-									gameProgress.murder_target(target_id: temp_action_target!.id)
 									temp_action_done = true
 								}
 								.padding()
@@ -86,6 +85,7 @@ struct NightTime: View {
 					actionDone = false
 					let _ = print("\(survivors_index)\n\(gameProgress.get_num_survivors())")
 					if survivors_index+1 == gameProgress.get_num_survivors(){
+						gameProgress.murder_target(target_id: temp_action_target!.id)
 						TempView = .After_night
 					}else{
 						survivors_index += 1

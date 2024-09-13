@@ -130,7 +130,7 @@ enum gameStatus{
 	case titleScreen, homeScreen, gameScreen, gameOverScreen
 }
 
-class Player: Identifiable {
+class Player: Identifiable, NSCopying {
 	var id: UUID
 	var player_order: Int  // id starts from 0 (ex: 0, 1, 2, 3, 4...)
 	var player_name: String
@@ -146,6 +146,11 @@ class Player: Identifiable {
 		self.isAlive = isAlive
 		self.voteCount = voteCount
 	}
+	
+	func copy(with zone: NSZone? = nil) -> Any {
+		let copy = Player(player_order: self.player_order, role: self.role_name, player_name: self.player_name)
+			return copy
+		}
 }
 
 class GameStatusData: ObservableObject {
@@ -154,7 +159,7 @@ class GameStatusData: ObservableObject {
 	@Published var roundNumber_CONFIG: Int = 0
 	@Published var view_status_CONFIG: Int = 0
 	@Published var discussion_minutes_CONFIG: Int = 0
-	@Published var discussion_seconds_CONFIG: Int = 0
+	@Published var discussion_seconds_CONFIG: Int = 30
 	@Published var discussion_time_CONFIG: Int = 30
 	@Published var villager_Count_CONFIG: Int = 0
 	@Published var werewolf_Count_CONFIG: Int = 1

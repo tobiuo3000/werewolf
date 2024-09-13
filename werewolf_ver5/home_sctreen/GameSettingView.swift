@@ -1,14 +1,9 @@
 import SwiftUI
 
-struct IntervalSet {
-	var minutes: Int = 0
-	var seconds: Int = 0
-}
 
 struct GameSettingView: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var isAlertShown = false
-	@State var selectedTime = IntervalSet()
 	@State var maxWerewolf: Int = 1
 	private let minPlayer = 4
 	private let maxPlayer = 2
@@ -31,29 +26,32 @@ struct GameSettingView: View{
 				.allowsHitTesting(false)
 			
 			ScrollView(.vertical){
-				HStack{
-					Text("プレイヤー人数: \(gameStatusData.players_CONFIG.count)人")
-						.textFrameDesignProxy()
-					
-					Button(action: {
-						gameStatusData.players_CONFIG.append(Player(player_order: gameStatusData.players_CONFIG.count, role: .villager, player_name: "プレイヤー\(gameStatusData.players_CONFIG.count)"))
-						maxWerewolf = gameStatusData.players_CONFIG.count / 2
-					}) {
-						Image(systemName: "plus.circle")
-							.frame(width: 30, height: 30)
+				VStack{
+					HStack{
+						Spacer()
+						Text("プレイヤー人数: \(gameStatusData.players_CONFIG.count)人")
+						Button(action: {
+							gameStatusData.players_CONFIG.append(Player(player_order: gameStatusData.players_CONFIG.count, role: .villager, player_name: "プレイヤー\(gameStatusData.players_CONFIG.count)"))
+							maxWerewolf = gameStatusData.players_CONFIG.count / 2
+						}) {
+							Image(systemName: "plus.circle")
+								.frame(width: 30, height: 30)
+						}
+						.myButtonBounce()
+						Spacer()
 					}
-					.textFrameSimple()
-					.myButtonBounce()
+					
+					ForEach(gameStatusData.players_CONFIG.indices, id: \.self) { index in
+						TextField("", text: $gameStatusData.players_CONFIG[index].player_name)
+							.textFieldStyle(RoundedBorderTextFieldStyle())
+							.foregroundColor(.black)
+							.padding()
+					}
+					.onChange(of: gameStatusData.players_CONFIG.count) { _ in
+						setConfig()
+					}
 				}
-				
-				ForEach(gameStatusData.players_CONFIG.indices, id: \.self) { index in
-					TextField("", text: $gameStatusData.players_CONFIG[index].player_name)
-						.textFieldStyle(RoundedBorderTextFieldStyle())
-						.padding()
-				}
-				.onChange(of: gameStatusData.players_CONFIG.count) { _ in
-					setConfig()
-				}
+				.textFrameDesignProxy()
 				
 				
 				
@@ -62,13 +60,11 @@ struct GameSettingView: View{
 						.padding()
 					
 					
-					HStack(spacing: 30) {
-						WheelPickerView(selection: $gameStatusData.discussion_minutes_CONFIG)
-						.frame(height: 60) // 高さを調整して内容が見やすくする
-						
-						WheelPickerView(selection: $gameStatusData.discussion_seconds_CONFIG)
-						.frame(height: 60) // 高さを調整して内容が見やすくする
-						
+					HStack{
+						WheelPickerView(selection: $gameStatusData.discussion_minutes_CONFIG, textArg: "分")
+								.frame(height: 50) // 高さを調整して内容が見やすくする
+						WheelPickerView(selection: $gameStatusData.discussion_seconds_CONFIG, textArg: "秒")
+								.frame(height: 50) // 高さを調整して内容が見やすくする
 					}
 				}
 				.textFrameDesignProxy()
@@ -80,7 +76,6 @@ struct GameSettingView: View{
 					.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
 						setConfig()
 					}
-				
 				
 				Stepper("占い師の数: \(gameStatusData.seer_Count_CONFIG)", value: $gameStatusData.seer_Count_CONFIG, in: 0...1)
 					.pickerStyle(SegmentedPickerStyle())
@@ -103,12 +98,13 @@ struct GameSettingView: View{
 
 
 struct WheelPickerView: UIViewRepresentable {
-
 	@Binding private var selection: Int
 	private let content: [Int] = Array(0...59)
+	private let textTimeUnit: String
 
-	init(selection: Binding<Int>) {
+	init(selection: Binding<Int>, textArg: String) {
 		self._selection = selection
+		self.textTimeUnit = textArg
 	}
 
 	func makeUIView(context: Context) -> UIPickerView {
@@ -148,14 +144,18 @@ struct WheelPickerView: UIViewRepresentable {
 		private func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> Int? {
 			return wheelPickerView.content[row]
 		}
+		
 		func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
 			wheelPickerView.selection = row
 		}
+		
 		func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
 			let label = (view as? UILabel) ?? UILabel()
-			label.text = String(wheelPickerView.content[row])
+			label.text = "\(String(wheelPickerView.content[row])) \(String(wheelPickerView.textTimeUnit))"
 			label.textAlignment = .center
 			label.adjustsFontSizeToFitWidth = true
+			label.font = UIFont.systemFont(ofSize: 20)  // define font size
+			label.textColor = .white  // define text color
 			return label
 		}
 	}
