@@ -85,14 +85,14 @@ struct TextFrameDesignProxy: ViewModifier {
 
 
 struct CardAnimationLToR: ViewModifier {
-	@EnvironmentObject var GameStatusData: GameStatusData
-	@State var animationFlag: Bool = false
-	@State var offset: CGFloat = -400
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@State var animationFlag: Bool = true
+	@State var offset: CGFloat
 	@Binding var viewOffset: CGFloat
 	var imageIndex: Int
-	let viewOffsetThreshold: CGFloat = 300
 	
 	func body(content: Content) -> some View {
+		let viewOffsetThreshold: CGFloat = (gameStatusData.fullScreenSize.width / 2)
 		ZStack{
 			content
 				.offset(x: offset, y: 0)
@@ -100,32 +100,42 @@ struct CardAnimationLToR: ViewModifier {
 					if abs(viewOffset) < viewOffsetThreshold {
 						performAnimation(imageIndex: imageIndex)
 						animationFlag = false
-						
 					}else{
 						animationFlag = true
-						offset = -400
+						offset = -(gameStatusData.fullScreenSize.width)
 					}
+				}
+				.onAppear(){
+					performAnimation(imageIndex: imageIndex)
+					animationFlag = false
 				}
 		}
 	}
 	
 	private func performAnimation(imageIndex: Int) {
 		let delay = CGFloat(imageIndex) * 0.05
+		let amplitude = (gameStatusData.fullScreenSize.width / (30+CGFloat(imageIndex)))
 		if animationFlag == true{
 			DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
 				withAnimation(.linear(duration: 0.1)) {
-					offset = 10
+					offset = amplitude
 				}
 			}
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1 + delay) {
-				withAnimation(.linear(duration: 0.1)) {
-					offset = -10
+				withAnimation(.linear(duration: 0.05)) {
+					offset = -(amplitude/2)
 				}
 			}
 			
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 + delay) {
-				withAnimation(.linear(duration: 0.1)) {
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.15 + delay) {
+				withAnimation(.linear(duration: 0.05)) {
+					offset = (amplitude/4)
+				}
+			}
+			
+			DispatchQueue.main.asyncAfter(deadline: .now() + 0.20 + delay) {
+				withAnimation(.linear(duration: 0.05)) {
 					offset = 0
 				}
 			}
@@ -312,8 +322,8 @@ extension View {
 		self.modifier(CardFlippedAndRtoL(isCardFlipped: isCardFlipped, cardScale: cardScale, imageIndex: imageIndex))
 	}
 	
-	func cardAnimationLToR(beforeGameViewOffset: Binding<CGFloat>, imageIndex: Int) -> some View {
-		self.modifier(CardAnimationLToR(viewOffset: beforeGameViewOffset, imageIndex: imageIndex))
+	func cardAnimationLToR(screenWidth: CGFloat, beforeGameViewOffset: Binding<CGFloat>, imageIndex: Int) -> some View {
+		self.modifier(CardAnimationLToR(offset: -screenWidth, viewOffset: beforeGameViewOffset, imageIndex: imageIndex))
 	}
 	
 	func uiAnimationRToL(animationFlag: Binding<Bool>, delay: CGFloat) -> some View {

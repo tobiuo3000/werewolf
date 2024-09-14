@@ -64,7 +64,7 @@ struct CardFlippingAnimation: View{
 				}
 		}
 		.scaleEffect(cardScale)
-		.cardAnimationLToR(beforeGameViewOffset: $beforeGameViewOffset, imageIndex: imageIndex)
+		.cardAnimationLToR(screenWidth: gameStatusData.fullScreenSize.width, beforeGameViewOffset: $beforeGameViewOffset, imageIndex: imageIndex)
 		.cardFlippedAndPiled(isCardFlipped: $isCardFlipped, cardScale: $cardScale, imageIndex: imageIndex)
 	}
 }
