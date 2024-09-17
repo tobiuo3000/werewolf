@@ -85,6 +85,14 @@ struct GameSettingView: View{
 						setConfig()
 					}
 				
+				Stepper("狩人の数: \(gameStatusData.hunter_Count_CONFIG)", value: $gameStatusData.hunter_Count_CONFIG, in: 0...1)
+					.pickerStyle(SegmentedPickerStyle())
+					.textFrameDesignProxy()
+					.accentColor(.white)
+					.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
+						setConfig()
+					}
+				
 			}
 		}
 	}

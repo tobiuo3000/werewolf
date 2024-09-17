@@ -85,7 +85,7 @@ enum Role {
 	case villager
 	case werewolf
 	case seer
-	case knight
+	case hunter
 	case madman
 	
 	var image_name: String {
@@ -98,8 +98,8 @@ enum Role {
 			return "card_werewolf"
 		case .seer:
 			return "card_seer"
-		case .knight:
-			return "role_night_image"
+		case .hunter:
+			return "temp_hunter"
 		case .madman:
 			return "role_madman_image"
 		}
@@ -116,8 +116,8 @@ enum Role {
 			return "人狼"
 		case .seer:
 			return "占い師"
-		case .knight:
-			return "騎士"
+		case .hunter:
+			return "狩人"
 		case .madman:
 			return "狂人"
 		}
@@ -164,6 +164,7 @@ class GameStatusData: ObservableObject {
 	@Published var villager_Count_CONFIG: Int = 0
 	@Published var werewolf_Count_CONFIG: Int = 1
 	@Published var seer_Count_CONFIG: Int = 0
+	@Published var hunter_Count_CONFIG: Int = 0
 	@Published var currentTheme: AppTheme = .std_theme
 	
 	@Published var textSize: CGSize = .zero
@@ -260,7 +261,7 @@ class GameProgress: ObservableObject {
 		get_player_from_UUID(targetPlayerID: target_id).isAlive = false
 	}
 	
-	func assignRoles(wolfNum:Int, seerNum:Int) {
+	func assignRoles(wolfNum:Int, seerNum:Int, hunterNum:Int) {
 		// プレイヤーのインデックスの配列を作成
 		var indexes = Array(self.players.indices)
 		
@@ -274,6 +275,13 @@ class GameProgress: ObservableObject {
 		
 		// ランダムに占い師を選ぶ
 		for _ in 0..<seerNum {
+			if let randomIndex = indexes.randomElement() {
+				self.players[randomIndex].role_name = .seer
+				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
+			}
+		}
+		
+		for _ in 0..<hunterNum {
 			if let randomIndex = indexes.randomElement() {
 				self.players[randomIndex].role_name = .seer
 				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除

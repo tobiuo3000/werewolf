@@ -12,9 +12,10 @@ struct GameStartView: View{
 	
 	var body: some View{
 		VStack {
-			
-			Text("人狼ゲーム(仮)")
-				.font(.largeTitle)
+			Image("temp_title_logo")
+				.resizable()
+				.aspectRatio(contentMode: .fit)
+				.frame(width: gameStatusData.fullScreenSize.width/2)
 				.opacity(isAnimated ? -1 : 1) // フェードアウト効果
 				.offset(y: isAnimated ? -200 : 0) // 上に移動
 				.animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用

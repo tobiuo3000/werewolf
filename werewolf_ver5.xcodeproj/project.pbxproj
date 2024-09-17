@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1724E4772C999FB600AEC605 /* Wolf.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 1724E4762C999FB600AEC605 /* Wolf.MOV */; };
 		1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */; };
 		1749BD1A2BEBB9E6005E9560 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1749BD192BEBB9E6005E9560 /* Assets.xcassets */; };
 		1749BD252BEBBA9D005E9560 /* BeforeGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */; };
@@ -18,13 +19,14 @@
 		1749BD322BEBBB44005E9560 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD312BEBBB44005E9560 /* ContentView.swift */; };
 		1749BD342BEBBB5A005E9560 /* EachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD332BEBBB5A005E9560 /* EachView.swift */; };
 		1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */; };
-		1749BD382BEBBB80005E9560 /* GameSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD372BEBBB80005E9560 /* GameSettings.swift */; };
+		1749BD382BEBBB80005E9560 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD372BEBBB80005E9560 /* Settings.swift */; };
 		1749BD3A2BEBBB97005E9560 /* GameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD392BEBBB97005E9560 /* GameViews.swift */; };
 		1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */; };
 		1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1724E4762C999FB600AEC605 /* Wolf.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Wolf.MOV; sourceTree = "<group>"; };
 		1749BD102BEBB9E5005E9560 /* werewolf_ver5.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = werewolf_ver5.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = werewolf_ver5App.swift; sourceTree = "<group>"; };
 		1749BD192BEBB9E6005E9560 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -37,7 +39,7 @@
 		1749BD312BEBBB44005E9560 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1749BD332BEBBB5A005E9560 /* EachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EachView.swift; sourceTree = "<group>"; };
 		1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraModifiers.swift; sourceTree = "<group>"; };
-		1749BD372BEBBB80005E9560 /* GameSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameSettings.swift; sourceTree = "<group>"; };
+		1749BD372BEBBB80005E9560 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		1749BD392BEBBB97005E9560 /* GameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViews.swift; sourceTree = "<group>"; };
 		1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightTimeView.swift; sourceTree = "<group>"; };
 		1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayingView.swift; sourceTree = "<group>"; };
@@ -79,6 +81,7 @@
 				177585212C7EE49C0007D386 /* game_views */,
 				1749BD232BEBBA80005E9560 /* home_sctreen */,
 				1749BD192BEBB9E6005E9560 /* Assets.xcassets */,
+				1724E4762C999FB600AEC605 /* Wolf.MOV */,
 				1749BD3F2BEBBC86005E9560 /* sample_video.mp4 */,
 				1749BD402BEBBE4E005E9560 /* Preview Content */,
 			);
@@ -102,7 +105,7 @@
 			children = (
 				1749BD312BEBBB44005E9560 /* ContentView.swift */,
 				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
-				1749BD372BEBBB80005E9560 /* GameSettings.swift */,
+				1749BD372BEBBB80005E9560 /* Settings.swift */,
 				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
 			);
 			path = main;
@@ -184,6 +187,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1724E4772C999FB600AEC605 /* Wolf.MOV in Resources */,
 				1749BD1A2BEBB9E6005E9560 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -205,7 +209,7 @@
 				1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */,
 				1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */,
 				1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */,
-				1749BD382BEBBB80005E9560 /* GameSettings.swift in Sources */,
+				1749BD382BEBBB80005E9560 /* Settings.swift in Sources */,
 				1749BD2D2BEBBAFD005E9560 /* CardViews.swift in Sources */,
 				1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */,
 				1749BD272BEBBABB005E9560 /* HomeScreenView.swift in Sources */,

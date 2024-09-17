@@ -44,9 +44,6 @@ struct GameView: View {
 			}else if TempView == .Before_discussion {
 				Before_discussion(TempView: $TempView)
 				
-			}else if TempView == .After_night{
-				After_night(TempView: $TempView)
-				
 			}else if TempView == .Discussion_time {
 				Discussion_time(TempView: $TempView, num_survivors: $num_survivors)
 				
@@ -59,13 +56,13 @@ struct GameView: View {
 			}else if TempView == .Vote_result{
 				VoteResult(TempView: $TempView)
 				
+			}else if TempView == .Before_night_time {
+				Before_night_time(TempView: $TempView, num_survivors: $num_survivors)
+			
 			}else if TempView == .Night_time{
 				NightTime(TempView: $TempView, players_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
 				
-			}else if TempView == .Before_night_time {
-				Before_night_time(TempView: $TempView, num_survivors: $num_survivors)
-				
-			}
+			}			
 		}
 	}
 }
@@ -258,32 +255,6 @@ struct Before_night_time: View{
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.background(Color.black)
-	}
-}
-
-struct After_night: View{
-	@EnvironmentObject var gameStatusData: GameStatusData
-	@EnvironmentObject var gameProgress: GameProgress
-	@Binding var TempView: GameView_display_status
-	
-	var body: some View{
-		VStack{
-			Text("昨晩の犠牲者は...")
-				.textFrameDesignProxy()
-			Text("〇〇さんでした")
-				.textFrameDesignProxy()
-			Button("次へ") {
-				gameProgress.game_Result()
-				if gameProgress.game_result == 0{
-					TempView = .Before_discussion
-				}else if gameProgress.game_result == 1{
-					gameStatusData.game_status = .gameOverScreen
-				}else if gameProgress.game_result == 2{
-					gameStatusData.game_status = .gameOverScreen
-				}
-			}
-			.padding()
-		}
 	}
 }
 

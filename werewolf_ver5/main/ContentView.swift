@@ -6,17 +6,24 @@ struct ContentView: View {
 
 	var body: some View {
 		GeometryReader{ proxy_ContentView in
-				//VideoPlayerView(videoFileName: "sample_video", videoFileType: "mp4")
-				//			.frame(width: 300)
-				VStack(spacing:0){
+				VStack{
 					if gameStatusData.game_status == .titleScreen{
 						ZStack{
-							Image(gameStatusData.currentTheme.titleScreenBackground)
-								.resizable()
+							Rectangle()
+								.foregroundColor(.black)
 								.frame(maxHeight: .infinity)
 								.ignoresSafeArea()
+							
+							VideoPlayerView(videoFileName: "Wolf", videoFileType: "MOV")
+								.frame(maxHeight: gameStatusData.fullScreenSize.height)
+										
+							/*Image(gameStatusData.currentTheme.titleScreenBackground)
+								.resizable()
+								.frame(maxHeight: .infinity)
+								.ignoresSafeArea()*/
 							GameStartView()
 						}
+						.ignoresSafeArea()
 					}else if gameStatusData.game_status == .homeScreen{
 						BeforeHomeScreen()
 					}else if gameStatusData.game_status == .gameScreen{

@@ -9,35 +9,25 @@ struct Theme_Config: View {
 		ZStack{
 			Color.black
 			
-			ScrollView{
+			ScrollView(.vertical){
+				Color.clear
+					.frame(height:20)
 				ZStack{
-					
-					
-					VStack(spacing: 0){
-						ForEach(0..<2) { _ in
-							Image(gameStatusData.currentTheme.textBackgroundImage)  // BACKGROUND SHEEPSKIN
-								.resizable()
-								.frame(maxWidth: .infinity, maxHeight:.infinity)
-								.allowsHitTesting(false)
-								.clipped()
+					Text("役 職 一 覧")
+						.font(.system(.largeTitle, design: .serif))
+						.background(){
+							Image(gameStatusData.currentTheme.textBackgroundImage)
+								.aspectRatio(contentMode: .fill)
 						}
-					}
-					
-					
-					VStack{
-						Color.clear
-							.frame(height:20)
-						Text("役 職 一 覧")
-							.font(.system(.largeTitle, design: .serif))
-						
-						Color.clear
-							.frame(height:10)
-						CardPreview()
-						Text("下部のビュー")
-							.foregroundColor(.white)
-					}
+						.padding()
+						.clipped()
 				}
 				
+				Color.clear
+					.frame(height:10)
+				CardPreview()
+				Text("下部のビュー")
+					.foregroundColor(.white)
 			}
 		}
 	}
@@ -52,27 +42,24 @@ struct CardPreview: View{
 	
 	
 	var body: some View {
-		GeometryReader { geometry in
-			let imageFrameWidth: CGFloat =  CGFloat(geometry.size.width * OccupiedByCard)
-			let imageFrameHeight: CGFloat = CGFloat(imageFrameWidth * CardRatio)
-			HStack{
-				Spacer()
-				VStack{
-					ThemeConfigScreen_CardView(role: Role.villager, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
-					Text(Role.villager.japaneseName)
-						.textFrameDesignProxy()
-					ThemeConfigScreen_CardView(role: Role.seer, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
-					Text(Role.seer.japaneseName)
-						.textFrameDesignProxy()
-					ThemeConfigScreen_CardView(role: Role.werewolf, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
-					Text(Role.werewolf.japaneseName)
-						.textFrameDesignProxy()
-					
-				}
+		let imageFrameWidth: CGFloat =  CGFloat(gameStatusData.fullScreenSize.width*(2/3))
+		let imageFrameHeight: CGFloat = CGFloat(imageFrameWidth * CardRatio)
+		HStack{
+			Spacer()
+			VStack{
+				ThemeConfigScreen_CardView(role: Role.villager, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+				Text(Role.villager.japaneseName)
+					.textFrameDesignProxy()
+				ThemeConfigScreen_CardView(role: Role.seer, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+				Text(Role.seer.japaneseName)
+					.textFrameDesignProxy()
+				ThemeConfigScreen_CardView(role: Role.werewolf, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+				Text(Role.werewolf.japaneseName)
+					.textFrameDesignProxy()
 				
-				Spacer()
 			}
 			
+			Spacer()
 		}
 	}
 }

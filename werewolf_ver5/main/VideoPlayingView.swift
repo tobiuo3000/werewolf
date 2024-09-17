@@ -20,6 +20,7 @@ class PlayerUIView: UIView {
 		self.player = AVPlayer(url: url)
 		self.playerLayer = AVPlayerLayer(player: player)
 		self.playerLayer?.frame = self.bounds
+		self.playerLayer?.videoGravity = .resizeAspectFill
 		if let playerLayer = self.playerLayer {
 			self.layer.addSublayer(playerLayer)
 		}
@@ -29,6 +30,7 @@ class PlayerUIView: UIView {
 	override func layoutSubviews() {
 		super.layoutSubviews()
 		playerLayer?.frame = self.bounds
+		playerLayer?.position = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
 	}
 	
 	// 再生
