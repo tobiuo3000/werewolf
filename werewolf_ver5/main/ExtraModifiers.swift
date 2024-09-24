@@ -86,28 +86,29 @@ struct TextFrameDesignProxy: ViewModifier {
 
 struct CardAnimationLToR: ViewModifier {
 	@EnvironmentObject var gameStatusData: GameStatusData
-	@State var animationFlag: Bool = true
+	@State var doesCardAppear: Bool = true
 	@State var offset: CGFloat
 	@Binding var viewOffset: CGFloat
 	var imageIndex: Int
 	
 	func body(content: Content) -> some View {
-		let viewOffsetThreshold: CGFloat = (gameStatusData.fullScreenSize.width / 2)
+		let viewOffsetThreshold: CGFloat = (gameStatusData.fullScreenSize.width / 4)
 		ZStack{
 			content
 				.offset(x: offset, y: 0)
 				.onChange(of: viewOffset){new_value in
 					if abs(viewOffset) < viewOffsetThreshold {
 						performAnimation(imageIndex: imageIndex)
-						animationFlag = false
+						doesCardAppear = false
 					}else{
-						animationFlag = true
-						offset = -(gameStatusData.fullScreenSize.width)
+						dissapeatingAnimation(imageIndex: imageIndex)
+						doesCardAppear = true
+						
 					}
 				}
-				.onAppear(){
+				.onAppear(){  // first appearance after "start game"
 					performAnimation(imageIndex: imageIndex)
-					animationFlag = false
+					doesCardAppear = false
 				}
 		}
 	}
@@ -115,28 +116,33 @@ struct CardAnimationLToR: ViewModifier {
 	private func performAnimation(imageIndex: Int) {
 		let delay = CGFloat(imageIndex) * 0.05
 		let amplitude = (gameStatusData.fullScreenSize.width / (30+CGFloat(imageIndex)))
-		if animationFlag == true{
+		if doesCardAppear == true{
 			DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-				withAnimation(.linear(duration: 0.1)) {
+				withAnimation(.linear(duration: 0.15)) {
 					offset = amplitude
-				}
-			}
-			
-			DispatchQueue.main.asyncAfter(deadline: .now() + 0.1 + delay) {
-				withAnimation(.linear(duration: 0.05)) {
-					offset = -(amplitude/2)
 				}
 			}
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.15 + delay) {
 				withAnimation(.linear(duration: 0.05)) {
-					offset = (amplitude/4)
+					offset = -(amplitude/2)
 				}
 			}
 			
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.20 + delay) {
 				withAnimation(.linear(duration: 0.05)) {
 					offset = 0
+				}
+			}
+		}
+	}
+	
+	private func dissapeatingAnimation(imageIndex: Int) {
+		let delay = CGFloat(imageIndex) * 0.05
+		if doesCardAppear == false{
+			DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+				withAnimation(.linear(duration: 0.15)) {
+					offset = -(gameStatusData.fullScreenSize.width)
 				}
 			}
 		}

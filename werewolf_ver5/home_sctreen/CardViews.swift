@@ -8,30 +8,29 @@ struct CardGalleryView: View {
 	private let numberOfColumn: CGFloat = 4
 	
 	var body: some View{
-		GeometryReader { geometry in
-			let imageFrameWidth: CGFloat =  CGFloat(geometry.size.width / (numberOfColumn + 1)) // SCREEN WIDTH: 393
-			let imageFrameHeight: CGFloat = CGFloat(imageFrameWidth * (88/63))
-			let numberOfImagesInRow: Int = Int(geometry.size.width / (imageFrameWidth + spacing))
-			let numberOfRows: Int = (gameStatusData.players_CONFIG.count + numberOfImagesInRow - 1) / numberOfImagesInRow
-			VStack{
-				HStack{
-					Spacer()
-					ScrollView{
-						VStack(alignment: .leading, spacing: spacing) {
-							ForEach(0..<numberOfRows, id: \.self) { rowIndex in
-								HStack(spacing: spacing) {
-									ForEach(0..<numberOfImagesInRow, id: \.self) { columnIndex in
-										CardFlippingAnimation(showAllText: $showAllText, beforeGameViewOffset: $beforeGameViewOffset, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
-									}
+		let imageFrameWidth: CGFloat =  CGFloat(gameStatusData.fullScreenSize.width / (numberOfColumn + 1)) // SCREEN WIDTH: 393
+		let imageFrameHeight: CGFloat = CGFloat(imageFrameWidth * (88/63))
+		let numberOfImagesInRow: Int = Int(gameStatusData.fullScreenSize.width / (imageFrameWidth + spacing))
+		let numberOfRows: Int = (gameStatusData.players_CONFIG.count + numberOfImagesInRow - 1) / numberOfImagesInRow
+		VStack{
+			HStack{
+				Spacer()
+				ScrollView{
+					VStack(alignment: .leading, spacing: spacing) {
+						ForEach(0..<numberOfRows, id: \.self) { rowIndex in
+							HStack(spacing: spacing) {
+								ForEach(0..<numberOfImagesInRow, id: \.self) { columnIndex in
+									CardFlippingAnimation(showAllText: $showAllText, beforeGameViewOffset: $beforeGameViewOffset, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
 								}
 							}
 						}
 					}
-					Spacer()
 				}
-				.padding()
+				Spacer()
 			}
+			.padding()
 		}
+		
 	}
 }
 
@@ -53,15 +52,18 @@ struct CardFlippingAnimation: View{
 		let conditionVil = imageIndex < gameStatusData.villager_Count_CONFIG
 		let conditionWerewolf = (gameStatusData.villager_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG)
 		let conditionSeer = (gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG)
+		let conditionHunter = (gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG + gameStatusData.hunter_Count_CONFIG)
 		
 		VStack{
-				if conditionVil{
-					CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.villager, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
-				}else if conditionWerewolf{
-					CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.werewolf, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
-				}else if conditionSeer{
-					CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.seer, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
-				}
+			if conditionVil{
+				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.villager, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+			}else if conditionWerewolf{
+				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.werewolf, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+			}else if conditionSeer{
+				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.seer, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+			}else if conditionHunter{
+				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.hunter, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+			}
 		}
 		.scaleEffect(cardScale)
 		.cardAnimationLToR(screenWidth: gameStatusData.fullScreenSize.width, beforeGameViewOffset: $beforeGameViewOffset, imageIndex: imageIndex)
@@ -78,7 +80,6 @@ struct CardView: View {
 	var role: Role
 	var imageWidth: CGFloat
 	var imageHeight: CGFloat
-	
 	
 	var body: some View {
 		ZStack{

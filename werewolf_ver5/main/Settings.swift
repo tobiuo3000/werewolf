@@ -1,5 +1,11 @@
 import SwiftUI
 
+/*
+ 画像解像度の目安
+ →iphone16 pro maxは1320*2868(9:19.6)
+*/
+
+
 
 enum AppTheme: String, CaseIterable {
 	case std_theme, simple_theme, theme3 // テーマを追加していく
@@ -117,7 +123,7 @@ enum Role {
 		case .seer:
 			return "占い師"
 		case .hunter:
-			return "狩人"
+			return "騎士"
 		case .madman:
 			return "狂人"
 		}
@@ -158,9 +164,9 @@ class GameStatusData: ObservableObject {
 	@Published var players_CONFIG: [Player] = []
 	@Published var roundNumber_CONFIG: Int = 0
 	@Published var view_status_CONFIG: Int = 0
-	@Published var discussion_minutes_CONFIG: Int = 0
-	@Published var discussion_seconds_CONFIG: Int = 30
-	@Published var discussion_time_CONFIG: Int = 30
+	@Published var discussion_minutes_CONFIG: Int = 2
+	@Published var discussion_seconds_CONFIG: Int = 0
+	@Published var discussion_time_CONFIG: Int = 0
 	@Published var villager_Count_CONFIG: Int = 0
 	@Published var werewolf_Count_CONFIG: Int = 1
 	@Published var seer_Count_CONFIG: Int = 0

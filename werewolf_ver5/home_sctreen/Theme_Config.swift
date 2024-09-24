@@ -26,8 +26,6 @@ struct Theme_Config: View {
 				Color.clear
 					.frame(height:10)
 				CardPreview()
-				Text("下部のビュー")
-					.foregroundColor(.white)
 			}
 		}
 	}
@@ -55,15 +53,12 @@ struct CardPreview: View{
 					.textFrameDesignProxy()
 				ThemeConfigScreen_CardView(role: Role.werewolf, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
 				Text(Role.werewolf.japaneseName)
-					.textFrameDesignProxy()
-				
+					.textFrameDesignProxy()	
 			}
-			
 			Spacer()
 		}
 	}
 }
-
 
 struct ThemeConfigScreen_CardView: View {
 	var role: Role

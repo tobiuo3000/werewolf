@@ -1,5 +1,11 @@
 import SwiftUI
 
+/*
+ 画像解像度の目安
+ →iphone16 pro maxは1320*2868(9:19.6)
+*/
+
+
 struct OffsetProxy: View {
 	var body: some View {
 		GeometryReader { proxy in
@@ -67,16 +73,6 @@ struct LoopTransitionBackGround: View{
 		}
 	}
 }
-
-
-/*
-struct UIGatheringHomeScreen: View{
-	
-	var body: some View{
-		
-	}
-}
-*/
 
 
 struct HomeScreenView: View {
@@ -161,8 +157,6 @@ struct HomeScreenView: View {
 				SettingsView(showingSettings: $showingSettings)
 			}
 		}
-		
-		
 	}
 }
 
@@ -253,6 +247,38 @@ struct ScrollBarView: View{
 	var iconOffsetTab0: CGFloat
 	var iconOffsetTab1: CGFloat
 	var iconOffsetTab2: CGFloat
+	var offsetThreeTab: CGFloat {
+		if offsetTab0 >= -(gameStatusData.fullScreenSize.width){
+			return 0
+		} else if offsetTab0 < -(gameStatusData.fullScreenSize.width/2) && offsetTab1 >= -(gameStatusData.fullScreenSize.width){
+			return -(gameStatusData.fullScreenSize.width) + (-(offsetTab1))
+		} else if offsetTab1 < -(gameStatusData.fullScreenSize.width/2) && offsetTab2 >= -(gameStatusData.fullScreenSize.width){
+			return -(2*(gameStatusData.fullScreenSize.width)) + (-(offsetTab2))
+		} else{
+			return -(3*(gameStatusData.fullScreenSize.width))
+		}
+	}
+	var iconSize0: CGFloat {
+		if abs(gameStatusData.fullScreenSize.width/2) > offsetTab0 {
+			return 40
+		} else {
+			return 30
+		}
+	}
+	var iconSize1: CGFloat {
+		if abs(gameStatusData.fullScreenSize.width/2) > offsetTab1 {
+			return 40
+		} else {
+			return 30
+		}
+	}
+	var iconSize2: CGFloat {
+		if abs(gameStatusData.fullScreenSize.width/2) > offsetTab2 {
+			return 40
+		} else {
+			return 30
+		}
+	}
 	
 	var body: some View{
 		ZStack{
@@ -280,41 +306,41 @@ struct ScrollBarView: View{
 			}
 			
 			
+			
 			if -(gameStatusData.fullScreenSize.width/2) < offsetTab0 {  // -392.66 < offset < 392.66
-				
 				Rectangle()
 					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				//.position(x: (GameStatusData.fullScreenSize.width / 4))
 					.offset(x: -(gameStatusData.fullScreenSize.width/3) - (offsetTab0/3))
-				
+					
 			}else if -(gameStatusData.fullScreenSize.width/2) < offsetTab1{
 				Rectangle()
 					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				//.position(x: (GameStatusData.fullScreenSize.width / 4))
 					.offset(x: -(offsetTab1/3))
+
 			}else{
 				Rectangle()
 					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				//.position(x: (GameStatusData.fullScreenSize.width / 4))
 					.offset(x: (gameStatusData.fullScreenSize.width/3) - (offsetTab2/3))
+				
 			}
-			Image(systemName: "square.and.pencil")
-				.resizable()
+			
+			Image(systemName: "square.and.pencil.circle.fill")
 				.foregroundColor(.white)
-				.frame(width: 30, height: 30)
+				.font(.system(size: iconSize0))
 				.offset(x: -(gameStatusData.fullScreenSize.width/6)*2, y: iconOffsetTab0)
 			Image(systemName: "gamecontroller")
-				.resizable()
 				.foregroundColor(.white)
-				.frame(width: 30, height: 30)
+				.font(.system(size: iconSize1))
 				.offset(y: iconOffsetTab1)
-			Image(systemName: "gamecontroller")
-				.resizable()
+			Image(systemName: "text.book.closed")
 				.foregroundColor(.white)
-				.frame(width: 30, height: 30)
+				.font(.system(size: iconSize2))
 				.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffsetTab2)
 		}
 		.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.4)
@@ -347,7 +373,7 @@ struct BeforeHomeScreen: View {
 						.frame(width: gameStatusData.fullScreenSize.width,
 							   height: gameStatusData.fullScreenSize.height)
 						.clipped()
-					HomeScreenView(thresholdIcon: gameStatusData.fullScreenSize.width/3)
+					HomeScreenView(thresholdIcon: gameStatusData.fullScreenSize.width/6)
 				}
 			}
 		}

@@ -15,39 +15,48 @@ struct BeforeGameView: View {
 	var body: some View {
 		VStack{
 			CardGalleryView(beforeGameViewOffset: $beforeGameViewOffset, showAllText: $showAllText)
-
-			HStack{
-				Spacer()
-				Button(action: {
-					showAllText.toggle()
-				}) {
-					Text("文章を表示")
-					Image(systemName: "arrow.triangle.2.circlepath.circle")
-				}
-				.textFrameSimple()
-				.myButtonBounce()
-			}
-			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.2)
 			
-			Button("ゲームスタート"){
-				isAlertShown = true
-			}
-			.myTextBackground()
-			.myButtonBounce()
-			.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
-				Button("ゲームスタート"){
-					gameStatusData.calcDiscussionTime()
-					initiateGameProgress()
-					DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
-						gameStatusData.game_status = .gameScreen
-						gameProgress.game_start_flag = false
+			ZStack{
+				HStack{
+					Spacer()
+					Button("ゲームスタート"){
+						isAlertShown = true
 					}
+					.myTextBackground()
+					.myButtonBounce()
+					.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
+						Button("ゲームスタート"){
+							gameStatusData.calcDiscussionTime()
+							initiateGameProgress()
+							DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
+								gameStatusData.game_status = .gameScreen
+								gameProgress.game_start_flag = false
+							}
+						}
+						Button("キャンセル", role: .cancel){
+						}
+					}
+					.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
+					Spacer()
 				}
-				Button("キャンセル", role: .cancel){
+				
+				HStack{
+					Spacer()
+					Button(action: {
+						showAllText.toggle()
+					}) {
+						if showAllText{
+							Image(systemName: "rectangle.3.offgrid.bubble.left.fill")
+								.font(.title)
+						}else{
+							Image(systemName: "rectangle.3.offgrid.bubble.left")
+						}
+						Text("ROLE")
+					}
+					.myButtonBounce()
+					.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
 				}
 			}
-			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
-			
 			Spacer()
 		}
 	}
