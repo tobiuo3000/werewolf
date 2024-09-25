@@ -12,9 +12,11 @@ struct AssignRole: View{
 	
 	var body: some View {
 		if isPlayerConfirmationDone == false {
-			BeforeOnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num, isPlayerConfirmationDone: $isPlayerConfirmationDone)
+			BeforeOnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num, 
+								isPlayerConfirmationDone: $isPlayerConfirmationDone)
 		} else if isPlayerConfirmationDone == true {
-			OnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num, isPlayerConfirmationDone: $isPlayerConfirmationDone)
+			OnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num, 
+						  isPlayerConfirmationDone: $isPlayerConfirmationDone)
 		}
 	}
 }
@@ -64,54 +66,55 @@ struct OnePlayerRole: View {
 	@State private var textOpacity: CGFloat = 0.0
 	
 	var body: some View {
-		ScrollView{
-			VStack{
-				if isRoleNameShown == true{
-					Text("「\(gameProgress.players[Temp_index_num].player_name)」さん\n役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
-						.textFrameDesignProxy()
-						.scaleEffect(textScale)
-						.opacity(textOpacity)
-						.frame(height: 20)
-				}else{
-					Color(.clear)
-						.frame(height: 20)
-				}
-				
+		VStack{
+			if isRoleNameShown == true{
+				Text("「\(gameProgress.players[Temp_index_num].player_name)」さん\n役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+					.textFrameDesignProxy()
+					.scaleEffect(textScale)
+					.opacity(textOpacity)
+					.frame(height: 20)
+			}else{
 				Color(.clear)
-					.frame(height: 6)
-				
-				ZStack{
-					if isCardFlipped == false{
-						Image(gameStatusData.currentTheme.cardBackSide)
-							.resizable()
-							.aspectRatio(contentMode: .fill)
-							.scaleEffect(cardScale)
-					}else{
-						Image(gameProgress.players[Temp_index_num].role_name.image_name)
-							.resizable()
-							.aspectRatio(contentMode: .fill)
-							.scaleEffect(cardScale)
-					}
-				}
-				.cardFlippedWhenAssigningRole(isCardFlipped: $isCardFlipped, isCardTapped: $isCardTapped,  isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked, cardScale: $cardScale, textScale: $textScale, textOpacity: $textOpacity)
+					.frame(height: 20)
 			}
 			
 			Color(.clear)
-				.frame(height: 6)
+				.frame(height: 2)
 			
-			if isRoleNameChecked{
-				Button("役職を確認した"){
-					if Temp_index_num+1 < gameProgress.players.count {
-						Temp_index_num = Temp_index_num + 1
-						isPlayerConfirmationDone = false
-					}else{
-						TempView = .Before_discussion
-					}
-					
+			ZStack{
+				if isCardFlipped == false{
+					Image(gameStatusData.currentTheme.cardBackSide)
+						.resizable()
+						.aspectRatio(contentMode: .fill)
+						.scaleEffect(cardScale)
+				}else{
+					Image(gameProgress.players[Temp_index_num].role_name.image_name)
+						.resizable()
+						.aspectRatio(contentMode: .fill)
+						.scaleEffect(cardScale)
 				}
-				.myTextBackground()
-				.myButtonBounce()
 			}
+			.cardFlippedWhenAssigningRole(isCardFlipped: $isCardFlipped, isCardTapped: $isCardTapped,  
+										  isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked,
+										  cardScale: $cardScale, textScale: $textScale,
+										  textOpacity: $textOpacity)
+		}
+		
+		Color(.clear)
+			.frame(height: 2)
+		
+		if isRoleNameChecked{
+			Button("役職を確認した"){
+				if Temp_index_num+1 < gameProgress.players.count {
+					Temp_index_num = Temp_index_num + 1
+					isPlayerConfirmationDone = false
+				}else{
+					TempView = .Before_discussion
+				}
+				
+			}
+			.myTextBackground()
+			.myButtonBounce()
 		}
 	}
 }

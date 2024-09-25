@@ -78,33 +78,18 @@ struct LoopTransitionBackGround: View{
 struct HomeScreenView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var currentTab = 1  // decide first appearance tab
-	@State private var offsetTab0: CGFloat = -1000
+	@State var offsetTab0: CGFloat
 	@State private var offsetTab1: CGFloat = 0
-	@State private var offsetTab2: CGFloat = 1000
-	@State var showingSettings = false
+	@State var offsetTab2: CGFloat
+	@State var threeOffSetTab: CGFloat
+	@State private var showingSettings = false
+	@State private var iconOffsetTab0: CGFloat = 3
+	@State private var iconOffsetTab1: CGFloat = 3
+	@State private var iconOffsetTab2: CGFloat = 3
 	var thresholdIcon: CGFloat
-	
-	var iconOffsetTab0: CGFloat {
-		if (-thresholdIcon <= offsetTab0) && (offsetTab0 <= thresholdIcon) {
-			return (abs(offsetTab0)/thresholdIcon)*15 - 15
-		} else {
-			return 0
-		}
-	}
-	var iconOffsetTab1: CGFloat {
-		if (-thresholdIcon <= offsetTab1) && (offsetTab1 <= thresholdIcon) {
-			return (abs(offsetTab1)/thresholdIcon)*15 - 15
-		} else {
-			return 0
-		}
-	}
-	var iconOffsetTab2: CGFloat {
-		if (-thresholdIcon <= offsetTab2) && (offsetTab2 <= thresholdIcon) {
-			return (abs(offsetTab2)/thresholdIcon)*15 - 15
-		} else {
-			return 0
-		}
-	}
+	@State var iconSize0: CGFloat = 30
+	@State var iconSize1: CGFloat = 30
+	@State var iconSize2: CGFloat = 30
 	
 	
 	var body: some View {
@@ -120,6 +105,8 @@ struct HomeScreenView: View {
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
 							self.offsetTab0 = offset
+							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
+							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
 						}
 					
 					BeforeGameView(beforeGameViewOffset: $offsetTab1)
@@ -129,6 +116,8 @@ struct HomeScreenView: View {
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
 							self.offsetTab1 = offset
+							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
+							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
 						}
 					
 					Theme_Config()
@@ -138,12 +127,16 @@ struct HomeScreenView: View {
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
 							self.offsetTab2 = offset
+							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
+							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
 						}
 				}
 				.tabViewStyle(.page(indexDisplayMode: .never))
 				.animation(.easeInOut, value: currentTab)
 				
-				ScrollBarView(currentTab: $currentTab, offsetTab0: $offsetTab0, offsetTab1: $offsetTab1, offsetTab2: $offsetTab2, iconOffsetTab0: iconOffsetTab0, iconOffsetTab1: iconOffsetTab1, iconOffsetTab2: iconOffsetTab2)
+				ScrollBarView(currentTab: $currentTab, threeOffSetTab: $threeOffSetTab, iconOffsetTab0: $iconOffsetTab0,
+							  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
+							  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
 					.frame(height: 50)
 			}
 			.disabled(showingSettings)
@@ -158,6 +151,52 @@ struct HomeScreenView: View {
 			}
 		}
 	}
+	
+	func calcOffsetThreeTab(threeOffset: Binding<CGFloat>) {
+		if self.offsetTab0 >= 0{
+			threeOffset.wrappedValue = 0
+		} else if self.offsetTab0 < 0 && self.offsetTab1 >= 0 {
+			threeOffset.wrappedValue = -(self.offsetTab0)
+		} else if self.offsetTab1 < 0 && self.offsetTab2 >= 0 {
+			threeOffset.wrappedValue = (gameStatusData.fullScreenSize.width) - self.offsetTab1
+		} else {
+			threeOffset.wrappedValue = (2*(gameStatusData.fullScreenSize.width))
+		}
+	}
+	
+	func _calcIconOffset(iconOffset: Binding<CGFloat>, tabOffset: Binding<CGFloat>){
+		if (-self.thresholdIcon <= tabOffset.wrappedValue) && (tabOffset.wrappedValue <= self.thresholdIcon) {
+			iconOffset.wrappedValue = (abs(tabOffset.wrappedValue)/self.thresholdIcon)*6 - 6  // positive num: up, negative: down
+		} else {
+			iconOffset.wrappedValue = 3
+		}
+	}
+	
+	func calcIconOffset(arg_iconOffsetTab0: Binding<CGFloat>,
+						arg_iconOffsetTab1: Binding<CGFloat>,
+						arg_iconOffsetTab2: Binding<CGFloat>,
+						arg_iconSize0: Binding<CGFloat>,
+						arg_iconSize1: Binding<CGFloat>,
+						arg_iconSize2: Binding<CGFloat>,
+						arg_tabOffsetTab0: Binding<CGFloat>,
+						arg_tabOffsetTab1: Binding<CGFloat>,
+						arg_tabOffsetTab2: Binding<CGFloat>){
+		_calcIconOffset(iconOffset: arg_iconOffsetTab0, tabOffset: arg_tabOffsetTab0)
+		_calcIconOffset(iconOffset: arg_iconOffsetTab1, tabOffset: arg_tabOffsetTab1)
+		_calcIconOffset(iconOffset: arg_iconOffsetTab2, tabOffset: arg_tabOffsetTab2)
+		_calcIconSize(iconSize: arg_iconSize0, tabOffset: arg_tabOffsetTab0)
+		_calcIconSize(iconSize: arg_iconSize1, tabOffset: arg_tabOffsetTab1)
+		_calcIconSize(iconSize: arg_iconSize2, tabOffset: arg_tabOffsetTab2)
+	}
+	
+	func _calcIconSize(iconSize: Binding<CGFloat>, tabOffset: Binding<CGFloat>){
+		if (-self.thresholdIcon <= tabOffset.wrappedValue) && (tabOffset.wrappedValue <= self.thresholdIcon) {
+			iconSize.wrappedValue = 30 + 14 - (abs(tabOffset.wrappedValue)/self.thresholdIcon)*14  // positive num: up, negative: down
+		} else {
+			iconSize.wrappedValue = 30
+		}
+	}
+	
 }
 
 
@@ -241,44 +280,13 @@ struct ScrollBarView: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var currentTab: Int
-	@Binding var offsetTab0: CGFloat
-	@Binding var offsetTab1: CGFloat
-	@Binding var offsetTab2: CGFloat
-	var iconOffsetTab0: CGFloat
-	var iconOffsetTab1: CGFloat
-	var iconOffsetTab2: CGFloat
-	var offsetThreeTab: CGFloat {
-		if offsetTab0 >= -(gameStatusData.fullScreenSize.width){
-			return 0
-		} else if offsetTab0 < -(gameStatusData.fullScreenSize.width/2) && offsetTab1 >= -(gameStatusData.fullScreenSize.width){
-			return -(gameStatusData.fullScreenSize.width) + (-(offsetTab1))
-		} else if offsetTab1 < -(gameStatusData.fullScreenSize.width/2) && offsetTab2 >= -(gameStatusData.fullScreenSize.width){
-			return -(2*(gameStatusData.fullScreenSize.width)) + (-(offsetTab2))
-		} else{
-			return -(3*(gameStatusData.fullScreenSize.width))
-		}
-	}
-	var iconSize0: CGFloat {
-		if abs(gameStatusData.fullScreenSize.width/2) > offsetTab0 {
-			return 40
-		} else {
-			return 30
-		}
-	}
-	var iconSize1: CGFloat {
-		if abs(gameStatusData.fullScreenSize.width/2) > offsetTab1 {
-			return 40
-		} else {
-			return 30
-		}
-	}
-	var iconSize2: CGFloat {
-		if abs(gameStatusData.fullScreenSize.width/2) > offsetTab2 {
-			return 40
-		} else {
-			return 30
-		}
-	}
+	@Binding var threeOffSetTab: CGFloat
+	@Binding var iconOffsetTab0: CGFloat
+	@Binding var iconOffsetTab1: CGFloat
+	@Binding var iconOffsetTab2: CGFloat
+	@Binding var iconSize0: CGFloat
+	@Binding var iconSize1: CGFloat
+	@Binding var iconSize2: CGFloat
 	
 	var body: some View{
 		ZStack{
@@ -295,50 +303,29 @@ struct ScrollBarView: View{
 					.onTapGesture {
 						currentTab = 1
 					}
-				
 				Rectangle()
 					.fill(Color(red: 0.2, green: 0.2, blue: 0.2))
 					.frame(width: gameStatusData.fullScreenSize.width/3, height: 50)
 					.onTapGesture {
 						currentTab = 2
 					}
-				
 			}
 			
+			Rectangle()
+				.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
+				.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
+				.offset(x: (threeOffSetTab/3) - (gameStatusData.fullScreenSize.width/3))
+			let _ = print("\(threeOffSetTab), SIZE(\(gameStatusData.fullScreenSize.width))")
 			
-			
-			if -(gameStatusData.fullScreenSize.width/2) < offsetTab0 {  // -392.66 < offset < 392.66
-				Rectangle()
-					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
-					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
-				//.position(x: (GameStatusData.fullScreenSize.width / 4))
-					.offset(x: -(gameStatusData.fullScreenSize.width/3) - (offsetTab0/3))
-					
-			}else if -(gameStatusData.fullScreenSize.width/2) < offsetTab1{
-				Rectangle()
-					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
-					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
-				//.position(x: (GameStatusData.fullScreenSize.width / 4))
-					.offset(x: -(offsetTab1/3))
-
-			}else{
-				Rectangle()
-					.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
-					.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
-				//.position(x: (GameStatusData.fullScreenSize.width / 4))
-					.offset(x: (gameStatusData.fullScreenSize.width/3) - (offsetTab2/3))
-				
-			}
-			
-			Image(systemName: "square.and.pencil.circle.fill")
+			Image(systemName: iconSize0 == 30 ? "square.and.pencil.circle" : "square.and.pencil.circle.fill")
 				.foregroundColor(.white)
 				.font(.system(size: iconSize0))
 				.offset(x: -(gameStatusData.fullScreenSize.width/6)*2, y: iconOffsetTab0)
-			Image(systemName: "gamecontroller")
+			Image(systemName: iconSize1 == 30 ? "gamecontroller" : "gamecontroller.fill")
 				.foregroundColor(.white)
 				.font(.system(size: iconSize1))
 				.offset(y: iconOffsetTab1)
-			Image(systemName: "text.book.closed")
+			Image(systemName: iconSize2 == 30 ? "text.book.closed" : "text.book.closed.fill")
 				.foregroundColor(.white)
 				.font(.system(size: iconSize2))
 				.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffsetTab2)
@@ -373,7 +360,10 @@ struct BeforeHomeScreen: View {
 						.frame(width: gameStatusData.fullScreenSize.width,
 							   height: gameStatusData.fullScreenSize.height)
 						.clipped()
-					HomeScreenView(thresholdIcon: gameStatusData.fullScreenSize.width/6)
+					HomeScreenView(offsetTab0: -gameStatusData.fullScreenSize.width,
+								   offsetTab2: gameStatusData.fullScreenSize.width,
+								   threeOffSetTab: gameStatusData.fullScreenSize.width,
+								   thresholdIcon: gameStatusData.fullScreenSize.width/6)
 				}
 			}
 		}
