@@ -176,6 +176,7 @@ class GameStatusData: ObservableObject {
 	@Published var textSize: CGSize = .zero
 	@Published var titleTextSize: CGSize = .zero
 	@Published var fullScreenSize: CGSize = .zero
+	@Published var cardSize: CGSize = CGSize(width: 630, height: 880)
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存

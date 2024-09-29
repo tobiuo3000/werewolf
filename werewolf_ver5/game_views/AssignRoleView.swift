@@ -12,10 +12,10 @@ struct AssignRole: View{
 	
 	var body: some View {
 		if isPlayerConfirmationDone == false {
-			BeforeOnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num, 
+			BeforeOnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num,
 								isPlayerConfirmationDone: $isPlayerConfirmationDone)
 		} else if isPlayerConfirmationDone == true {
-			OnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num, 
+			OnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num,
 						  isPlayerConfirmationDone: $isPlayerConfirmationDone)
 		}
 	}
@@ -85,16 +85,16 @@ struct OnePlayerRole: View {
 				if isCardFlipped == false{
 					Image(gameStatusData.currentTheme.cardBackSide)
 						.resizable()
-						.aspectRatio(contentMode: .fill)
+						.frame(width: gameStatusData.cardSize.width, height: gameStatusData.cardSize.height)
 						.scaleEffect(cardScale)
 				}else{
 					Image(gameProgress.players[Temp_index_num].role_name.image_name)
 						.resizable()
-						.aspectRatio(contentMode: .fill)
+						.frame(width: gameStatusData.cardSize.width, height: gameStatusData.cardSize.height)
 						.scaleEffect(cardScale)
 				}
 			}
-			.cardFlippedWhenAssigningRole(isCardFlipped: $isCardFlipped, isCardTapped: $isCardTapped,  
+			.cardFlippedWhenAssigningRole(isCardFlipped: $isCardFlipped, isCardTapped: $isCardTapped,
 										  isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked,
 										  cardScale: $cardScale, textScale: $textScale,
 										  textOpacity: $textOpacity)
