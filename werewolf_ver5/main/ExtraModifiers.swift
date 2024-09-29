@@ -163,19 +163,19 @@ struct CardFlippingWhenAssigningRole: ViewModifier{
 			.rotation3DEffect(Angle(degrees: isCardFlipped ? 0 : 180), axis: (x: 0, y: 1, z: 0))
 			.onTapGesture {
 				withAnimation(.easeInOut(duration: 0.1)) {
-					cardScale = 0.4 // 最初に小さくバウンド
+					cardScale = 0.8 // 最初に小さくバウンド
 				}
 				withAnimation(.easeInOut(duration: 0.1).delay(0.2)) {
-					cardScale = 0.5 // 最初に小さくバウンド
+					cardScale = 1.0 // 最初に小さくバウンド
 				}
 				withAnimation(.easeInOut(duration: 0.3).delay(0.4)){
 					self.isCardFlipped.toggle()
 				}
 				withAnimation(.easeInOut(duration: 0.3).delay(0.8)) {
 					if isCardTapped {
-						cardScale = 0.5 // 元のサイズに戻す
+						cardScale = 1.0 // 元のサイズに戻す
 					} else {
-						cardScale = 0.8 // 2倍の大きさに拡大
+						cardScale = 1.2 // 拡大
 					}
 					self.isCardTapped.toggle()
 				}

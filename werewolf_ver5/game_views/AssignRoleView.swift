@@ -61,36 +61,26 @@ struct OnePlayerRole: View {
 	@State private var isRoleNameChecked = false
 	@State private var isCardFlipped = false
 	@State private var isRoleNameShown = false
-	@State private var cardScale: CGFloat = 0.5
-	@State private var textScale: CGFloat = 0
-	@State private var textOpacity: CGFloat = 0.0
+	@State var cardScale: CGFloat = 1.0
+	@State var textScale: CGFloat = 0
+	@State var textOpacity: CGFloat = 0.0
 	
 	var body: some View {
-		VStack{
-			if isRoleNameShown == true{
-				Text("「\(gameProgress.players[Temp_index_num].player_name)」さん\n役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
-					.textFrameDesignProxy()
-					.scaleEffect(textScale)
-					.opacity(textOpacity)
-					.frame(height: 20)
-			}else{
-				Color(.clear)
-					.frame(height: 20)
-			}
-			
-			Color(.clear)
-				.frame(height: 2)
+		ZStack{
+			TempTexts(TempView: $TempView, Temp_index_num: $Temp_index_num, isPlayerConfirmationDone: $isPlayerConfirmationDone, isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked, cardScale: $cardScale, textScale: $textScale, textOpacity: $textOpacity)
 			
 			ZStack{
 				if isCardFlipped == false{
 					Image(gameStatusData.currentTheme.cardBackSide)
 						.resizable()
-						.frame(width: gameStatusData.cardSize.width, height: gameStatusData.cardSize.height)
+						.frame(width: (gameStatusData.fullScreenSize.height/gameStatusData.cardSize.height)*gameStatusData.cardSize.width/2,
+							   height: gameStatusData.fullScreenSize.height/2)
 						.scaleEffect(cardScale)
 				}else{
 					Image(gameProgress.players[Temp_index_num].role_name.image_name)
 						.resizable()
-						.frame(width: gameStatusData.cardSize.width, height: gameStatusData.cardSize.height)
+						.frame(width: (gameStatusData.fullScreenSize.height/gameStatusData.cardSize.height)*gameStatusData.cardSize.width/2,
+							   height: gameStatusData.fullScreenSize.height/2)
 						.scaleEffect(cardScale)
 				}
 			}
@@ -99,24 +89,50 @@ struct OnePlayerRole: View {
 										  cardScale: $cardScale, textScale: $textScale,
 										  textOpacity: $textOpacity)
 		}
-		
-		Color(.clear)
-			.frame(height: 2)
-		
-		if isRoleNameChecked{
-			Button("役職を確認した"){
-				if Temp_index_num+1 < gameProgress.players.count {
-					Temp_index_num = Temp_index_num + 1
-					isPlayerConfirmationDone = false
-				}else{
-					TempView = .Before_discussion
-				}
-				
-			}
-			.myTextBackground()
-			.myButtonBounce()
-		}
 	}
 }
 
 
+struct TempTexts: View {
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
+	@Binding var TempView: GameView_display_status
+	@Binding var Temp_index_num: Int
+	@Binding var isPlayerConfirmationDone: Bool
+	
+	@Binding var isRoleNameShown: Bool
+	@Binding var isRoleNameChecked: Bool
+	@Binding var cardScale: CGFloat
+	@Binding var textScale: CGFloat
+	@Binding var textOpacity: CGFloat
+	
+	var body: some View{
+		VStack(spacing: 0){
+			ZStack{
+				if isRoleNameShown == true{
+					Text("「\(gameProgress.players[Temp_index_num].player_name)」さん\n役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+						.textFrameDesignProxy()
+						.opacity(textOpacity)
+				}else{
+					Text("「\(gameProgress.players[Temp_index_num].player_name)」さん\n役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+						.foregroundStyle(Color(.clear))
+				}
+			}
+			
+			Spacer()
+			
+			if isRoleNameChecked{
+				Button("役職を確認した"){
+					if Temp_index_num+1 < gameProgress.players.count {
+						Temp_index_num = Temp_index_num + 1
+						isPlayerConfirmationDone = false
+					}else{
+						TempView = .Before_discussion
+					}
+				}
+				.myTextBackground()
+				.myButtonBounce()
+			}
+		}
+	}
+}

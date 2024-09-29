@@ -28,10 +28,17 @@ struct ContentView: View {
 						BeforeHomeScreen()
 					}else if gameStatusData.game_status == .gameScreen{
 						ZStack{
+							Rectangle()
+								.foregroundColor(.black)
+								.frame(width: gameStatusData.fullScreenSize.width,
+									   height: gameStatusData.fullScreenSize.height)
 							Image(gameStatusData.currentTheme.loghouseBackground)
 								.resizable()
-								.frame(maxHeight: .infinity)
+								.scaledToFit()
 								.ignoresSafeArea()
+								.frame(width: gameStatusData.fullScreenSize.width,
+									   height: gameStatusData.fullScreenSize.height)
+								.clipped()
 							
 							GameView()
 						}
