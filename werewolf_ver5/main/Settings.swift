@@ -1,4 +1,6 @@
 import SwiftUI
+import SwiftData
+
 
 /*
  画像解像度の目安
@@ -123,7 +125,7 @@ enum Role {
 		case .seer:
 			return "占い師"
 		case .hunter:
-			return "騎士"
+			return "狩人"
 		case .madman:
 			return "狂人"
 		}
@@ -290,7 +292,7 @@ class GameProgress: ObservableObject {
 		
 		for _ in 0..<hunterNum {
 			if let randomIndex = indexes.randomElement() {
-				self.players[randomIndex].role_name = .seer
+				self.players[randomIndex].role_name = .hunter
 				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
 			}
 		}

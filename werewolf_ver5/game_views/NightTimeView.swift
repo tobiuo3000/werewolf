@@ -21,9 +21,9 @@ struct NightTime: View {
 	
 	var body: some View {
 		if isNightTimeFinished==false {
-			VStack{
+			VStack{  // this VStack is for modifiers
 				if isActionDone==false {
-					HStack{
+					VStack{
 						Text("\(gameProgress.players[players_index].player_name)さん\n夜の行動時間です")
 							.textFrameDesignProxy()
 						if gameProgress.players[players_index].role_name == Role.villager{
@@ -46,10 +46,25 @@ struct NightTime: View {
 									}.padding()
 								}
 							}
-						}else if gameProgress.players[players_index].role_name == Role.werewolf{
+						}else if gameProgress.players[players_index].role_name == Role.hunter{
+							Text("あなたは狩人です\n人狼から守りたい人を一人選択してください")
+								.textFrameDesignProxy()
 							
 							if isTargetConfirmed == true{
-								Text("\(werewolf_target!.player_name)さんを今晩襲撃します")
+								Text("あなたは今晩\(hunter_target!.player_name)さんを守ります")
+									.textFrameDesignProxy()
+								
+							}else{
+								ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
+									Button(player.player_name) {
+										hunter_target = player.copy() as? Player
+										isTargetConfirmed = true
+									}.padding()
+								}
+							}
+						}else if gameProgress.players[players_index].role_name == Role.werewolf{
+							if isTargetConfirmed == true{
+								Text("あなたは今晩\(werewolf_target!.player_name)さんを襲撃します")
 									.textFrameDesignProxy()
 							}else{
 								Text("あなたは人狼です\n今晩襲う相手を一人選択してください")

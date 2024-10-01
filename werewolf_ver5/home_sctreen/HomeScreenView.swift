@@ -91,7 +91,6 @@ struct HomeScreenView: View {
 	@State var iconSize1: CGFloat = 30
 	@State var iconSize2: CGFloat = 30
 	
-	
 	var body: some View {
 		ZStack{
 			VStack(spacing: 0){
@@ -109,7 +108,7 @@ struct HomeScreenView: View {
 							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
 						}
 					
-					BeforeGameView(beforeGameViewOffset: $offsetTab1)
+					BeforeGameView(threeOffSetTab: $threeOffSetTab)
 						.tag(1)
 						.overlay(
 							OffsetProxy()
@@ -289,6 +288,10 @@ struct ScrollBarView: View{
 	@Binding var iconSize2: CGFloat
 	
 	var body: some View{
+		//let _ = print("\(threeOffSetTab), SIZE(\(gameStatusData.fullScreenSize.width))")
+		let _ = print("wolf: \(gameStatusData.werewolf_Count_CONFIG)\nseer: \(gameStatusData.seer_Count_CONFIG)\nhunter: \(gameStatusData.hunter_Count_CONFIG)")
+		let _ = print("player: \(gameStatusData.players_CONFIG)")
+		
 		ZStack{
 			HStack(spacing: 0){
 				Rectangle()
@@ -315,7 +318,6 @@ struct ScrollBarView: View{
 				.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 				.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				.offset(x: (threeOffSetTab/3) - (gameStatusData.fullScreenSize.width/3))
-			let _ = print("\(threeOffSetTab), SIZE(\(gameStatusData.fullScreenSize.width))")
 			
 			Image(systemName: iconSize0 == 30 ? "square.and.pencil.circle" : "square.and.pencil.circle.fill")
 				.foregroundColor(.white)

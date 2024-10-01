@@ -99,7 +99,6 @@ struct TempTexts: View {
 	@Binding var TempView: GameView_display_status
 	@Binding var Temp_index_num: Int
 	@Binding var isPlayerConfirmationDone: Bool
-	
 	@Binding var isRoleNameShown: Bool
 	@Binding var isRoleNameChecked: Bool
 	@Binding var cardScale: CGFloat

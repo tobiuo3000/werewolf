@@ -6,7 +6,7 @@ struct BeforeGameView: View {
 	@EnvironmentObject var gameProgress: GameProgress
 	@State private var isAlertShown = false
 	@State var showAllText: Bool = false
-	@Binding var beforeGameViewOffset: CGFloat
+	@Binding var threeOffSetTab: CGFloat
 	
 	private let columns: [GridItem] = Array(repeating: .init(), count: 2)
 	private let cardScale = 0.3
@@ -14,7 +14,7 @@ struct BeforeGameView: View {
 	
 	var body: some View {
 		VStack{
-			CardGalleryView(beforeGameViewOffset: $beforeGameViewOffset, showAllText: $showAllText)
+			CardGalleryView(threeOffSetTab: $threeOffSetTab, showAllText: $showAllText)
 			
 			ZStack{
 				HStack{

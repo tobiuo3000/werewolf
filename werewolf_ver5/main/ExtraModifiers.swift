@@ -86,29 +86,36 @@ struct TextFrameDesignProxy: ViewModifier {
 
 struct CardAnimationLToR: ViewModifier {
 	@EnvironmentObject var gameStatusData: GameStatusData
-	@State var doesCardAppear: Bool = true
+	@State var hasAppeared: Bool = false  // restricting continuous execution
+	@State var isFirstAppearance: Bool = true  // restricting continuous execution
 	@State var offset: CGFloat
-	@Binding var viewOffset: CGFloat
+	@Binding var threeOffSetTab: CGFloat
 	var imageIndex: Int
 	
 	func body(content: Content) -> some View {
-		let viewOffsetThreshold: CGFloat = (gameStatusData.fullScreenSize.width / 4)
+		let viewOffsetThreshold1: CGFloat = (gameStatusData.fullScreenSize.width * 2 / 4)
+		let viewOffsetThreshold2: CGFloat = (gameStatusData.fullScreenSize.width * 3 / 4)
+		let viewOffsetThreshold3: CGFloat = (gameStatusData.fullScreenSize.width * 5 / 4)
+		let viewOffsetThreshold4: CGFloat = (gameStatusData.fullScreenSize.width * 6 / 4)
 		ZStack{
 			content
-				.offset(x: offset, y: 0)
-				.onChange(of: viewOffset){new_value in
-					if abs(viewOffset) < viewOffsetThreshold {
+				.onAppear(){
+					if isFirstAppearance{
 						performAnimation(imageIndex: imageIndex)
-						doesCardAppear = false
-					}else{
-						dissapeatingAnimation(imageIndex: imageIndex)
-						doesCardAppear = true
-						
+						hasAppeared = true
+						isFirstAppearance = false
 					}
 				}
-				.onAppear(){  // first appearance after "start game"
-					performAnimation(imageIndex: imageIndex)
-					doesCardAppear = false
+				.offset(x: offset, y: 0)
+				.onChange(of: threeOffSetTab){new_value in
+					if (viewOffsetThreshold2 < threeOffSetTab && threeOffSetTab < viewOffsetThreshold3) && !hasAppeared {
+						performAnimation(imageIndex: imageIndex)
+						hasAppeared = true
+					}else if ((threeOffSetTab < viewOffsetThreshold1 || viewOffsetThreshold4 < threeOffSetTab) && hasAppeared) {
+						dissapeatingAnimation(imageIndex: imageIndex)
+						hasAppeared = false
+						
+					}
 				}
 		}
 	}
@@ -116,7 +123,7 @@ struct CardAnimationLToR: ViewModifier {
 	private func performAnimation(imageIndex: Int) {
 		let delay = CGFloat(imageIndex) * 0.05
 		let amplitude = (gameStatusData.fullScreenSize.width / (30+CGFloat(imageIndex)))
-		if doesCardAppear == true{
+		if hasAppeared == false{
 			DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
 				withAnimation(.linear(duration: 0.15)) {
 					offset = amplitude
@@ -139,9 +146,9 @@ struct CardAnimationLToR: ViewModifier {
 	
 	private func dissapeatingAnimation(imageIndex: Int) {
 		let delay = CGFloat(imageIndex) * 0.05
-		if doesCardAppear == false{
+		if hasAppeared == true{
 			DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-				withAnimation(.linear(duration: 0.15)) {
+				withAnimation(.linear(duration: 0.30)) {
 					offset = -(gameStatusData.fullScreenSize.width)
 				}
 			}
@@ -328,8 +335,8 @@ extension View {
 		self.modifier(CardFlippedAndRtoL(isCardFlipped: isCardFlipped, cardScale: cardScale, imageIndex: imageIndex))
 	}
 	
-	func cardAnimationLToR(screenWidth: CGFloat, beforeGameViewOffset: Binding<CGFloat>, imageIndex: Int) -> some View {
-		self.modifier(CardAnimationLToR(offset: -screenWidth, viewOffset: beforeGameViewOffset, imageIndex: imageIndex))
+	func cardAnimationLToR(screenWidth: CGFloat, threeOffSetTab: Binding<CGFloat>, imageIndex: Int) -> some View {
+		self.modifier(CardAnimationLToR(offset: -screenWidth, threeOffSetTab: threeOffSetTab, imageIndex: imageIndex))
 	}
 	
 	func uiAnimationRToL(animationFlag: Binding<Bool>, delay: CGFloat) -> some View {
