@@ -15,12 +15,13 @@ struct ContentView: View {
 								.ignoresSafeArea()
 							
 							VideoPlayerView(videoFileName: "Wolf", videoFileType: "MOV")
-								.frame(maxHeight: gameStatusData.fullScreenSize.height)
-										
+								
+							
 							/*Image(gameStatusData.currentTheme.titleScreenBackground)
 								.resizable()
 								.frame(maxHeight: .infinity)
 								.ignoresSafeArea()*/
+							
 							GameStartView()
 						}
 						.ignoresSafeArea()
@@ -29,9 +30,11 @@ struct ContentView: View {
 					}else if gameStatusData.game_status == .gameScreen{
 						ZStack{
 							Rectangle()
+								.ignoresSafeArea()
 								.foregroundColor(.black)
 								.frame(width: gameStatusData.fullScreenSize.width,
 									   height: gameStatusData.fullScreenSize.height)
+							/*
 							Image(gameStatusData.currentTheme.loghouseBackground)
 								.resizable()
 								.scaledToFit()
@@ -39,7 +42,7 @@ struct ContentView: View {
 								.frame(width: gameStatusData.fullScreenSize.width,
 									   height: gameStatusData.fullScreenSize.height)
 								.clipped()
-							
+							 */
 							GameView()
 						}
 						

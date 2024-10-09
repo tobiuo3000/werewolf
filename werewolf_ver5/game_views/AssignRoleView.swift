@@ -32,20 +32,34 @@ struct BeforeOnePlayerRole: View{
 	@Binding var isPlayerConfirmationDone: Bool
 	
 	var body: some View {
-		Text("次のプレイヤーに携帯を渡してください\n次のプレイヤー：「\(gameProgress.players[Temp_index_num].player_name)」")
-			.textFrameDesignProxy()
-		
-		Button("次へ") {
-			isAlertShown = true
-		}
-		.myTextBackground()
-		.myButtonBounce()
-		.alert("\(gameProgress.players[Temp_index_num].player_name)さんですか？", isPresented: $isAlertShown){
-			Button("はい"){
-				isPlayerConfirmationDone = true
-				isAlertShown = false
+		VStack{
+			Spacer()
+			if Temp_index_num != 0{
+				Text("次のプレイヤーに携帯を渡してください\n「\(gameProgress.players[Temp_index_num].player_name)」さん")
+					.textFrameDesignProxy()
+			}else{
+				VStack(alignment: .center){
+					Text("役職割り当てを行います")
+					Text("”\(gameProgress.players[Temp_index_num].player_name)”さんが")
+					Text("「次へ」を選択してください")
+				}
+				.textFrameDesignProxy()
 			}
-			Button("いいえ", role:.cancel){}
+			
+			Spacer()
+			Button("次へ") {
+				isAlertShown = true
+			}
+			.myTextBackground()
+			.myButtonBounce()
+			.alert("\(gameProgress.players[Temp_index_num].player_name)さんですか？", isPresented: $isAlertShown){
+				Button("はい"){
+					isPlayerConfirmationDone = true
+					isAlertShown = false
+				}
+				Button("いいえ", role:.cancel){}
+			}
+			Spacer()
 		}
 	}
 }
@@ -56,7 +70,6 @@ struct OnePlayerRole: View {
 	@Binding var TempView: GameView_display_status
 	@Binding var Temp_index_num: Int
 	@Binding var isPlayerConfirmationDone: Bool
-	
 	@State private var isCardTapped = false
 	@State private var isRoleNameChecked = false
 	@State private var isCardFlipped = false
@@ -108,13 +121,19 @@ struct TempTexts: View {
 	
 	var body: some View{
 		VStack(spacing: 0){
-			ZStack{
+			ZStack(alignment: .center){
 				if isRoleNameShown == true{
-					Text("「\(gameProgress.players[Temp_index_num].player_name)」さん\n役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+					VStack{
+						Text("「\(gameProgress.players[Temp_index_num].player_name)」さん")
+						Text("役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+					}
 						.textFrameDesignProxy()
 						.opacity(textOpacity)
 				}else{
-					Text("「\(gameProgress.players[Temp_index_num].player_name)」さん\n役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+					VStack{
+						Text("「\(gameProgress.players[Temp_index_num].player_name)」さん")
+						Text("役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+					}
 						.foregroundStyle(Color(.clear))
 				}
 			}

@@ -55,11 +55,11 @@ struct GameView: View {
 				
 			}else if TempView == .Before_night_time {
 				Before_night_time(TempView: $TempView, num_survivors: $num_survivors)
-			
+				
 			}else if TempView == .Night_time{
 				NightTime(TempView: $TempView, players_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
 				
-			}			
+			}
 		}
 	}
 }
@@ -93,6 +93,8 @@ struct VoteResult: View{
 					GameStatusData.game_status = .gameOverScreen
 				}
 			}
+			.myTextBackground()
+			.myButtonBounce()
 			.padding()
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -122,11 +124,12 @@ struct VoteTime: View {
 								player.voteCount += 1
 								voteDone = true
 							}
-							.padding()
+							.myTextBackground()
+							.myButtonBounce()
 						}else{
 							Text(player.player_name)
-								.padding()
-								.foregroundColor(Color(red:0, green:0.3, blue:0.4))
+								.myTextBackground()
+								.foregroundColor(Color(red:0.3, green:0.3, blue:0.3))
 						}
 					}
 					.padding()
@@ -147,6 +150,7 @@ struct VoteTime: View {
 						
 					}
 				}
+				
 				.padding()
 			}
 		}
@@ -165,36 +169,30 @@ struct Before_discussion: View{
 	var body: some View{
 		VStack{
 			Spacer()
-			ScrollView {
-				Text("残り人数：\(gameProgress.get_num_survivors())\n生存者一覧")
-					.textFrameDesignProxy()
-				
-				LazyVGrid(columns: columns, spacing: 20) {
-					ForEach(0..<gameProgress.players.count, id: \.self) { index in
-						if gameProgress.players[index].isAlive == true{
-							Text("\(gameProgress.players[index].player_name)")
-								.padding()
-								.frame(maxWidth: .infinity)
-								.background(Color.blue)
-								.foregroundColor(.white)
-								.cornerRadius(20)
-						}else{
-							Text("\(gameProgress.players[index].player_name)")
-								.padding()
-								.frame(maxWidth: .infinity)
-								.background(Color(red: 0.0, green: 0.2, blue: 0.3))
-								.foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
-								.cornerRadius(20)
-						}
+			Text("残り人数：\(gameProgress.get_num_survivors())\n生存者一覧")
+				.textFrameDesignProxy()
+			
+			LazyVGrid(columns: columns, spacing: 20) {
+				ForEach(0..<gameProgress.players.count, id: \.self) { index in
+					if gameProgress.players[index].isAlive == true{
+						Text("\(gameProgress.players[index].player_name)")
+							.textFrameDesignProxy()
+					}else{
+						Text("\(gameProgress.players[index].player_name)")
+							.textFrameDesignProxy()
+							.background(Color(red: 0.3, green: 0.3, blue: 0.3))
+							.foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
 					}
 				}
-				.padding()
-				Button("議論時間開始") {
-					gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
-					TempView = .Discussion_time
-				}
-				.textFrameDesignProxy()
 			}
+			.padding()
+			Button("議論時間開始") {
+				gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
+				TempView = .Discussion_time
+			}
+			.myTextBackground()
+			.myButtonBounce()
+			Spacer()
 		}
 	}
 }
@@ -211,18 +209,11 @@ struct Before_night_time: View{
 		VStack {
 			
 			Spacer()
-			Text("おそろしい夜の時間がやってきます")
-				.textFrameDesignProxy()
-			Text("\(gameProgress.players[gameProgress.get_survivors_list()[0]].player_name)さんに端末を渡してください")
-				.textFrameDesignProxy()
-			
-			Button("端末を渡した") {
-				TempView = .Night_time
+			VStack{
+				Text("おそろしい夜の時間がやってきます")
+				Text("\(gameProgress.players[gameProgress.get_survivors_list()[0]].player_name)さんに端末を渡してください")
 			}
-			.foregroundColor(.blue)
-			.padding()
-			.background(Color.black)
-			.cornerRadius(20)
+			.textFrameDesignProxy()
 			
 			Text("残り人数：\(num_survivors)\n生存者一覧")
 				.textFrameDesignProxy()
@@ -232,16 +223,12 @@ struct Before_night_time: View{
 					ForEach(0..<gameProgress.players.count, id: \.self) { index in
 						if gameProgress.players[index].isAlive == true{
 							Text("\(gameProgress.players[index].player_name)")
-								.padding()
-								.frame(maxWidth: .infinity)
-								.background(Color.blue)
-								.foregroundColor(.white)
+								.textFrameDesignProxy()
 								.cornerRadius(20)
 						}else{
 							Text("\(gameProgress.players[index].player_name)")
-								.padding()
-								.frame(maxWidth: .infinity)
-								.background(Color(red: 0.0, green: 0.2, blue: 0.3))
+								.textFrameDesignProxy()
+								.background(Color(red: 0.3, green: 0.3, blue: 0.3))
 								.foregroundColor(Color(red: 0.5, green: 0.5, blue: 0.5))
 								.cornerRadius(20)
 						}
@@ -249,6 +236,14 @@ struct Before_night_time: View{
 				}
 				.padding()
 			}
+			
+			Button("端末を渡した") {
+				TempView = .Night_time
+			}
+			.myTextBackground()
+			.myButtonBounce()
+			
+			Spacer()
 		}
 		.frame(maxWidth: .infinity, maxHeight: .infinity)
 		.background(Color.black)
@@ -263,7 +258,7 @@ struct Discussion_time: View{
 	@Binding var num_survivors: Int
 	
 	var body: some View{
-		
+		Spacer()
 		Text("議論時間")
 			.textFrameDesignProxy()
 		Text("残り時間: \(discussion_time) 秒")
@@ -286,7 +281,9 @@ struct Discussion_time: View{
 		Button("議論を終える") {
 			TempView = .Vote_time
 		}
-		.padding()
+		.myTextBackground()
+		.myButtonBounce()
+		Spacer()
 	}
 }
 

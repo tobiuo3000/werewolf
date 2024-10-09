@@ -289,8 +289,6 @@ struct ScrollBarView: View{
 	
 	var body: some View{
 		//let _ = print("\(threeOffSetTab), SIZE(\(gameStatusData.fullScreenSize.width))")
-		let _ = print("wolf: \(gameStatusData.werewolf_Count_CONFIG)\nseer: \(gameStatusData.seer_Count_CONFIG)\nhunter: \(gameStatusData.hunter_Count_CONFIG)")
-		let _ = print("player: \(gameStatusData.players_CONFIG)")
 		
 		ZStack{
 			HStack(spacing: 0){
@@ -355,6 +353,7 @@ struct BeforeHomeScreen: View {
 					Rectangle()
 						.foregroundColor(.black)
 						.ignoresSafeArea()
+					/*
 					Image(gameStatusData.currentTheme.loghouseBackground)
 						.resizable()
 						.scaledToFit()
@@ -362,6 +361,11 @@ struct BeforeHomeScreen: View {
 						.frame(width: gameStatusData.fullScreenSize.width,
 							   height: gameStatusData.fullScreenSize.height)
 						.clipped()
+					*/
+					//VideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
+					//	.frame(maxHeight: gameStatusData.fullScreenSize.height)
+					LoopVideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
+					
 					HomeScreenView(offsetTab0: -gameStatusData.fullScreenSize.width,
 								   offsetTab2: gameStatusData.fullScreenSize.width,
 								   threeOffSetTab: gameStatusData.fullScreenSize.width,

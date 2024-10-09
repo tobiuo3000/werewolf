@@ -26,7 +26,7 @@ struct NightTime: View {
 						Text("\(gameProgress.players[players_index].player_name)さん\n夜の行動時間です")
 							.textFrameDesignProxy()
 						if gameProgress.players[players_index].role_name == Role.villager{
-							Text("あなたは特にやることがないので\n怪しまれないように適当に画面タップとかしてて下さい")
+							Text("あなたは市民です\n怪しまれないように画面タップとかしてて下さい")
 								.textFrameDesignProxy()
 							
 						}else if gameProgress.players[players_index].role_name == Role.seer{
@@ -42,7 +42,9 @@ struct NightTime: View {
 									Button(player.player_name) {
 										seer_target = player
 										isTargetConfirmed = true
-									}.padding()
+									}
+									.myTextBackground()
+									.myButtonBounce()
 								}
 							}
 						}else if gameProgress.players[players_index].role_name == Role.hunter{
@@ -58,7 +60,9 @@ struct NightTime: View {
 									Button(player.player_name) {
 										hunter_target = player
 										isTargetConfirmed = true
-									}.padding()
+									}
+									.myTextBackground()
+									.myButtonBounce()
 								}
 							}
 						}else if gameProgress.players[players_index].role_name == Role.werewolf{
@@ -74,7 +78,8 @@ struct NightTime: View {
 											werewolf_target = player
 											isTargetConfirmed = true
 										}
-										.padding()
+										.myTextBackground()
+										.myButtonBounce()
 									}
 								}
 							}
@@ -83,13 +88,15 @@ struct NightTime: View {
 						Button("行動を終える") {
 							isTargetConfirmed = false
 							isActionDone = true
-						}.padding()
-							.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
-								Button("ゲームスタート"){
-									isTargetConfirmed = false
-									isActionDone = true
-								}
+						}
+						.myTextBackground()
+						.myButtonBounce()
+						.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
+							Button("ゲームスタート"){
+								isTargetConfirmed = false
+								isActionDone = true
 							}
+						}
 						Button("キャンセル", role: .cancel){
 						}
 					}
@@ -117,7 +124,9 @@ struct NightTime: View {
 							players_index = survivors_list[survivors_index]
 							
 						}
-					}.padding()
+					}
+					.myTextBackground()
+					.myButtonBounce()
 				}
 			}
 			.frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -126,20 +135,18 @@ struct NightTime: View {
 			
 		} else {  // After NightTime View
 			VStack{
-				Text("昨晩の犠牲者は...")
-					.textFrameDesignProxy()
-				if isSomeoneMurdered{
-					Text("\(werewolf_target!.player_name)さんでした")
-						.textFrameDesignProxy()
-					Text("残り人数： \(gameProgress.get_num_survivors())")
-						.textFrameDesignProxy()
-					
-				}else{
-					Text("いませんでした")
-					Text("残り人数： \(gameProgress.get_num_survivors())")
-						.textFrameDesignProxy()
-					
+				VStack{
+					Text("昨晩の犠牲者は...")
+					if isSomeoneMurdered{
+						Text("\(werewolf_target!.player_name)さんでした")
+						Text("残り人数： \(gameProgress.get_num_survivors())")
+						
+					}else{
+						Text("いませんでした")
+						Text("残り人数： \(gameProgress.get_num_survivors())")
+					}
 				}
+				.textFrameDesignProxy()
 				Button("次へ") {
 					isSomeoneMurdered = false
 					gameProgress.game_Result()
@@ -151,7 +158,8 @@ struct NightTime: View {
 						gameStatusData.game_status = .gameOverScreen
 					}
 				}
-				.padding()
+				.myTextBackground()
+				.myButtonBounce()
 			}
 		}
 		

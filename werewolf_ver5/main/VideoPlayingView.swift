@@ -1,5 +1,6 @@
 import SwiftUI
 import AVKit
+import Combine
 
 class PlayerUIView: UIView {
 	private var player: AVPlayer?
@@ -96,3 +97,68 @@ struct VideoPlayerView: UIViewRepresentable {
 	}
 }
 
+
+
+
+
+
+
+/*
+ make 2nd version player
+ */
+
+class LoopingVideoManager: ObservableObject {
+	private var queuePlayer: AVQueuePlayer!
+	private var playerLooper: AVPlayerLooper!
+	
+	init(url: URL) {
+		let playerItem = AVPlayerItem(url: url)
+		queuePlayer = AVQueuePlayer(items: [playerItem])
+		queuePlayer.isMuted = true
+		playerLooper = AVPlayerLooper(player: queuePlayer, templateItem: playerItem)
+		
+		NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] _ in
+			self?.queuePlayer.play()  // Safely restart playback on foreground
+		}
+	}
+	
+	func getPlayer() -> AVQueuePlayer {
+		return queuePlayer
+	}
+}
+
+struct LoopingVideoView: View {
+	@StateObject private var videoManager: LoopingVideoManager
+	
+	init(url: URL) {
+		_videoManager = StateObject(wrappedValue: LoopingVideoManager(url: url))
+	}
+	
+	var body: some View {
+		VideoPlayer(player: videoManager.getPlayer())
+			.onAppear {
+				videoManager.getPlayer().play()  // Automatically start video
+			}
+			.onDisappear {
+				videoManager.getPlayer().pause()  // Pause video on disappear
+			}
+	}
+}
+
+struct LoopVideoPlayerView: View {
+	@EnvironmentObject var gameStatusData: GameStatusData
+	var videoFileName: String
+	var videoFileType: String
+	var isPlaying: Bool = true
+	
+	var body: some View{
+		LoopingVideoView(url: makeUIView())
+			.frame(maxHeight: gameStatusData.fullScreenSize.height)
+	}
+	
+	func makeUIView() -> URL {
+		let path = Bundle.main.path(forResource: videoFileName, ofType: videoFileType)!
+		let url = URL(fileURLWithPath: path)
+		return url
+	}
+}
