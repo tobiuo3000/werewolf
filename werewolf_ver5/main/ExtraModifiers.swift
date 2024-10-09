@@ -164,38 +164,45 @@ struct CardFlippingWhenAssigningRole: ViewModifier{
 	@Binding var cardScale: CGFloat
 	@Binding var textScale: CGFloat
 	@Binding var textOpacity: CGFloat
+	@Binding var isTapAllowed: Bool
 	
 	func body(content: Content) -> some View {
 		content
 			.rotation3DEffect(Angle(degrees: isCardFlipped ? 0 : 180), axis: (x: 0, y: 1, z: 0))
 			.onTapGesture {
-				withAnimation(.easeInOut(duration: 0.1)) {
-					cardScale = 0.8 // 最初に小さくバウンド
-				}
-				withAnimation(.easeInOut(duration: 0.1).delay(0.2)) {
-					cardScale = 1.0 // 最初に小さくバウンド
-				}
-				withAnimation(.easeInOut(duration: 0.3).delay(0.4)){
-					self.isCardFlipped.toggle()
-				}
-				withAnimation(.easeInOut(duration: 0.3).delay(0.8)) {
-					if isCardTapped {
-						cardScale = 1.0 // 元のサイズに戻す
-					} else {
-						cardScale = 1.2 // 拡大
+				if isTapAllowed{
+					isTapAllowed = false
+					withAnimation(.easeInOut(duration: 0.1)) {
+						cardScale = 0.8 // 最初に小さくバウンド
 					}
-					self.isCardTapped.toggle()
-				}
-				withAnimation(.easeOut(duration: 0.3).delay(1.1)){
-					if isRoleNameShown {
-						textScale = 0.0
-						textOpacity = 0.0
-					} else {
-						textScale = 1.0
-						textOpacity = 1.0
+					withAnimation(.easeInOut(duration: 0.1).delay(0.2)) {
+						cardScale = 1.0 // 最初に小さくバウンド
 					}
-					self.isRoleNameShown.toggle()
-					self.isRoleNameChecked = true
+					withAnimation(.easeInOut(duration: 0.3).delay(0.4)){
+						self.isCardFlipped.toggle()
+					}
+					withAnimation(.easeInOut(duration: 0.3).delay(0.8)) {
+						if isCardTapped {
+							cardScale = 1.0 // 元のサイズに戻す
+						} else {
+							cardScale = 1.2 // 拡大
+						}
+						self.isCardTapped.toggle()
+					}
+					withAnimation(.easeOut(duration: 0.3).delay(1.1)){
+						if isRoleNameShown {
+							textScale = 0.0
+							textOpacity = 0.0
+						} else {
+							textScale = 1.0
+							textOpacity = 1.0
+						}
+						self.isRoleNameShown.toggle()
+						self.isRoleNameChecked = true
+					}
+					DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
+						isTapAllowed = true
+					}
 				}
 			}
 	}
@@ -327,8 +334,8 @@ extension View {
 		self.modifier(TextFrameDesignProxy())
 	}
 	
-	func cardFlippedWhenAssigningRole(isCardFlipped: Binding<Bool>, isCardTapped: Binding<Bool>, isRoleNameShown: Binding<Bool>, isRoleNameChecked: Binding<Bool>, cardScale: Binding<CGFloat>, textScale: Binding<CGFloat>, textOpacity: Binding<CGFloat>) -> some View {
-		self.modifier(CardFlippingWhenAssigningRole(isCardFlipped: isCardFlipped, isCardTapped: isCardTapped, isRoleNameShown: isRoleNameShown, isRoleNameChecked: isRoleNameChecked, cardScale: cardScale, textScale: textScale, textOpacity: textOpacity))
+	func cardFlippedWhenAssigningRole(isCardFlipped: Binding<Bool>, isCardTapped: Binding<Bool>, isRoleNameShown: Binding<Bool>, isRoleNameChecked: Binding<Bool>, cardScale: Binding<CGFloat>, textScale: Binding<CGFloat>, textOpacity: Binding<CGFloat>, isTapAllowed: Binding<Bool>) -> some View {
+		self.modifier(CardFlippingWhenAssigningRole(isCardFlipped: isCardFlipped, isCardTapped: isCardTapped, isRoleNameShown: isRoleNameShown, isRoleNameChecked: isRoleNameChecked, cardScale: cardScale, textScale: textScale, textOpacity: textOpacity, isTapAllowed: isTapAllowed))
 	}
 	
 	func cardFlippedAndPiled(isCardFlipped: Binding<Bool>, cardScale: Binding<CGFloat>, imageIndex: Int) -> some View {

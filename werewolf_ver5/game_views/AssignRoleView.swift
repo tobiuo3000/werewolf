@@ -64,6 +64,7 @@ struct OnePlayerRole: View {
 	@State var cardScale: CGFloat = 1.0
 	@State var textScale: CGFloat = 0
 	@State var textOpacity: CGFloat = 0.0
+	@State var isTapAllowed: Bool = true
 	
 	var body: some View {
 		ZStack{
@@ -87,7 +88,7 @@ struct OnePlayerRole: View {
 			.cardFlippedWhenAssigningRole(isCardFlipped: $isCardFlipped, isCardTapped: $isCardTapped,
 										  isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked,
 										  cardScale: $cardScale, textScale: $textScale,
-										  textOpacity: $textOpacity)
+										  textOpacity: $textOpacity, isTapAllowed: $isTapAllowed)
 		}
 	}
 }

@@ -46,7 +46,7 @@ enum AppTheme: String, CaseIterable {
 	
 	var loghouseBackground: String {
 		switch self {
-		case .std_theme: return "loghouse_1"
+		case .std_theme: return "loghouse"
 		case .simple_theme: return "Theme2_TitleScreen"
 		case .theme3: return "Theme3_TitleScreen"
 		}
@@ -239,7 +239,7 @@ class GameProgress: ObservableObject {
 	}
 	
 	func get_player_from_UUID(targetPlayerID: UUID) -> Player{
-		return players.first(where: { $0.id == targetPlayerID })!
+		return self.players.first(where: { $0.id == targetPlayerID })!
 	}
 	
 	func get_num_survivors()->Int{
@@ -266,8 +266,23 @@ class GameProgress: ObservableObject {
 		get_player_from_UUID(targetPlayerID: suspect_id).isAlive = false
 	}
 	
-	func murder_target(target_id: UUID){
-		get_player_from_UUID(targetPlayerID: target_id).isAlive = false
+	func try_murdering(target: Player, hunter_target: Player?) -> Bool{
+		guard let hunter_target = hunter_target else{
+			let _ = print("1")
+			let _ = print(target)
+			target.isAlive = false
+			return true
+		}
+		
+		if target.id == hunter_target.id{
+			let _ = print("2")
+			return false
+		}else{
+			let _ = print("3")
+			let _ = print(target)
+			target.isAlive = false
+			return true
+		}
 	}
 	
 	func assignRoles(wolfNum:Int, seerNum:Int, hunterNum:Int) {

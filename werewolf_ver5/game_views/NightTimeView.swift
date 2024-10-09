@@ -5,7 +5,6 @@ import SwiftUI
 struct NightTime: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
-	
 	@Binding var TempView: GameView_display_status
 	@State var players_index: Int
 	@State private var survivors_index: Int = 0
@@ -41,7 +40,7 @@ struct NightTime: View {
 							}else{
 								ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
 									Button(player.player_name) {
-										seer_target = player.copy() as? Player
+										seer_target = player
 										isTargetConfirmed = true
 									}.padding()
 								}
@@ -57,7 +56,7 @@ struct NightTime: View {
 							}else{
 								ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
 									Button(player.player_name) {
-										hunter_target = player.copy() as? Player
+										hunter_target = player
 										isTargetConfirmed = true
 									}.padding()
 								}
@@ -72,7 +71,7 @@ struct NightTime: View {
 								ScrollView {
 									ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
 										Button(player.player_name) {
-											werewolf_target = player.copy() as? Player
+											werewolf_target = player
 											isTargetConfirmed = true
 										}
 										.padding()
@@ -107,13 +106,11 @@ struct NightTime: View {
 						isActionDone = false
 						
 						if survivors_index+1 == gameProgress.get_num_survivors(){  // NightTime Processes are done here
+							let _ = print(werewolf_target!.player_name)
+							let _ = print(werewolf_target!.isAlive)
+							isSomeoneMurdered = gameProgress.try_murdering(target: werewolf_target!,
+																		   hunter_target: hunter_target)
 							isNightTimeFinished = true
-							if werewolf_target!.id == hunter_target!.id{
-								isSomeoneMurdered = true
-								gameProgress.murder_target(target_id: werewolf_target!.id)
-							}else{
-								isSomeoneMurdered = false
-							}
 							
 						}else{
 							survivors_index += 1

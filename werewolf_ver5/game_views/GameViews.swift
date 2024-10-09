@@ -45,13 +45,10 @@ struct GameView: View {
 				Before_discussion(TempView: $TempView)
 				
 			}else if TempView == .Discussion_time {
-				Discussion_time(TempView: $TempView, num_survivors: $num_survivors)
+				Discussion_time(discussion_time: gameStatusData.discussion_time_CONFIG, TempView: $TempView,  num_survivors: $num_survivors)
 				
 			}else if TempView == .Vote_time{
 				VoteTime(TempView: $TempView, player_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
-					.onAppear(){
-						gameProgress.discussion_time = gameStatusData.discussion_time_CONFIG
-					}
 				
 			}else if TempView == .Vote_result{
 				VoteResult(TempView: $TempView)
@@ -260,8 +257,8 @@ struct Before_night_time: View{
 
 
 struct Discussion_time: View{
-	@EnvironmentObject var GameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
+	@State var discussion_time: Int
 	@Binding var TempView: GameView_display_status
 	@Binding var num_survivors: Int
 	
@@ -269,11 +266,11 @@ struct Discussion_time: View{
 		
 		Text("議論時間")
 			.textFrameDesignProxy()
-		Text("残り時間: \(gameProgress.discussion_time) 秒")
+		Text("残り時間: \(discussion_time) 秒")
 			.onAppear {
 				Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-					if gameProgress.discussion_time > 0 {
-						gameProgress.discussion_time -= 1
+					if discussion_time > 0 {
+						discussion_time -= 1
 					} else {
 						timer.invalidate()
 						TempView = .Vote_time
