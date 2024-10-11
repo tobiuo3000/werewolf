@@ -2,6 +2,8 @@
 import SwiftUI
 
 
+"これはテストです"
+
 struct NightTime: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
