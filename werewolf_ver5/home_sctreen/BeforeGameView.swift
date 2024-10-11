@@ -67,7 +67,7 @@ struct BeforeGameView: View {
 		gameProgress.players = gameStatusData.players_CONFIG.map { $0.copy() as! Player }
 		//gameProgress.players = gameStatusData.players_CONFIG  // initiate players property
 		gameProgress.discussion_time = gameStatusData.discussion_time_CONFIG
-		gameProgress.assignRoles(wolfNum: gameStatusData.werewolf_Count_CONFIG, seerNum: gameStatusData.seer_Count_CONFIG, hunterNum: gameStatusData.hunter_Count_CONFIG)
+		gameProgress.assignRoles(wolfNum: gameStatusData.werewolf_Count_CONFIG, seerNum: gameStatusData.seer_Count_CONFIG, mediumNum: gameStatusData.medium_Count_CONFIG, hunterNum: gameStatusData.hunter_Count_CONFIG)
 		gameProgress.game_start_flag = true
 		showAllText = false
 	}

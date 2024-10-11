@@ -83,6 +83,14 @@ struct GameSettingView: View{
 						setConfig()
 					}
 				
+				Stepper("霊媒師の数: \(gameStatusData.medium_Count_CONFIG)", value: $gameStatusData.medium_Count_CONFIG, in: 0...1)
+					.pickerStyle(SegmentedPickerStyle())
+					.textFrameDesignProxy()
+					.accentColor(.white)
+					.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
+						setConfig()
+					}
+				
 				Stepper("騎士の数: \(gameStatusData.hunter_Count_CONFIG)", value: $gameStatusData.hunter_Count_CONFIG, in: 0...1)
 					.pickerStyle(SegmentedPickerStyle())
 					.textFrameDesignProxy()

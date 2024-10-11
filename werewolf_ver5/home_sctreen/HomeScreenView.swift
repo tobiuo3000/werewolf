@@ -75,6 +75,8 @@ struct TransitionLoopBackGround: View{
 }
 
 
+
+
 struct HomeScreenView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var currentTab = 1  // decide first appearance tab
