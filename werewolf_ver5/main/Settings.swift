@@ -135,7 +135,7 @@ enum Role {
 
 
 enum gameStatus{
-	case titleScreen, homeScreen, gameScreen, gameOverScreen
+	case titleScreen, homeScreen, gameScreen, gameOverScreen, toTitleScreen
 }
 
 class Player: Identifiable, NSCopying {
@@ -160,6 +160,25 @@ class Player: Identifiable, NSCopying {
 			return copy
 		}
 }
+
+
+class DailyLog: Identifiable, NSCopying{
+	var id: UUID
+	var day: Int
+	var murderedPlayer: Player?
+	var executedPlayer: Player?
+	
+	init(day: Int) {
+		self.id = UUID()
+		self.day = day
+	}
+	
+	func copy(with zone: NSZone? = nil) -> Any {
+		let copy = DailyLog(day: self.day)
+			return copy
+		}
+}
+
 
 class GameStatusData: ObservableObject {
 	@Published var game_status: gameStatus = .titleScreen
@@ -215,6 +234,8 @@ func makePlayerList(playersNum: Int)->[Player]{
 
 class GameProgress: ObservableObject {
 	@Published var players: [Player] = []
+	@Published var diary: [DailyLog] = []
+	@Published var day_currrent_game: Int = 0
 	@Published var roundNumber: Int = 0
 	@Published var discussion_time: Int = 10
 	@Published var game_start_flag: Bool = false
@@ -240,6 +261,10 @@ class GameProgress: ObservableObject {
 	
 	func get_player_from_UUID(targetPlayerID: UUID) -> Player{
 		return self.players.first(where: { $0.id == targetPlayerID })!
+	}
+	
+	func get_diary_from_day(target_day: Int) -> DailyLog{
+		return self.diary.first(where: { $0.day == target_day })!
 	}
 	
 	func get_num_survivors()->Int{

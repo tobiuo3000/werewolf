@@ -10,11 +10,9 @@ enum GameView_display_status{
 struct GameView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
-	
 	@State private var num_survivors: Int = 0
 	@State private var isAlertShown = false
 	@State var TempView: GameView_display_status = .Show_player_role
-	
 	
 	var body: some View {
 		VStack{
@@ -40,7 +38,6 @@ struct GameView: View {
 			
 			if TempView == .Show_player_role {
 				AssignRole(TempView: $TempView)
-				
 			}else if TempView == .Before_discussion {
 				Before_discussion(TempView: $TempView)
 				
@@ -83,6 +80,7 @@ struct VoteResult: View{
 			
 			Button("次へ") {
 				gameProgress.sentence_to_death(suspect_id: gameProgress.get_hightst_vote()!.id)
+				gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer = gameProgress.get_hightst_vote()!
 				gameProgress.reset_vote_count()
 				gameProgress.game_Result()
 				if gameProgress.game_result == 0{
@@ -188,6 +186,8 @@ struct Before_discussion: View{
 			.padding()
 			Button("議論時間開始") {
 				gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
+				gameProgress.day_currrent_game = gameProgress.day_currrent_game + 1
+				gameProgress.diary.append(DailyLog(day: gameProgress.day_currrent_game))
 				TempView = .Discussion_time
 			}
 			.myTextBackground()

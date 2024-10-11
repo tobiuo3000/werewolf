@@ -3,7 +3,7 @@ import SwiftUI
 /*
  画像解像度の目安
  →iphone16 pro maxは1320*2868(9:19.6)
-*/
+ */
 
 
 struct OffsetProxy: View {
@@ -25,7 +25,7 @@ struct OffsetKey: PreferenceKey {
 }
 
 
-struct LoopTransitionBackGround: View{
+struct TransitionLoopBackGround: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var offset: CGSize
 	@State private var opacity: Double = 1.0
@@ -33,12 +33,12 @@ struct LoopTransitionBackGround: View{
 	
 	var body: some View{
 		HStack{}
-		.onAppear(){
-			if count<1 {
-				startScrolling()
-				count = 1
+			.onAppear(){
+				if count<1 {
+					startScrolling()
+					count = 1
+				}
 			}
-		}
 		
 		ZStack{
 			HStack(spacing: 0){
@@ -136,7 +136,7 @@ struct HomeScreenView: View {
 				ScrollBarView(currentTab: $currentTab, threeOffSetTab: $threeOffSetTab, iconOffsetTab0: $iconOffsetTab0,
 							  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
 							  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
-					.frame(height: 50)
+				.frame(height: 50)
 			}
 			.disabled(showingSettings)
 			
@@ -240,7 +240,7 @@ struct HomeScreenMenu: View{
 			.textFrameSimple()
 			.alert("タイトルに戻りますか？", isPresented: $isAlertShown){
 				Button("はい"){
-					gameStatusData.game_status = .titleScreen
+					gameStatusData.game_status = .toTitleScreen
 					isAlertShown = false
 				}
 				Button("いいえ", role:.cancel){}
@@ -343,10 +343,12 @@ struct BeforeHomeScreen: View {
 	var body: some View {
 		ZStack {
 			if isAnimeDone == false{
-				LoopTransitionBackGround(offset: CGSize(width: 0,
+				TransitionLoopBackGround(offset: CGSize(width: 0,
 														height: 0))
 				.onAppear(){
-					startScrolling()
+					DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+						isAnimeDone = true
+					}
 				}
 			}else{
 				ZStack{
@@ -354,14 +356,14 @@ struct BeforeHomeScreen: View {
 						.foregroundColor(.black)
 						.ignoresSafeArea()
 					/*
-					Image(gameStatusData.currentTheme.loghouseBackground)
-						.resizable()
-						.scaledToFit()
-						.ignoresSafeArea()
-						.frame(width: gameStatusData.fullScreenSize.width,
-							   height: gameStatusData.fullScreenSize.height)
-						.clipped()
-					*/
+					 Image(gameStatusData.currentTheme.loghouseBackground)
+					 .resizable()
+					 .scaledToFit()
+					 .ignoresSafeArea()
+					 .frame(width: gameStatusData.fullScreenSize.width,
+					 height: gameStatusData.fullScreenSize.height)
+					 .clipped()
+					 */
 					//VideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
 					//	.frame(maxHeight: gameStatusData.fullScreenSize.height)
 					LoopVideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
@@ -373,11 +375,5 @@ struct BeforeHomeScreen: View {
 				}
 			}
 		}
-	}
-	
-	func startScrolling() {
-		DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-				isAnimeDone = true
-			}
 	}
 }

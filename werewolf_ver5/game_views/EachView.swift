@@ -33,6 +33,7 @@ struct GameStartView: View{
 				
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { // 1秒のディレイ
 					gameStatusData.game_status = .homeScreen
+					isAnimated.toggle()
 				}
 			}
 			.myTextBackground()
@@ -41,7 +42,7 @@ struct GameStartView: View{
 			.offset(y: isAnimated ? 200 : 0) // 上に移動
 			.animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用
 			
-				Spacer()
+			Spacer()
 		}
 	}
 }
@@ -79,3 +80,17 @@ struct GameOverView: View {
 }
 
 
+struct toTitleView: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	private let delay: Double = 1.4
+	
+	var body: some View{
+		TransitionLoopBackGround(offset: CGSize(width: 0,
+												height: 0))
+		.onAppear(){
+			DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+				gameStatusData.game_status = .titleScreen
+			}
+		}
+	}
+}

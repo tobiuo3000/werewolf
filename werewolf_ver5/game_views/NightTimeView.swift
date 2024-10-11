@@ -118,7 +118,9 @@ struct NightTime: View {
 							isSomeoneMurdered = gameProgress.try_murdering(target: werewolf_target!,
 																		   hunter_target: hunter_target)
 							isNightTimeFinished = true
-							
+							if isSomeoneMurdered == true {
+								gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).murderedPlayer = werewolf_target!
+							}
 						}else{
 							survivors_index += 1
 							players_index = survivors_list[survivors_index]

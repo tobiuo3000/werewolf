@@ -153,7 +153,9 @@ struct LoopVideoPlayerView: View {
 	
 	var body: some View{
 		LoopingVideoView(url: makeUIView())
-			.frame(maxHeight: gameStatusData.fullScreenSize.height)
+			.scaledToFill()
+			.position(x: gameStatusData.fullScreenSize.width/2,
+					  y: gameStatusData.fullScreenSize.height/2)
 	}
 	
 	func makeUIView() -> URL {

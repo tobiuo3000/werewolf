@@ -52,5 +52,158 @@
             landmarkType = "24">
          </BreakpointContent>
       </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "werewolf_ver5/main/Settings.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "189"
+            endingLineNumber = "189"
+            landmarkName = "GameStatusData"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - d5630cc4ae0aa115"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "property wrapper backing initializer of werewolf_ver5.GameStatusData.discussion_seconds_CONFIG : Swift.Int"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/werewolf_ver5/main/Settings.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - bbae0f7a20694f31"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.discussion_seconds_CONFIG.getter : Swift.Int"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/werewolf_ver5/main/Settings.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - c56d1fb778703947"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.discussion_seconds_CONFIG.setter : Swift.Int"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/werewolf_ver5/main/Settings.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - 11cdb61105340c54"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.discussion_seconds_CONFIG.modify : Swift.Int"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/werewolf_ver5/main/Settings.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - f1bc4d7ff8df042b"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.discussion_seconds_CONFIG.modify : Swift.Int with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "20">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - 1235abf83ba736a9"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.$discussion_seconds_CONFIG.getter : Combine.Published&lt;Swift.Int&gt;.Publisher"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/werewolf_ver5/main/Settings.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "170"
+                  endingLineNumber = "170"
+                  offsetFromSymbolStart = "0">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - 8676523003a8b9d2"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.$discussion_seconds_CONFIG.setter : Combine.Published&lt;Swift.Int&gt;.Publisher"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - a6d5b00d0faa2f6d"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.$discussion_seconds_CONFIG.modify : Combine.Published&lt;Swift.Int&gt;.Publisher"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "64">
+               </Location>
+               <Location
+                  uuid = "61336FC9-4D1F-4D64-BF39-D4D8A8920449 - 719be48b565daea5"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "werewolf_ver5.GameStatusData.$discussion_seconds_CONFIG.modify : Combine.Published&lt;Swift.Int&gt;.Publisher with unmangled suffix &quot;.resume.0&quot;"
+                  moduleName = "werewolf_ver5"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/masanorisudo/Documents/wolf_game/werewolf_ver5/%3Ccompiler-generated%3E"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
    </Breakpoints>
 </Bucket>

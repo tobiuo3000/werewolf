@@ -14,8 +14,9 @@ struct ContentView: View {
 								.frame(maxHeight: .infinity)
 								.ignoresSafeArea()
 							
-							VideoPlayerView(videoFileName: "Wolf", videoFileType: "MOV")
-								
+							LoopVideoPlayerView(videoFileName: "Wolf", videoFileType: "MOV")
+							ScrollView{
+							}
 							
 							/*Image(gameStatusData.currentTheme.titleScreenBackground)
 								.resizable()
@@ -25,6 +26,8 @@ struct ContentView: View {
 							GameStartView()
 						}
 						.ignoresSafeArea()
+					}else if gameStatusData.game_status == .toTitleScreen{
+						toTitleView()
 					}else if gameStatusData.game_status == .homeScreen{
 						BeforeHomeScreen()
 					}else if gameStatusData.game_status == .gameScreen{
@@ -57,8 +60,5 @@ struct ContentView: View {
 			}
 		}
 	}
-
-
-
 
 
