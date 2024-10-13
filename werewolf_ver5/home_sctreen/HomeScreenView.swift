@@ -75,8 +75,6 @@ struct TransitionLoopBackGround: View{
 }
 
 
-
-
 struct HomeScreenView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var currentTab = 1  // decide first appearance tab
@@ -85,13 +83,14 @@ struct HomeScreenView: View {
 	@State var offsetTab2: CGFloat
 	@State var threeOffSetTab: CGFloat
 	@State private var showingSettings = false
+	@State private var isReorderingViewShown = false
 	@State private var iconOffsetTab0: CGFloat = 3
 	@State private var iconOffsetTab1: CGFloat = 3
 	@State private var iconOffsetTab2: CGFloat = 3
-	var thresholdIcon: CGFloat
 	@State var iconSize0: CGFloat = 30
 	@State var iconSize1: CGFloat = 30
 	@State var iconSize2: CGFloat = 30
+	var thresholdIcon: CGFloat
 	
 	var body: some View {
 		ZStack{
@@ -99,7 +98,7 @@ struct HomeScreenView: View {
 				HomeScreenMenu(showingSettings: $showingSettings)
 				
 				TabView(selection: $currentTab) {
-					GameSettingView()
+					GameSettingView(isReorderingViewShown: $isReorderingViewShown)
 						.tag(0)
 						.overlay(
 							OffsetProxy()
@@ -135,12 +134,15 @@ struct HomeScreenView: View {
 				.tabViewStyle(.page(indexDisplayMode: .never))
 				.animation(.easeInOut, value: currentTab)
 				
-				ScrollBarView(currentTab: $currentTab, threeOffSetTab: $threeOffSetTab, iconOffsetTab0: $iconOffsetTab0,
-							  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
-							  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
-				.frame(height: 50)
+				if isReorderingViewShown == false {
+					ScrollBarView(currentTab: $currentTab, threeOffSetTab: $threeOffSetTab, iconOffsetTab0: $iconOffsetTab0,
+								  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
+								  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
+					.frame(height: 50)
+				}
 			}
 			.disabled(showingSettings)
+			.disabled(isReorderingViewShown)
 			
 			if showingSettings == true{
 				Color.black.opacity(0.4)
@@ -149,6 +151,11 @@ struct HomeScreenView: View {
 					.foregroundColor(.white)
 					.cornerRadius(20)
 				SettingsView(showingSettings: $showingSettings)
+			}
+			if isReorderingViewShown == true {
+					
+						ReorderingPlayerView(isReorderingViewShown: $isReorderingViewShown)
+						
 			}
 		}
 	}
@@ -197,6 +204,7 @@ struct HomeScreenView: View {
 			iconSize.wrappedValue = 30
 		}
 	}
+
 	
 }
 

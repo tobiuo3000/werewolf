@@ -27,6 +27,7 @@ struct GameView: View {
 				}
 				.alert("進行中のゲームを終了しますか？", isPresented: $isAlertShown){
 					Button("はい"){
+						gameStatusData.update_role_CONFIG()
 						gameStatusData.game_status = .homeScreen
 						isAlertShown = false
 					}
@@ -107,35 +108,61 @@ struct VoteTime: View {
 	@State var player_index: Int = 0
 	@State var survivors_index: Int = 0
 	@State var voteDone: Bool = false
+	@State var isAlertShown: Bool = false
 	var survivors_list: [Int]
 	
 	var body: some View {
 		VStack{
 			if voteDone == false{
-				Text("「\(gameProgress.players[player_index].player_name)」さん\n人狼だと思う人物を選択してください ")
-					.textFrameDesignProxy()
+				VStack{
+					Text("「\(gameProgress.players[player_index].player_name)」さん")
+					Text("人狼だと思う人物を選択してください")
+				}
+				.textFrameDesignProxy()
 				
 				ScrollView {
 					ForEach(gameProgress.players.filter {$0.isAlive}) { player in
 						if gameProgress.players[player_index].player_order != player.player_order{
 							Button(player.player_name) {
-								player.voteCount += 1
-								voteDone = true
+								isAlertShown = true
 							}
 							.myTextBackground()
 							.myButtonBounce()
+							.alert("\(player.player_name)さんに投票しますか？", isPresented: $isAlertShown){
+								Button("投票する"){
+									player.voteCount += 1
+									voteDone = true
+									isAlertShown = false
+								}
+								Button("キャンセル", role: .cancel){
+								}
+							}
+							.padding()
 						}else{
-							Text(player.player_name)
-								.myTextBackground()
-								.foregroundColor(Color(red:0.3, green:0.3, blue:0.3))
+							ZStack{
+								Text(player.player_name)
+									.padding(12)
+									.background(.white)
+									.cornerRadius(GameStatusData.currentTheme.cornerRadius)
+								Text(player.player_name)
+									.foregroundColor(.white)
+									.padding(10)
+									.background(
+										Color(.gray)
+									)
+									.cornerRadius(GameStatusData.currentTheme.cornerRadius)
+							}
+							.padding()
 						}
 					}
-					.padding()
 				}
 			}else{
 				if survivors_index+1 < gameProgress.get_num_survivors(){
-					Text("次のプレイヤーに携帯を渡してください\n次のプレイヤー：「\(gameProgress.players[survivors_list[survivors_index+1]].player_name)」")
-						.textFrameDesignProxy()
+					VStack{
+						Text("次のプレイヤーに携帯を渡してください")
+						Text("次のプレイヤー：「\(gameProgress.players[survivors_list[survivors_index+1]].player_name)」")
+					}
+					.textFrameDesignProxy()
 				}
 				
 				Button("次へ") {
@@ -167,8 +194,11 @@ struct Before_discussion: View{
 	var body: some View{
 		VStack{
 			Spacer()
-			Text("残り人数：\(gameProgress.get_num_survivors())\n生存者一覧")
-				.textFrameDesignProxy()
+			VStack{
+				Text("残り人数：\(gameProgress.get_num_survivors())")
+				Text("生存者一覧")
+			}
+			.textFrameDesignProxy()
 			
 			LazyVGrid(columns: columns, spacing: 20) {
 				ForEach(0..<gameProgress.players.count, id: \.self) { index in
@@ -215,8 +245,11 @@ struct Before_night_time: View{
 			}
 			.textFrameDesignProxy()
 			
-			Text("残り人数：\(num_survivors)\n生存者一覧")
-				.textFrameDesignProxy()
+			VStack{
+				Text("残り人数：\(num_survivors)")
+				Text("生存者一覧")
+			}
+			.textFrameDesignProxy()
 			
 			ScrollView {
 				LazyVGrid(columns: columns, spacing: 20) {

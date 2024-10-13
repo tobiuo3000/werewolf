@@ -52,7 +52,8 @@ struct CardFlippingAnimation: View{
 		let conditionVil = imageIndex < gameStatusData.villager_Count_CONFIG
 		let conditionWerewolf = (gameStatusData.villager_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG)
 		let conditionSeer = (gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG)
-		let conditionHunter = (gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG + gameStatusData.hunter_Count_CONFIG)
+		let conditionMedium = (gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG + gameStatusData.medium_Count_CONFIG)
+		let conditionHunter = (gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG + gameStatusData.medium_Count_CONFIG <= imageIndex) && (imageIndex < gameStatusData.villager_Count_CONFIG + gameStatusData.werewolf_Count_CONFIG + gameStatusData.seer_Count_CONFIG + gameStatusData.medium_Count_CONFIG + gameStatusData.hunter_Count_CONFIG)
 		
 		VStack{
 			if conditionVil{
@@ -61,6 +62,8 @@ struct CardFlippingAnimation: View{
 				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.werewolf, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
 			}else if conditionSeer{
 				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.seer, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
+			}else if conditionMedium{
+				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.medium, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
 			}else if conditionHunter{
 				CardView(showAllText: $showAllText, isCardFlipped: $isCardFlipped, role: Role.hunter, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight)
 			}

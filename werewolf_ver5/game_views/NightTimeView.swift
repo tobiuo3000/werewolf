@@ -1,8 +1,6 @@
-
 import SwiftUI
 
 
-"これはテストです"
 
 struct NightTime: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
@@ -28,16 +26,25 @@ struct NightTime: View {
 						Text("\(gameProgress.players[players_index].player_name)さん\n夜の行動時間です")
 							.textFrameDesignProxy()
 						if gameProgress.players[players_index].role_name == Role.villager{
-							Text("あなたは市民です\n怪しまれないように画面タップとかしてて下さい")
-								.textFrameDesignProxy()
+							VStack{
+								Text("あなたは市民です")
+								Text("怪しまれないように画面タップとかしてて下さい")
+							}
+							.textFrameDesignProxy()
 							
 						}else if gameProgress.players[players_index].role_name == Role.seer{
-							Text("あなたは占い師です\n占いたい人を一人選択してください")
-								.textFrameDesignProxy()
+							VStack{
+								Text("あなたは占い師です")
+								Text("一人の役職を知ることができます")
+							}
+							.textFrameDesignProxy()
 							
 							if isTargetConfirmed == true{
-								Text("\(seer_target!.player_name)さんの役職は...\n\(seer_target!.role_name.japaneseName)です")
-									.textFrameDesignProxy()
+								VStack{
+									Text("\(seer_target!.player_name)さんの役職は...")
+									Text("\(seer_target!.role_name.japaneseName)です")
+								}
+								.textFrameDesignProxy()
 								
 							}else{
 								ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
@@ -49,9 +56,29 @@ struct NightTime: View {
 									.myButtonBounce()
 								}
 							}
+						}else if gameProgress.players[players_index].role_name == Role.medium{
+							VStack{
+								Text("あなたは霊媒師です")
+								Text("処刑された人物が人狼かどうかわかります")
+							}
+							.textFrameDesignProxy()
+							
+							if gameProgress.day_currrent_game == 0{
+								Text("現在はまだ誰も殺されていません")
+							}else{
+								Text("昨晩殺された\(gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.player_name)さんは...)")
+								if gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.role_name == .werewolf{
+									Text("人狼でした")
+								}else{
+									Text("人狼ではありません")
+								}
+							}
 						}else if gameProgress.players[players_index].role_name == Role.hunter{
-							Text("あなたは狩人です\n人狼から守りたい人を一人選択してください")
-								.textFrameDesignProxy()
+							VStack{
+								Text("あなたは狩人です")
+								Text("今晩人狼から守る人物を選択できます")
+							}
+							.textFrameDesignProxy()
 							
 							if isTargetConfirmed == true{
 								Text("あなたは今晩\(hunter_target!.player_name)さんを守ります")
@@ -72,8 +99,12 @@ struct NightTime: View {
 								Text("あなたは今晩\(werewolf_target!.player_name)さんを襲撃します")
 									.textFrameDesignProxy()
 							}else{
-								Text("あなたは人狼です\n今晩襲う相手を一人選択してください")
-									.textFrameDesignProxy()
+								VStack{
+									Text("あなたは人狼です")
+									Text("今晩襲う人物を選択してください")
+								}
+								
+								.textFrameDesignProxy()
 								ScrollView {
 									ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
 										Button(player.player_name) {
@@ -93,25 +124,29 @@ struct NightTime: View {
 						}
 						.myTextBackground()
 						.myButtonBounce()
-						.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
+						.alert("行動を終了する", isPresented: $isAlertShown){
 							Button("ゲームスタート"){
 								isTargetConfirmed = false
 								isActionDone = true
 							}
-						}
-						Button("キャンセル", role: .cancel){
+							
+							Button("キャンセル", role: .cancel){
+							}
 						}
 					}
 				}else if isActionDone == true {
 					if survivors_index+1 < gameProgress.get_num_survivors(){
-						Text("次のプレイヤーに携帯を渡してください\n次のプレイヤー：「\(gameProgress.players[survivors_list[survivors_index+1]].player_name)」")
-							.textFrameDesignProxy()
+						VStack{
+							Text("次のプレイヤーに端末を渡してください")
+							Text("次のプレイヤー：「\(gameProgress.players[survivors_list[survivors_index+1]].player_name)」")
+						}
+						.textFrameDesignProxy()
 					}else{
 						Text("恐怖の夜が明け、朝が来ます")
 							.textFrameDesignProxy()
 					}
 					
-					Button("端末をGMに渡した") {
+					Button("端末を渡した") {
 						isActionDone = false
 						
 						if survivors_index+1 == gameProgress.get_num_survivors(){  // NightTime Processes are done here

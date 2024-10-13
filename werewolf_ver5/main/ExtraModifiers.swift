@@ -13,20 +13,21 @@ struct ViewSizePreferenceKey: PreferenceKey {
 
 struct TextBackgroundModifier: ViewModifier {
 	@EnvironmentObject var GameStatusData: GameStatusData
+	var outerSquare: CGFloat
+	var innerSquare: CGFloat
 	
 	func body(content: Content) -> some View {
 		ZStack{
 			content
-				.padding(12)
+				.padding(outerSquare)
 				.background(.white)
 				.cornerRadius(GameStatusData.currentTheme.cornerRadius)
 			content
 				.foregroundColor(.white)
-				.padding(10)
+				.padding(innerSquare)
 				.background(
 					Color(red: 0.5, green: 0.6, blue: 0.8)
 				)
-			
 				.cornerRadius(GameStatusData.currentTheme.cornerRadius)
 			
 			//.allowsHitTesting(false)
@@ -322,8 +323,8 @@ extension View {
 		self.modifier(ButtonAnimationModifier())
 	}
 	
-	func myTextBackground() -> some View {
-		self.modifier(TextBackgroundModifier())
+	func myTextBackground(outerSquare: CGFloat = 12, innerSquare: CGFloat = 10) -> some View {
+		self.modifier(TextBackgroundModifier(outerSquare: outerSquare, innerSquare: innerSquare))
 	}
 	
 	func textFrameSimple() -> some View {

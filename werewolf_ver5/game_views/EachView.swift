@@ -24,11 +24,6 @@ struct GameStartView: View{
 			}
 			Spacer()
 			Button("ゲームスタート") {
-				gameStatusData.players_CONFIG = makePlayerList(playersNum: 4)
-				gameStatusData.werewolf_Count_CONFIG = tempWerewolfCount
-				gameStatusData.seer_Count_CONFIG = tempSeerCount
-				gameStatusData.villager_Count_CONFIG = tempPlayerCount - tempWerewolfCount - tempSeerCount
-				gameStatusData.discussion_time_CONFIG = tempDiscussionTime
 				isAnimated.toggle()
 				
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { // 1秒のディレイ

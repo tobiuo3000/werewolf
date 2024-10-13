@@ -7,6 +7,7 @@ struct BeforeGameView: View {
 	@State private var isAlertShown = false
 	@State var showAllText: Bool = false
 	@Binding var threeOffSetTab: CGFloat
+	@State var isParameterSet: Bool = false
 	
 	private let columns: [GridItem] = Array(repeating: .init(), count: 2)
 	private let cardScale = 0.3
@@ -26,6 +27,7 @@ struct BeforeGameView: View {
 					.myButtonBounce()
 					.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
 						Button("ゲームスタート"){
+							isParameterSet = false
 							gameStatusData.calcDiscussionTime()
 							initiateGameProgress()
 							DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
@@ -58,6 +60,12 @@ struct BeforeGameView: View {
 				}
 			}
 			Spacer()
+		}
+		.onAppear(){
+			if isParameterSet == false {
+				gameStatusData.calc_vil_count()
+				isParameterSet = true
+			}
 		}
 	}
 	

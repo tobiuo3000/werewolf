@@ -198,8 +198,9 @@ class GameStatusData: ObservableObject {
 	@Published var seer_Count_CONFIG: Int = 0
 	@Published var medium_Count_CONFIG: Int = 0
 	@Published var hunter_Count_CONFIG: Int = 0
+	@Published var max_werewolf_CONFIG: Int = 1
+	@Published var is_player_with_role_max: Bool = false
 	@Published var currentTheme: AppTheme = .std_theme
-	
 	@Published var textSize: CGSize = .zero
 	@Published var titleTextSize: CGSize = .zero
 	@Published var fullScreenSize: CGSize = .zero
@@ -212,10 +213,28 @@ class GameStatusData: ObservableObject {
 				self.fullScreenSize = mainWindow.bounds.size
 			}
 		}
+		self.players_CONFIG = self.makePlayerList(playersNum: 4)
 	}
 	
 	func changeTheme(to theme: AppTheme) {
 		currentTheme = theme
+	}
+	
+	func update_role_CONFIG(){
+		self.calc_max_roles()
+		self.calc_vil_count()
+	}
+	
+	func calc_max_roles(){
+		let num_player_with_role: Int =
+		self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG
+		self.max_werewolf_CONFIG = self.players_CONFIG.count / 2 - 1
+		self.is_player_with_role_max = (self.players_CONFIG.count - num_player_with_role <= 0)
+	}
+	
+	func calc_vil_count(){
+		let num_villager_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG
+		self.villager_Count_CONFIG = self.players_CONFIG.count - num_villager_with_role
 	}
 	
 	func init_player_CONFIG(){
@@ -225,17 +244,25 @@ class GameStatusData: ObservableObject {
 	func calcDiscussionTime(){
 		self.discussion_time_CONFIG = self.discussion_seconds_CONFIG + 60 * self.discussion_minutes_CONFIG
 	}
-}
-
-
-func makePlayerList(playersNum: Int)->[Player]{
-	var tempPlayersList: [Player] = []
-	for order in 0...playersNum-1 {
-		let player = Player(player_order: order, role: Role.villager, player_name: "プレイヤー\(order)", isAlive: true)
-		tempPlayersList.append(player)
+	
+	func updatePlayerOrder() {
+			for index in players_CONFIG.indices {
+				players_CONFIG[index].player_order = index
+			}
+		}
+	
+	func makePlayerList(playersNum: Int)->[Player]{
+		var tempPlayersList: [Player] = []
+		for order in 0...playersNum-1 {
+			let player = Player(player_order: order, role: Role.villager, player_name: "プレイヤー\(order)", isAlive: true)
+			tempPlayersList.append(player)
+		}
+		return tempPlayersList
 	}
-	return tempPlayersList
 }
+
+
+
 
 
 class GameProgress: ObservableObject {
