@@ -189,7 +189,7 @@ struct ReorderingPlayerView: View{
 							Spacer()
 							Text("プレイヤー編集")
 								.font(.title)
-							
+							"temp 10/13"
 							Spacer()
 							Button(action: {
 								gameStatusData.players_CONFIG.append(Player(player_order: gameStatusData.players_CONFIG.count, role: .villager, player_name: "プレイヤー\(gameStatusData.players_CONFIG.count)"))
