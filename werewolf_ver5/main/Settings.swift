@@ -62,7 +62,7 @@ enum AppTheme: String, CaseIterable {
 	
 	var cornerRadius: CGFloat {
 		switch self {
-		case .std_theme: return 20
+		case .std_theme: return 18
 		case .simple_theme: return 20
 		case .theme3: return 0
 		}
@@ -108,9 +108,9 @@ enum Role {
 		case .seer:
 			return "card_seer"
 		case .hunter:
-			return "temp_hunter"
+			return "card_hunter"
 		case .medium:
-			return "temp_medium"
+			return "card_medium"
 		case .madman:
 			return "role_madman_image"
 		}
@@ -274,6 +274,13 @@ class GameProgress: ObservableObject {
 	@Published var game_start_flag: Bool = false
 	@Published var stage: String = "夜時間" // 例: "夜時間", "議論時間"など
 	@Published var game_result: Int = 0
+	
+	func init_gameProgress() {
+		players.removeAll()
+		day_currrent_game = 0
+		roundNumber = 0
+		diary.removeAll()
+	}
 	
 	func game_Result() {
 		let werewolvesAlive = self.players.filter { $0.role_name == .werewolf && $0.isAlive }.count

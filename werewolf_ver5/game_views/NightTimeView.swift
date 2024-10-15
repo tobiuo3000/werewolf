@@ -9,6 +9,7 @@ struct NightTime: View {
 	@State var players_index: Int
 	@State private var survivors_index: Int = 0
 	@State private var isActionDone: Bool = false
+	@State private var villager_target: Player?
 	@State private var seer_target: Player?
 	@State private var werewolf_target: Player?
 	@State private var hunter_target: Player?
@@ -16,44 +17,102 @@ struct NightTime: View {
 	@State private var isAlertShown: Bool = false
 	@State private var isNightTimeFinished: Bool = false
 	@State private var isSomeoneMurdered: Bool = false
+	@State var tmpPlayer:Player = Player(player_order: 1000, role: .villager, player_name: "none")  // TEMP
 	var survivors_list: [Int]
+	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	
 	var body: some View {
 		if isNightTimeFinished==false {
 			VStack{  // this VStack is for modifiers
 				if isActionDone==false {
 					VStack{
-						Text("\(gameProgress.players[players_index].player_name)さん\n夜の行動時間です")
-							.textFrameDesignProxy()
+						VStack{
+							Text("\(gameProgress.players[players_index].player_name)さん")
+							Text("夜の行動時間です")
+						}
+						.textFrameDesignProxy()
+						
 						if gameProgress.players[players_index].role_name == Role.villager{
-							VStack{
-								Text("あなたは市民です")
-								Text("怪しまれないように画面タップとかしてて下さい")
-							}
-							.textFrameDesignProxy()
 							
-						}else if gameProgress.players[players_index].role_name == Role.seer{
-							VStack{
-								Text("あなたは占い師です")
-								Text("一人の役職を知ることができます")
+							if isTargetConfirmed == true{
+								Text("\(villager_target!.player_name)を選択しました")
+									.textFrameDesignProxy()
+								Spacer()
+								
+							}else{
+								VStack{
+									Text("あなたは市民です")
+									Text("他役職の方と同じタップ動作にするため")
+									Text("あやしいと思う人物を一人選んでください")
+								}
+								.textFrameDesignProxy()
+								
+								Spacer()
+								ScrollView(.vertical) {
+									ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player_vil in
+										Button(player_vil.player_name) {
+											tmpPlayer = player_vil
+											isAlertShown = true
+										}
+										.myTextBackground()
+										.myButtonBounce()
+										.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
+											Button("次へ"){
+												villager_target = tmpPlayer
+												isTargetConfirmed = true
+												isAlertShown = false
+											}
+											
+											Button("キャンセル", role: .cancel){
+											}
+										}
+									}
+								}
 							}
-							.textFrameDesignProxy()
+						}else if gameProgress.players[players_index].role_name == Role.seer{
+							if isTargetConfirmed == false{
+								VStack{
+									Text("あなたは占い師です")
+									Text("一人の役職を知ることができます")
+								}
+								.textFrameDesignProxy()
+							}
 							
 							if isTargetConfirmed == true{
 								VStack{
-									Text("\(seer_target!.player_name)さんの役職は...")
-									Text("\(seer_target!.role_name.japaneseName)です")
+									Text("\(seer_target!.player_name)さんは...")
+									HStack{
+										if seer_target!.role_name == .werewolf{
+											Text("人狼")
+												.foregroundStyle(highlightColor)
+											Text("です")
+										}else{
+											Text("人狼ではありません")
+										}
+									}
 								}
 								.textFrameDesignProxy()
 								
 							}else{
-								ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
-									Button(player.player_name) {
-										seer_target = player
-										isTargetConfirmed = true
+								ScrollView(.vertical) {
+									ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player_seer in
+										Button(player_seer.player_name) {
+											tmpPlayer = player_seer
+											isAlertShown = true
+										}
+										.myTextBackground()
+										.myButtonBounce()
+										.alert("\(tmpPlayer.player_name)を占いますか？", isPresented: $isAlertShown){
+											Button("決定"){
+												seer_target = tmpPlayer
+												isTargetConfirmed = true
+												isAlertShown = false
+											}
+											
+											Button("キャンセル", role: .cancel){
+											}
+										}
 									}
-									.myTextBackground()
-									.myButtonBounce()
 								}
 							}
 						}else if gameProgress.players[players_index].role_name == Role.medium{
@@ -63,35 +122,55 @@ struct NightTime: View {
 							}
 							.textFrameDesignProxy()
 							
-							if gameProgress.day_currrent_game == 0{
-								Text("現在はまだ誰も殺されていません")
+							if gameProgress.day_currrent_game == -1{
+								Text("まだ誰も殺されていません")
 							}else{
-								Text("昨晩殺された\(gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.player_name)さんは...)")
+								Text("本日処刑された\(gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.player_name)さんは...)")
 								if gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.role_name == .werewolf{
 									Text("人狼でした")
 								}else{
 									Text("人狼ではありません")
 								}
 							}
-						}else if gameProgress.players[players_index].role_name == Role.hunter{
-							VStack{
-								Text("あなたは狩人です")
-								Text("今晩人狼から守る人物を選択できます")
-							}
-							.textFrameDesignProxy()
 							
+							Button("行動を終える") {
+								isTargetConfirmed = false
+								isActionDone = true
+							}
+							.myTextBackground()
+							.myButtonBounce()
+							
+						}else if gameProgress.players[players_index].role_name == Role.hunter{
 							if isTargetConfirmed == true{
 								Text("あなたは今晩\(hunter_target!.player_name)さんを守ります")
 									.textFrameDesignProxy()
 								
 							}else{
-								ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
-									Button(player.player_name) {
-										hunter_target = player
-										isTargetConfirmed = true
+								VStack{
+									Text("あなたは狩人です")
+									Text("今晩人狼から守る人物を選択できます")
+								}
+								.textFrameDesignProxy()
+								.padding()
+								ScrollView(.vertical) {
+									ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player_hunter in
+										Button(player_hunter.player_name) {
+											tmpPlayer = player_hunter
+											isAlertShown = true
+										}
+										.myTextBackground()
+										.myButtonBounce()
+										.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
+											Button("決定"){
+												hunter_target = tmpPlayer
+												isTargetConfirmed = true
+												isAlertShown = false
+											}
+											
+											Button("キャンセル", role: .cancel){
+											}
+										}
 									}
-									.myTextBackground()
-									.myButtonBounce()
 								}
 							}
 						}else if gameProgress.players[players_index].role_name == Role.werewolf{
@@ -103,35 +182,39 @@ struct NightTime: View {
 									Text("あなたは人狼です")
 									Text("今晩襲う人物を選択してください")
 								}
-								
 								.textFrameDesignProxy()
-								ScrollView {
-									ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player in
-										Button(player.player_name) {
-											werewolf_target = player
-											isTargetConfirmed = true
+								.padding()
+								
+								ScrollView(.vertical) {
+									ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[players_index].id}) { player_wolf in
+										Button(player_wolf.player_name) {
+											tmpPlayer = player_wolf
+											isAlertShown = true
 										}
 										.myTextBackground()
 										.myButtonBounce()
+										.alert("\(tmpPlayer.player_name)を襲いますか？", isPresented: $isAlertShown){
+											Button("投票する"){
+												werewolf_target = tmpPlayer
+												isTargetConfirmed = true
+												isAlertShown = false
+											}
+											
+											Button("キャンセル", role: .cancel){
+											}
+										}
 									}
 								}
 							}
 						}
 						
-						Button("行動を終える") {
-							isTargetConfirmed = false
-							isActionDone = true
-						}
-						.myTextBackground()
-						.myButtonBounce()
-						.alert("行動を終了する", isPresented: $isAlertShown){
-							Button("ゲームスタート"){
+						if isTargetConfirmed == true{
+							Button("行動を終える") {
 								isTargetConfirmed = false
 								isActionDone = true
 							}
-							
-							Button("キャンセル", role: .cancel){
-							}
+							.myTextBackground()
+							.myButtonBounce()
 						}
 					}
 				}else if isActionDone == true {
@@ -146,7 +229,8 @@ struct NightTime: View {
 							.textFrameDesignProxy()
 					}
 					
-					Button("端末を渡した") {
+					Spacer()
+					Button("次へ") {
 						isActionDone = false
 						
 						if survivors_index+1 == gameProgress.get_num_survivors(){  // NightTime Processes are done here
@@ -168,8 +252,6 @@ struct NightTime: View {
 					.myButtonBounce()
 				}
 			}
-			.frame(maxWidth: .infinity, maxHeight: .infinity)
-			.background(Color.black)
 			
 			
 		} else {  // After NightTime View
@@ -177,7 +259,9 @@ struct NightTime: View {
 				VStack{
 					Text("昨晩の犠牲者は...")
 					if isSomeoneMurdered{
-						Text("\(werewolf_target!.player_name)さんでした")
+						Text("\(werewolf_target!.player_name)")
+							.foregroundStyle(highlightColor)
+						Text("さんでした")
 						Text("残り人数： \(gameProgress.get_num_survivors())")
 						
 					}else{
@@ -186,8 +270,11 @@ struct NightTime: View {
 					}
 				}
 				.textFrameDesignProxy()
+				
+				Spacer()
 				Button("次へ") {
 					isSomeoneMurdered = false
+					gameProgress.day_currrent_game = gameProgress.day_currrent_game + 1
 					gameProgress.game_Result()
 					if gameProgress.game_result == 0{
 						TempView = .Before_discussion

@@ -6,7 +6,7 @@ struct ContentView: View {
 
 	var body: some View {
 		GeometryReader{ proxy_ContentView in
-				VStack{
+				VStack{  // closure for .onAppear()
 					if gameStatusData.game_status == .titleScreen{
 						ZStack{
 							Rectangle()
@@ -33,10 +33,18 @@ struct ContentView: View {
 					}else if gameStatusData.game_status == .gameScreen{
 						ZStack{
 							Rectangle()
+								.fill(.black)
+								.ignoresSafeArea()
+							LoopVideoPlayerView(videoFileName: "Table", videoFileType: "mov")
+							ScrollView{
+							}
+							/*
+							Rectangle()
 								.ignoresSafeArea()
 								.foregroundColor(.black)
 								.frame(width: gameStatusData.fullScreenSize.width,
 									   height: gameStatusData.fullScreenSize.height)
+							 */
 							/*
 							Image(gameStatusData.currentTheme.loghouseBackground)
 								.resizable()

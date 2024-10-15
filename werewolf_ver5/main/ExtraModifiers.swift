@@ -26,7 +26,7 @@ struct TextBackgroundModifier: ViewModifier {
 				.foregroundColor(.white)
 				.padding(innerSquare)
 				.background(
-					Color(red: 0.5, green: 0.6, blue: 0.8)
+					Color(red: 0.3, green: 0.4, blue: 0.5)
 				)
 				.cornerRadius(GameStatusData.currentTheme.cornerRadius)
 			
@@ -64,9 +64,8 @@ struct TextFrameSimple: ViewModifier {
 			content
 				.foregroundColor(.white)
 				.padding(10)
-				.background(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.5))
+				.background(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.8))
 				.border(Color(red: 0.8, green: 0.6, blue: 0.24, opacity: 1.0), width: 2)
-			
 			
 		}
 	}

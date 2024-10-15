@@ -57,6 +57,9 @@ struct BeforeGameView: View {
 					}
 					.myButtonBounce()
 					.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
+					Rectangle()
+						.fill(.clear)
+						.frame(width: 10, height: 10)
 				}
 			}
 			Spacer()
@@ -70,8 +73,7 @@ struct BeforeGameView: View {
 	}
 	
 	func initiateGameProgress(){
-		
-		gameProgress.init_player()
+		gameProgress.init_gameProgress()
 		gameProgress.players = gameStatusData.players_CONFIG.map { $0.copy() as! Player }
 		//gameProgress.players = gameStatusData.players_CONFIG  // initiate players property
 		gameProgress.discussion_time = gameStatusData.discussion_time_CONFIG

@@ -12,16 +12,19 @@ struct GameStartView: View{
 	
 	var body: some View{
 		VStack {
-			HStack{
-				Spacer()
-				Image("temp_title_logo")
-					.resizable()
-					.aspectRatio(contentMode: .fit)
-					.frame(width: gameStatusData.fullScreenSize.width/4)
-					.opacity(isAnimated ? -1 : 1) // フェードアウト効果
-					.offset(y: isAnimated ? -200 : 0) // 上に移動
-					.animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用
-			}
+			/*
+			 HStack{
+			 Spacer()
+			 Image("temp_title_logo")
+			 .resizable()
+			 .aspectRatio(contentMode: .fit)
+			 .frame(width: gameStatusData.fullScreenSize.width/4)
+			 .opacity(isAnimated ? -1 : 1) // フェードアウト効果
+			 .offset(y: isAnimated ? -200 : 0) // 上に移動
+			 .animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用
+			 }
+			 */
+			Spacer()
 			Spacer()
 			Button("ゲームスタート") {
 				isAnimated.toggle()
@@ -48,29 +51,64 @@ struct GameStartView: View{
 struct GameOverView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
+	@State var opacity: CGFloat = 1.0
 	var body: some View {
-		VStack {
-			if gameProgress.game_result == 1{
-				Text("人狼の勝利")
+		if gameProgress.game_result == 1{
+			ZStack{
+				Image("wolf_Win")
+					.resizable()
+					.ignoresSafeArea()
+					.scaledToFill()
+				VStack {
+					Text("人狼の勝利")
+						.font(.title)
+						.foregroundColor(.white)
+					
+					Button("改めてゲームスタート") {
+						gameProgress.init_player()
+						gameStatusData.game_status = .homeScreen
+					}
 					.foregroundColor(.white)
-			}else if gameProgress.game_result == 2{
-				Text("村人陣営の勝利")
+					.padding()
+					.background(Color.blue)
+					.cornerRadius(10)
+					
+				}
+				.frame(maxWidth: .infinity, maxHeight: .infinity)
+				.navigationBarHidden(true)
+				
+			}
+			.opacity(opacity)
+		}else if gameProgress.game_result == 2{
+			ZStack{
+				Image("villager_Win")
+					.resizable()
+					.ignoresSafeArea()
+					.scaledToFill()
+				VStack{
+					ZStack{
+						Text("村人陣営の勝利")
+							.font(.title)
+							.foregroundColor(.white)
+							.padding(10)
+							.background(.black.opacity(0.1))
+							.cornerRadius(14)
+					}
+					Button("改めてゲームスタート") {
+						gameProgress.init_player()
+						gameStatusData.game_status = .homeScreen
+					}
 					.foregroundColor(.white)
+					.padding()
+					.background(Color.blue)
+					.cornerRadius(10)
+					
+				}
+				.frame(maxWidth: .infinity, maxHeight: .infinity)
+				.navigationBarHidden(true)
 			}
-			
-			Button("改めてゲームスタート") {
-				gameProgress.init_player()
-				gameStatusData.game_status = .homeScreen
-			}
-			.foregroundColor(.white)
-			.padding()
-			.background(Color.blue)
-			.cornerRadius(10)
-			
+			.opacity(opacity)
 		}
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.background(Color.black)
-		.navigationBarHidden(true)
 	}
 }
 

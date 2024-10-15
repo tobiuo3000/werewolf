@@ -25,7 +25,7 @@ struct OffsetKey: PreferenceKey {
 }
 
 
-struct TransitionLoopBackGround: View{
+struct TransitionLoopBackGround: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var offset: CGSize
 	@State private var opacity: Double = 1.0
@@ -145,11 +145,6 @@ struct HomeScreenView: View {
 			.disabled(isReorderingViewShown)
 			
 			if showingSettings == true{
-				Color.black.opacity(0.4)
-				Rectangle()
-					.frame(width: 300, height: 300)
-					.foregroundColor(.white)
-					.cornerRadius(20)
 				SettingsView(showingSettings: $showingSettings)
 			}
 			if isReorderingViewShown == true {
@@ -214,22 +209,38 @@ struct SettingsView: View {
 	@Binding var showingSettings: Bool
 	
 	var body: some View{
-		VStack{
-			Text("これがテスト")
-			Button(action: {
-				showingSettings = false
-			})
-			{
-				Image(systemName: "xmark.octagon")
-					.resizable()
-					.frame(width: 30, height: 30)
+		ZStack{
+			Color.black.opacity(0.4)
+			Rectangle()
+			VStack{
+				HStack{
+					Spacer()
+					Button(action: {
+						showingSettings = false
+					})
+					{
+						Image(systemName: "xmark.octagon")
+							.font(.largeTitle)
+					}
+				}
+				Text("音声設定画面")
+					.font(.title)
+					.foregroundColor(.white)
+				Spacer()
+				Text("近日中に音声を実装します！")
+					.font(.title3)
+					.foregroundColor(.white)
+				Spacer()
 			}
+			.frame(width: 300, height: 300)
+			.background(.black)
+			.cornerRadius(20)
 		}
 	}
 }
 
 
-struct HomeScreenMenu: View{
+struct HomeScreenMenu: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@State var isGearPushed = false
@@ -241,8 +252,7 @@ struct HomeScreenMenu: View{
 		HStack{
 			Button(action: {
 				isAlertShown = true
-			})
-			{
+			}){
 				Text("TITLE")
 					.frame(height: 30)
 					.font(.title)

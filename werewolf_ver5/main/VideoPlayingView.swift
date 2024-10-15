@@ -101,8 +101,6 @@ struct VideoPlayerView: UIViewRepresentable {
 
 
 
-
-
 /*
  make 2nd version player
  */
@@ -150,12 +148,23 @@ struct LoopVideoPlayerView: View {
 	var videoFileName: String
 	var videoFileType: String
 	var isPlaying: Bool = true
+	var isScaledToFill: Bool
+	
+	init(videoFileName: String, videoFileType: String,  isScaledToFill: Bool = true) {
+		self.videoFileName = videoFileName
+		self.videoFileType = videoFileType
+		self.isScaledToFill = isScaledToFill
+	}
 	
 	var body: some View{
-		LoopingVideoView(url: makeUIView())
-			.scaledToFill()
-			.position(x: gameStatusData.fullScreenSize.width/2,
-					  y: gameStatusData.fullScreenSize.height/2)
+		if isScaledToFill{
+			LoopingVideoView(url: makeUIView())
+				.scaledToFill()
+				.position(x: gameStatusData.fullScreenSize.width/2,
+						  y: gameStatusData.fullScreenSize.height/2)
+		}else{
+			LoopingVideoView(url: makeUIView())
+		}
 	}
 	
 	func makeUIView() -> URL {
