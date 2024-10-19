@@ -54,6 +54,7 @@ struct GameSettingView: View{
 										.foregroundColor(.blue)
 								}
 								.myButtonBounce()
+								.bouncingUI(interval: 3)
 							}
 						}
 						
@@ -74,7 +75,7 @@ struct GameSettingView: View{
 							}
 						}
 					}
-					.onChange(of: gameStatusData.players_CONFIG.count) { _ in
+					.onChange(of: gameStatusData.players_CONFIG.count) { 
 						gameStatusData.update_role_CONFIG()
 					}
 				}
@@ -96,7 +97,7 @@ struct GameSettingView: View{
 						Stepper("minutes(分):", value: $gameStatusData.discussion_minutes_CONFIG, in: minutes_range)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
+							.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
 								gameStatusData.update_role_CONFIG()
 								gameStatusData.calcDiscussionTime()
 							}
@@ -104,7 +105,7 @@ struct GameSettingView: View{
 						Stepper("seconds(秒):", value: $gameStatusData.discussion_seconds_CONFIG, in: seconds_range, step: 10)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
+							.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
 								gameStatusData.update_role_CONFIG()
 								gameStatusData.calcDiscussionTime()
 							}
@@ -118,7 +119,7 @@ struct GameSettingView: View{
 						.pickerStyle(SegmentedPickerStyle())
 						.textFrameDesignProxy()
 						.accentColor(.white)
-						.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
+						.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
 							gameStatusData.update_role_CONFIG()
 						}
 					Text("\(gameStatusData.werewolf_Count_CONFIG)")
@@ -132,7 +133,7 @@ struct GameSettingView: View{
 						.pickerStyle(SegmentedPickerStyle())
 						.textFrameDesignProxy()
 						.accentColor(.white)
-						.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
+						.onChange(of: gameStatusData.seer_Count_CONFIG) {
 							gameStatusData.update_role_CONFIG()
 						}
 					Text("\(gameStatusData.seer_Count_CONFIG)")
@@ -146,7 +147,7 @@ struct GameSettingView: View{
 						.pickerStyle(SegmentedPickerStyle())
 						.textFrameDesignProxy()
 						.accentColor(.white)
-						.onChange(of: gameStatusData.medium_Count_CONFIG) { _ in
+						.onChange(of: gameStatusData.medium_Count_CONFIG) {
 							gameStatusData.update_role_CONFIG()
 						}
 					Text("\(gameStatusData.medium_Count_CONFIG)")
@@ -160,7 +161,7 @@ struct GameSettingView: View{
 						.pickerStyle(SegmentedPickerStyle())
 						.textFrameDesignProxy()
 						.accentColor(.white)
-						.onChange(of: gameStatusData.hunter_Count_CONFIG) { _ in
+						.onChange(of: gameStatusData.hunter_Count_CONFIG) { 
 							gameStatusData.update_role_CONFIG()
 						}
 					Text("\(gameStatusData.hunter_Count_CONFIG)")
@@ -211,12 +212,12 @@ struct ReorderingPlayerView: View {
 									Image(systemName: "person.badge.plus")
 										.font(.title)
 										.padding(4)
-									
 								}
 								.myButtonBounce()
+								.bouncingUI(interval: 3)
 								
 								Spacer()
-								Text("プレイヤー編集")
+								Text("プレイヤー設定")
 									.foregroundStyle(.white)
 									.font(.title)
 									.padding(4)
@@ -236,11 +237,13 @@ struct ReorderingPlayerView: View {
 								HStack {
 									Text("\(gameStatusData.players_CONFIG[index].player_order+1)番目")
 										.foregroundStyle(.white)
+										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
 									Spacer()
 									TextField("プレイヤー名", text: $gameStatusData.players_CONFIG[index].player_name)
 										.foregroundStyle(.blue)
 										.textFieldStyle(RoundedBorderTextFieldStyle())
 										.autocorrectionDisabled()
+										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .trailing)
 								}
 								.listRowBackground(viewColor)
 								.padding()
@@ -266,6 +269,7 @@ struct ReorderingPlayerView: View {
 										.font(.largeTitle)
 								}
 								.myButtonBounce()
+								.bouncingUI(interval: 3)
 								.padding(8)
 							Rectangle()
 								.fill(.clear)

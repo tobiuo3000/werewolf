@@ -59,7 +59,7 @@ struct GameOverView: View {
 					.resizable()
 					.ignoresSafeArea()
 					.scaledToFill()
-				VStack {
+				VStack{
 					Text("人狼の勝利")
 						.font(.title)
 						.foregroundColor(.white)

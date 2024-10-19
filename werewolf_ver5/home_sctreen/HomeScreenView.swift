@@ -233,7 +233,6 @@ struct SettingsView: View {
 				Spacer()
 			}
 			.frame(width: 300, height: 300)
-			.background(.black)
 			.cornerRadius(20)
 		}
 	}
@@ -306,6 +305,8 @@ struct ScrollBarView: View{
 	@Binding var iconSize0: CGFloat
 	@Binding var iconSize1: CGFloat
 	@Binding var iconSize2: CGFloat
+	@State var isBounced: Bool = true
+	let triangleConst:CGFloat = 46
 	
 	var body: some View{
 		//let _ = print("\(threeOffSetTab), SIZE(\(gameStatusData.fullScreenSize.width))")
@@ -337,18 +338,48 @@ struct ScrollBarView: View{
 				.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
 				.offset(x: (threeOffSetTab/3) - (gameStatusData.fullScreenSize.width/3))
 			
-			Image(systemName: iconSize0 == 30 ? "square.and.pencil.circle" : "square.and.pencil.circle.fill")
-				.foregroundColor(.white)
-				.font(.system(size: iconSize0))
-				.offset(x: -(gameStatusData.fullScreenSize.width/6)*2, y: iconOffsetTab0)
-			Image(systemName: iconSize1 == 30 ? "gamecontroller" : "gamecontroller.fill")
-				.foregroundColor(.white)
-				.font(.system(size: iconSize1))
-				.offset(y: iconOffsetTab1)
-			Image(systemName: iconSize2 == 30 ? "text.book.closed" : "text.book.closed.fill")
-				.foregroundColor(.white)
-				.font(.system(size: iconSize2))
-				.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffsetTab2)
+			ZStack{  // for code readability
+				if iconSize0 != 30 {
+					Image(systemName: "arrowtriangle.right.fill")
+						.foregroundColor(.white)
+						.offset(x: -(gameStatusData.fullScreenSize.width/6)*2+triangleConst, y: iconOffsetTab0)
+						.flickeringUI(interval: 1.6)
+				}
+				Image(systemName: iconSize0 == 30 ? "square.and.pencil.circle" : "square.and.pencil.circle.fill")
+					.foregroundColor(.white)
+					.font(.system(size: iconSize0))
+					.offset(x: -(gameStatusData.fullScreenSize.width/6)*2, y: iconOffsetTab0)
+			}
+			
+			ZStack{  // for code readability
+				if iconSize1 != 30 {
+					Image(systemName: "arrowtriangle.backward.fill")
+						.foregroundColor(.white)
+						.offset(x: -triangleConst, y: iconOffsetTab0-8)
+						.flickeringUI(interval: 1.6)
+					Image(systemName: "arrowtriangle.right.fill")
+						.foregroundColor(.white)
+						.offset(x: +triangleConst, y: iconOffsetTab0-8)
+						.flickeringUI(interval: 1.6)
+				}
+				Image(systemName: iconSize1 == 30 ? "gamecontroller" : "gamecontroller.fill")
+					.foregroundColor(.white)
+					.font(.system(size: iconSize1))
+					.offset(x: 0, y: iconOffsetTab1)
+			}
+			
+			ZStack{  // for code readability
+				if iconSize2 != 30 {
+					Image(systemName: "arrowtriangle.backward.fill")
+						.foregroundColor(.white)
+						.offset(x: (gameStatusData.fullScreenSize.width/6)*2-triangleConst, y: iconOffsetTab2)
+						.flickeringUI(interval: 1.6)
+				}
+				Image(systemName: iconSize2 == 30 ? "text.book.closed" : "text.book.closed.fill")
+					.foregroundColor(.white)
+					.font(.system(size: iconSize2))
+					.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffsetTab2)
+			}
 		}
 		.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.4)
 	}

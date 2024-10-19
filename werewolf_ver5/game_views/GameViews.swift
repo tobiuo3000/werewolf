@@ -11,8 +11,6 @@ struct GameView: View {
 	@State private var num_survivors: Int = 0
 	@State var TempView: GameView_display_status = .Show_player_role
 	
-	
-	
 	var body: some View {
 		VStack{
 			MenuDuringGameView()
@@ -21,6 +19,7 @@ struct GameView: View {
 				
 				if TempView == .Show_player_role {
 					AssignRole(TempView: $TempView)
+					
 				}else if TempView == .Before_discussion {
 					Before_discussion(TempView: $TempView)
 					
@@ -30,17 +29,21 @@ struct GameView: View {
 				}else if TempView == .Vote_time{
 					VoteTime(TempView: $TempView, player_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
 					
+				}else if TempView == .Night_time{
+					NightTime(TempView: $TempView, players_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
+					
 				}else if TempView == .Vote_result{
 					VoteResult(TempView: $TempView)
 					
 				}else if TempView == .Before_night_time {
 					Before_night_time(TempView: $TempView, num_survivors: $num_survivors)
 					
-				}else if TempView == .Night_time{
-					NightTime(TempView: $TempView, players_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
 				}
 			}
 			BottomButtonGameView(TempView: $TempView)
+		}
+		.onChange(of: TempView){
+			let _ = print(TempView)
 		}
 	}
 }
@@ -108,14 +111,20 @@ struct MenuDuringGameView: View{
 				}
 				
 				Spacer()
-				Text("\(gameProgress.day_currrent_game+1)")
-					.font(.title)
-					.foregroundStyle(.white)
-				Text("日目")
-					.font(.title)
-					.foregroundStyle(.white)
+				VStack{
+					HStack{
+						Text("\(gameProgress.day_currrent_game+1)")
+							.font(.title)
+							.foregroundStyle(.white)
+						Text("日目")
+							.font(.title)
+							.foregroundStyle(.white)
+					}
+					Text("\(gameProgress.stage)")
+						.foregroundStyle(.white)
+				}
 				Spacer()
-				Text("残プレイヤー:")
+				Text("生存:")
 					.font(.title2)
 					.foregroundStyle(.white)
 				Text("\(gameProgress.get_num_survivors())")
@@ -230,6 +239,7 @@ struct VoteTime: View {
 								
 								Text(": \(player.voteCount)票")
 									.font(.title3)
+									.foregroundStyle(.white)
 							}
 							.padding(12)
 						}else{
@@ -298,9 +308,9 @@ struct ListSurviversView: View{
 	
 	var body: some View{
 		VStack{
-			Text("残り人数：\(gameProgress.get_num_survivors())")
 			Text("生存者一覧")
 		}
+		.font(.title2)
 		.textFrameDesignProxy()
 		ScrollView{
 			ForEach(0..<gameProgress.players.count, id: \.self) { index in
@@ -327,18 +337,26 @@ struct Before_discussion: View{
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var TempView: GameView_display_status
 	private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
+	@State var isAlertShown: Bool = false
 	
 	var body: some View{
 		VStack{
 			ListSurviversView()
 			Spacer()
 			Button("議論開始") {
-				gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
-				gameProgress.diary.append(DailyLog(day: gameProgress.day_currrent_game))
-				TempView = .Discussion_time
+				isAlertShown = true
 			}
 			.myTextBackground()
 			.myButtonBounce()
+			.alert("\(GameStatusData.discussion_minutes_CONFIG)分\(GameStatusData.discussion_seconds_CONFIG)秒間の議論が開始します", isPresented: $isAlertShown){
+				Button("議論を開始する"){
+					gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
+					gameProgress.diary.append(DailyLog(day: gameProgress.day_currrent_game))
+					TempView = .Discussion_time
+				}
+				Button("キャンセル", role: .cancel){
+				}
+			}
 		}
 	}
 }
@@ -399,7 +417,11 @@ struct Discussion_time: View{
 				.foregroundStyle(.white)
 				.onAppear {
 					Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-						if discussion_time > 0 {
+						if TempView != .Discussion_time {
+							timer.invalidate()
+						}
+						
+						if discussion_time > 0 { 
 							discussion_time -= 1
 						} else {
 							timer.invalidate()

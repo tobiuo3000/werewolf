@@ -96,24 +96,42 @@ struct OnePlayerRole: View {
 			TempTexts(TempView: $TempView, Temp_index_num: $Temp_index_num, isPlayerConfirmationDone: $isPlayerConfirmationDone, isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked, cardScale: $cardScale, textScale: $textScale, textOpacity: $textOpacity)
 			
 			ZStack{
+				ZStack{  // for Modifier
+					if isCardFlipped == false{
+						Image(gameStatusData.currentTheme.cardBackSide)
+							.resizable()
+							.frame(width: (gameStatusData.fullScreenSize.height/gameStatusData.cardSize.height)*gameStatusData.cardSize.width/2,
+								   height: gameStatusData.fullScreenSize.height/2)
+							.scaleEffect(cardScale)
+					}else{
+						Image(gameProgress.players[Temp_index_num].role_name.image_name)
+							.resizable()
+							.frame(width: (gameStatusData.fullScreenSize.height/gameStatusData.cardSize.height)*gameStatusData.cardSize.width/2,
+								   height: gameStatusData.fullScreenSize.height/2)
+							.scaleEffect(cardScale)
+					}
+				}
+				.cardFlippedWhenAssigningRole(isCardFlipped: $isCardFlipped, isCardTapped: $isCardTapped,
+											  isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked,
+											  cardScale: $cardScale, textScale: $textScale,
+											  textOpacity: $textOpacity, isTapAllowed: $isTapAllowed)
 				if isCardFlipped == false{
-					Image(gameStatusData.currentTheme.cardBackSide)
-						.resizable()
-						.frame(width: (gameStatusData.fullScreenSize.height/gameStatusData.cardSize.height)*gameStatusData.cardSize.width/2,
-							   height: gameStatusData.fullScreenSize.height/2)
-						.scaleEffect(cardScale)
-				}else{
-					Image(gameProgress.players[Temp_index_num].role_name.image_name)
-						.resizable()
-						.frame(width: (gameStatusData.fullScreenSize.height/gameStatusData.cardSize.height)*gameStatusData.cardSize.width/2,
-							   height: gameStatusData.fullScreenSize.height/2)
-						.scaleEffect(cardScale)
+					VStack{
+						Text("”tap here”")
+							.font(.headline)
+								.fontWeight(.bold)
+							.foregroundStyle(.white)
+						Rectangle()
+							.fill(.clear)
+							.frame(width: 5, height: 5)
+						Image(systemName: "hand.tap.fill")
+							.font(.largeTitle)
+							.foregroundStyle(.white)
+					}
+					.flickeringUI(interval: 1)
+					
 				}
 			}
-			.cardFlippedWhenAssigningRole(isCardFlipped: $isCardFlipped, isCardTapped: $isCardTapped,
-										  isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked,
-										  cardScale: $cardScale, textScale: $textScale,
-										  textOpacity: $textOpacity, isTapAllowed: $isTapAllowed)
 		}
 	}
 }

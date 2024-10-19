@@ -149,6 +149,7 @@ struct ExplanationsRole: View {
 				Text("特別な能力を持たない一般市民です")
 				Text("ゲームの目的は、人狼を見つけ出し村を守ることです")
 				Text("昼の議論で怪しい人物を見つけ、人狼と思われるプレイヤーを処刑するように投票します")
+					.lineLimit(nil)
 				Text("夜には何もできませんが推理で勝利に貢献します")
 				
 			}else if role == .seer{
@@ -157,6 +158,7 @@ struct ExplanationsRole: View {
 				Text("")
 				Text("毎晩他のプレイヤー1人を占い")
 				Text("そのプレイヤーが「村人」か「人狼」かを知ることができます")
+					.lineLimit(nil)
 				Text("村を守るために重要な情報を持つ役職です")
 				Text("人狼に狙われないように、慎重に行動しましょう")
 			}else if role == .hunter{
@@ -165,6 +167,7 @@ struct ExplanationsRole: View {
 				Text("")
 				Text("毎晩1人のプレイヤーを選んで守ることができます")
 				Text("守られたプレイヤーは、人狼からの襲撃を防ぐことができます")
+					.lineLimit(nil)
 				Text("自分が生き延びるために護衛先を慎重に選び")
 				Text("村の勝利に貢献しましょう")
 			}else if role == .medium{
@@ -174,6 +177,7 @@ struct ExplanationsRole: View {
 				Text("昼のターンで処刑されたプレイヤーが")
 				Text("「村人」か「人狼」だったのかを知ることができます")
 				Text("処刑した人物が正しかったのか、間違っていたのかを確認し")
+					.lineLimit(nil)
 				Text("議論を有利に進めることで")
 				Text("村の勝利に貢献しましょう")
 			}else if role == .werewolf{

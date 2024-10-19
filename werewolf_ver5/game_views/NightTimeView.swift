@@ -122,16 +122,19 @@ struct NightTime: View {
 							}
 							.textFrameDesignProxy()
 							
-							if gameProgress.day_currrent_game == -1{
-								Text("まだ誰も殺されていません")
-							}else{
-								Text("本日処刑された\(gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.player_name)さんは...)")
-								if gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.role_name == .werewolf{
-									Text("人狼でした")
+							VStack{  // fot Modifier
+								if gameProgress.day_currrent_game == -1{
+									Text("まだ誰も殺されていません")
 								}else{
-									Text("人狼ではありません")
+									Text("処刑された\(gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.player_name)さんは...")
+									if gameProgress.get_diary_from_day(target_day: gameProgress.day_currrent_game).executedPlayer!.role_name == .werewolf{
+										Text("人狼でした")
+									}else{
+										Text("人狼ではありません")
+									}
 								}
 							}
+							.textFrameDesignProxy()
 							
 							Button("行動を終える") {
 								isTargetConfirmed = false
@@ -251,6 +254,8 @@ struct NightTime: View {
 					.myTextBackground()
 					.myButtonBounce()
 				}
+				
+				Spacer()  // to keep objects' position elevated
 			}
 			
 			

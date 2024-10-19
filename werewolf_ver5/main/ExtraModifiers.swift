@@ -107,7 +107,7 @@ struct CardAnimationLToR: ViewModifier {
 					}
 				}
 				.offset(x: offset, y: 0)
-				.onChange(of: threeOffSetTab){new_value in
+				.onChange(of: threeOffSetTab){
 					if (viewOffsetThreshold2 < threeOffSetTab && threeOffSetTab < viewOffsetThreshold3) && !hasAppeared {
 						performAnimation(imageIndex: imageIndex)
 						hasAppeared = true
@@ -175,21 +175,25 @@ struct CardFlippingWhenAssigningRole: ViewModifier{
 					withAnimation(.easeInOut(duration: 0.1)) {
 						cardScale = 0.8 // 最初に小さくバウンド
 					}
-					withAnimation(.easeInOut(duration: 0.1).delay(0.2)) {
+					withAnimation(.easeInOut(duration: 0.1).delay(0.1)) {
 						cardScale = 1.0 // 最初に小さくバウンド
 					}
-					withAnimation(.easeInOut(duration: 0.3).delay(0.4)){
-						self.isCardFlipped.toggle()
-					}
-					withAnimation(.easeInOut(duration: 0.3).delay(0.8)) {
-						if isCardTapped {
-							cardScale = 1.0 // 元のサイズに戻す
-						} else {
-							cardScale = 1.2 // 拡大
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+						withAnimation(.easeInOut(duration: 0.3)){
+							self.isCardFlipped.toggle()
 						}
-						self.isCardTapped.toggle()
 					}
-					withAnimation(.easeOut(duration: 0.3).delay(1.1)){
+					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+						withAnimation(.easeInOut(duration: 0.3)) {
+							if isCardFlipped{
+								self.cardScale = 1.2 // 拡大
+							}else{
+								self.cardScale = 1.0 // 拡大
+							}
+							self.isCardTapped.toggle()
+						}
+					}
+					withAnimation(.easeOut(duration: 0.3).delay(0.8)){
 						if isRoleNameShown {
 							textScale = 0.0
 							textOpacity = 0.0
@@ -200,8 +204,8 @@ struct CardFlippingWhenAssigningRole: ViewModifier{
 						self.isRoleNameShown.toggle()
 						self.isRoleNameChecked = true
 					}
-					DispatchQueue.main.asyncAfter(deadline: .now() + 1.6) {
-						isTapAllowed = true
+					DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
+						self.isTapAllowed = true
 					}
 				}
 			}
@@ -221,7 +225,7 @@ struct CardFlippedAndRtoL: ViewModifier{
 			content
 				.offset(card_offset)
 				.rotation3DEffect(Angle(degrees: isCardFlipped ? 180 : 360), axis: (x: 0, y: 1, z: 0))
-				.onChange(of: gameProgress.game_start_flag){new_value in
+				.onChange(of: gameProgress.game_start_flag){
 					performAnimation(imageIndex: imageIndex)
 				}
 		}
@@ -264,7 +268,7 @@ struct UIAnimationRToL: ViewModifier {
 		ZStack{
 			content
 				.offset(x: offset, y: 0)
-				.onChange(of: animationFlag){ _ in
+				.onChange(of: animationFlag){
 					if animationFlag == true{
 						performAnimation()
 					}
@@ -292,7 +296,7 @@ struct UIAnimationLToR: ViewModifier {
 		ZStack{
 			content
 				.offset(x: offset, y: 0)
-				.onChange(of: animationFlag){ _ in
+				.onChange(of: animationFlag){
 					if animationFlag == true{
 						performAnimation()
 					}
@@ -312,9 +316,111 @@ struct UIAnimationLToR: ViewModifier {
 }
 
 
+struct BouncingUI: ViewModifier {
+	@State private var isBouncing = false
+	@State var offset: CGFloat = 0
+	let duration: CGFloat
+	let interval: CGFloat
+	
+	func body(content: Content) -> some View {
+		let timer = Timer.publish(every: interval, on: .main, in: .common).autoconnect()
+		
+		content
+			.offset(y: offset)
+			.onReceive(timer) { _ in
+				isBouncing.toggle()
+				performAnimation()
+			}
+	}
+	
+	private func performAnimation() {
+		if isBouncing{
+			withAnimation(.easeOut(duration: duration/2)) {
+				offset = -10
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + (duration)) {
+				withAnimation(.easeIn(duration: duration)) {
+					offset = 5
+				}
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + (duration*2)) {
+				withAnimation(.easeOut(duration: duration/4)) {
+					offset = -3
+				}
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + (duration*9/4)) {
+				withAnimation(.linear(duration: duration/6)) {
+					offset = 0
+				}
+			}
+		}
+	}
+}
 
 
+struct FloatingUI: ViewModifier {
+	@State private var isBouncing = false
+	@State var offset: CGFloat = 5
+	let duration: CGFloat = 1
+	
+	func body(content: Content) -> some View {
+		let timer = Timer.publish(every: duration, on: .main, in: .common).autoconnect()
+		content
+			.offset(y: offset)
+			.onReceive(timer) { _ in
+				isBouncing.toggle()
+				performAnimation()
+			}
+	}
+	
+	private func performAnimation() {
+		if isBouncing{
+			withAnimation(.easeInOut(duration: duration/2)) {
+				offset = -5
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + (duration/2)) {
+				withAnimation(.easeOut(duration: duration/2)) {
+					offset = 5
+				}
+			}
+		}
+	}
+}
 
+
+struct  FlickeringUI: ViewModifier {
+	@State private var isBouncing = false
+	@State var opacity: CGFloat = 1.0
+	@State var size: CGFloat = 1.1
+	let duration: CGFloat = 2
+	let interval: CGFloat
+	
+	func body(content: Content) -> some View {
+		let timer = Timer.publish(every: interval, on: .main, in: .common).autoconnect()
+		content
+			.opacity(opacity)
+			.scaleEffect(size)
+			.onReceive(timer) { _ in
+				isBouncing.toggle()
+				performAnimation()
+			}
+	}
+	
+	private func performAnimation() {
+		if isBouncing{
+			withAnimation(.easeInOut(duration: duration*2/3)) {
+				opacity = 0.5
+				size = 1.0
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + (duration/2)) {
+				withAnimation(.easeInOut(duration: duration/3)) {
+					opacity = 1.0
+					size = 1.1
+				}
+			}
+		}
+	}
+}
 
 
 extension View {
@@ -352,6 +458,18 @@ extension View {
 	
 	func uiAnimationLToR(animationFlag: Binding<Bool>, delay: CGFloat = 0) -> some View {
 		self.modifier(UIAnimationRToL(animationFlag: animationFlag, delay: delay))
+	}
+	
+	func bouncingUI(duration: CGFloat = 0.2, interval: CGFloat = 5) -> some View {
+		self.modifier(BouncingUI(duration: duration, interval: interval))
+	}
+	
+	func floatingUI() -> some View {
+		self.modifier(FloatingUI())
+	}
+	
+	func flickeringUI(interval: CGFloat = 2) -> some View {
+		self.modifier(FlickeringUI(interval: interval))
 	}
 }
 
