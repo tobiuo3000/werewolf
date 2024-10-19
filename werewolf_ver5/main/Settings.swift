@@ -375,7 +375,7 @@ class GameProgress: ObservableObject {
 				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
 			}
 		}
-		
+		temp
 		for _ in 0..<hunterNum {
 			if let randomIndex = indexes.randomElement() {
 				self.players[randomIndex].role_name = .hunter
