@@ -241,7 +241,6 @@ struct VoteResult: View{
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	
 	var body: some View{
-		if gameProgress.get_list_highest_vote().count == 1{
 		VStack{
 			Spacer()
 			VStack{
@@ -249,7 +248,7 @@ struct VoteResult: View{
 					.foregroundStyle(.white)
 				HStack{
 					Text("「")
-					Text("\(gameProgress.choose_one_random_player(highestList: gameProgress.get_list_highest_vote()))")
+					Text("\(gameProgress.get_hightst_vote()!.player_name)")
 						.foregroundStyle(highlightColor)
 					Text("」です")
 				}
@@ -281,48 +280,7 @@ struct VoteResult: View{
 			.myButtonBounce()
 			.padding()
 		}
-		}else{
-			VStack{
-				Spacer()
-				VStack{
-					Text("最も多くの得票を得たプレイヤーは")
-						.foregroundStyle(.white)
-					HStack{
-						Text("「")
-						Text("\(gameProgress.get_hightst_vote()!.player_name)")
-							.foregroundStyle(highlightColor)
-						Text("」です")
-					}
-				}
-				.textFrameDesignProxy()
-				
-				HStack{
-					Text("「")
-					Text("\(gameProgress.get_hightst_vote()!.player_name)")
-						.foregroundStyle(highlightColor)
-					Text("」は処刑されます")
-				}
-				.textFrameDesignProxy()
-				Spacer()
-				Button("次へ") {
-					gameProgress.sentence_to_death(suspect_id: gameProgress.get_hightst_vote()!.id)
-					gameProgress.get_diary_cur_day().executedPlayer = gameProgress.get_hightst_vote()!
-					gameProgress.reset_vote_count()
-					gameProgress.game_Result()
-					if gameProgress.game_result == 0{
-						gameProgress.stageView = .Before_night_time
-					}else if gameProgress.game_result == 1{
-						gameStatusData.game_status = .gameOverScreen
-					}else if gameProgress.game_result == 2{
-						gameStatusData.game_status = .gameOverScreen
-					}
-				}
-				.myTextBackground()
-				.myButtonBounce()
-				.padding()
-			}
-		}
-		
+	}
 }
 
 
@@ -475,8 +433,7 @@ struct Before_discussion: View{
 	
 	var body: some View{
 		VStack{
-			let tmpSuspectedPlayers = gameProgress.get_list_highest_vote()
-			if let tmpSuspectedPlayer = gameProgress.choose_one_random_player(highestLists: tmpSuspectedPlayers)!{
+			if let tmpSuspectedPlayer = gameProgress.get_hightst_suspected(){
 				VStack{
 					Text("昨晩もっとも疑われた人物は...")
 					HStack{
@@ -498,6 +455,7 @@ struct Before_discussion: View{
 			.alert("\(GameStatusData.discussion_minutes_CONFIG)分\(GameStatusData.discussion_seconds_CONFIG)秒間の議論が開始します", isPresented: $isAlertShown){
 				Button("議論を開始する"){
 					gameProgress.reset_suspected_count()
+					gameProgress.reset_werewolvesTarget_count()
 					gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
 					gameProgress.stageView = .Discussion_time
 					let _ = print(gameProgress.get_diary_cur_day())
