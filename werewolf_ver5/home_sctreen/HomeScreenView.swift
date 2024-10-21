@@ -148,9 +148,9 @@ struct HomeScreenView: View {
 				SettingsView(showingSettings: $showingSettings)
 			}
 			if isReorderingViewShown == true {
-					
-						ReorderingPlayerView(isReorderingViewShown: $isReorderingViewShown)
-						
+				
+				ReorderingPlayerView(isReorderingViewShown: $isReorderingViewShown)
+				
 			}
 		}
 	}
@@ -199,41 +199,76 @@ struct HomeScreenView: View {
 			iconSize.wrappedValue = 30
 		}
 	}
-
+	
 	
 }
 
 
 struct SettingsView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var showingSettings: Bool
+	let viewColor: Color = Color(red: 0.1, green: 0.1, blue: 0.1)
 	
 	var body: some View{
-		ZStack{
+		ZStack{  // for darken background View
 			Color.black.opacity(0.4)
-			Rectangle()
 			VStack{
+				Rectangle()
+					.fill(.clear)
+					.frame(height: gameStatusData.fullScreenSize.height/4)
+				
 				HStack{
-					Spacer()
-					Button(action: {
-						showingSettings = false
-					})
-					{
-						Image(systemName: "xmark.octagon")
-							.font(.largeTitle)
-					}
+					Rectangle()
+						.fill(.clear)
+						.frame(width: gameStatusData.fullScreenSize.width/16)
+					ZStack{
+						Color(viewColor)
+						
+						VStack{
+							ZStack{
+								Text("環境設定")
+									.font(.title)
+									.foregroundColor(.white)
+									.padding()
+								HStack{
+									Spacer()
+									Button(action: {
+										showingSettings = false
+									})
+									{
+										Image(systemName: "xmark.octagon")
+											.font(.largeTitle)
+									}
+									.padding()
+								}
+							}
+							Spacer()
+							Toggle(isOn: $gameStatusData.isAnimeShown) {
+								Text("背景アニメーションを動かす")
+									.font(.title)
+									.foregroundColor(.white)
+							}
+							Toggle(isOn: $gameStatusData.isAnimeShown) {
+								Text("背景アニメーションを動かす")
+									.font(.title)
+									.foregroundColor(.white)
+							}
+							.padding()
+							Spacer()
+						}
+					}  // ZStack closure
+					.background(.black)
+					.cornerRadius(20)
+					
+					Rectangle()
+						.fill(.clear)
+						.frame(width: gameStatusData.fullScreenSize.width/16)
 				}
-				Text("音声設定画面")
-					.font(.title)
-					.foregroundColor(.white)
-				Spacer()
-				Text("近日中に音声を実装します！")
-					.font(.title3)
-					.foregroundColor(.white)
-				Spacer()
+				Rectangle()
+					.fill(.clear)
+					.frame(height: gameStatusData.fullScreenSize.height/4)
 			}
-			.frame(width: 300, height: 300)
-			.cornerRadius(20)
 		}
 	}
 }
@@ -343,7 +378,7 @@ struct ScrollBarView: View{
 					Image(systemName: "arrowtriangle.right.fill")
 						.foregroundColor(.white)
 						.offset(x: -(gameStatusData.fullScreenSize.width/6)*2+triangleConst, y: iconOffsetTab0)
-						.flickeringUI(interval: 1.6)
+						.flickeringUI(interval: 1.2)
 				}
 				Image(systemName: iconSize0 == 30 ? "square.and.pencil.circle" : "square.and.pencil.circle.fill")
 					.foregroundColor(.white)
@@ -356,11 +391,11 @@ struct ScrollBarView: View{
 					Image(systemName: "arrowtriangle.backward.fill")
 						.foregroundColor(.white)
 						.offset(x: -triangleConst, y: iconOffsetTab0-8)
-						.flickeringUI(interval: 1.6)
+						.flickeringUI(interval: 1.2)
 					Image(systemName: "arrowtriangle.right.fill")
 						.foregroundColor(.white)
 						.offset(x: +triangleConst, y: iconOffsetTab0-8)
-						.flickeringUI(interval: 1.6)
+						.flickeringUI(interval: 1.2)
 				}
 				Image(systemName: iconSize1 == 30 ? "gamecontroller" : "gamecontroller.fill")
 					.foregroundColor(.white)
@@ -373,7 +408,7 @@ struct ScrollBarView: View{
 					Image(systemName: "arrowtriangle.backward.fill")
 						.foregroundColor(.white)
 						.offset(x: (gameStatusData.fullScreenSize.width/6)*2-triangleConst, y: iconOffsetTab2)
-						.flickeringUI(interval: 1.6)
+						.flickeringUI(interval: 1.2)
 				}
 				Image(systemName: iconSize2 == 30 ? "text.book.closed" : "text.book.closed.fill")
 					.foregroundColor(.white)
@@ -417,7 +452,18 @@ struct BeforeHomeScreen: View {
 					 */
 					//VideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
 					//	.frame(maxHeight: gameStatusData.fullScreenSize.height)
-					LoopVideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
+					if gameStatusData.isAnimeShown == true {
+						LoopVideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
+					}else{
+						Image("still_House")
+							.resizable()
+							.scaledToFill()
+							.ignoresSafeArea()
+							.frame(width: gameStatusData.fullScreenSize.width,
+								   height: gameStatusData.fullScreenSize.height)
+							.clipped()
+					}
+					
 					
 					HomeScreenView(offsetTab0: -gameStatusData.fullScreenSize.width,
 								   offsetTab2: gameStatusData.fullScreenSize.width,

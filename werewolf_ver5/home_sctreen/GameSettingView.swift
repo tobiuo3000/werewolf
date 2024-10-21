@@ -29,7 +29,7 @@ struct GameSettingView: View{
 					.font(.system(.largeTitle, design: .serif))
 					.foregroundStyle(.black)
 					.padding()
-
+				
 				
 				VStack{
 					VStack(alignment: .leading){
@@ -75,7 +75,7 @@ struct GameSettingView: View{
 							}
 						}
 					}
-					.onChange(of: gameStatusData.players_CONFIG.count) { 
+					.onChange(of: gameStatusData.players_CONFIG.count) {
 						gameStatusData.update_role_CONFIG()
 					}
 				}
@@ -113,61 +113,93 @@ struct GameSettingView: View{
 				}
 				.textFrameDesignProxy()
 				
-				ZStack{
-					Stepper("人狼の数:", value: $gameStatusData.werewolf_Count_CONFIG, in: 1...gameStatusData.max_werewolf_CONFIG)
-						.font(.title2)
-						.pickerStyle(SegmentedPickerStyle())
-						.textFrameDesignProxy()
-						.accentColor(.white)
-						.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
-							gameStatusData.update_role_CONFIG()
-						}
-					Text("\(gameStatusData.werewolf_Count_CONFIG)")
-						.foregroundStyle(highlightColor)
-						.font(.title)
+				VStack{
+					ZStack{
+						Stepper("人狼の数:", value: $gameStatusData.werewolf_Count_CONFIG, in: 1...gameStatusData.max_werewolf_CONFIG)
+							.font(.title2)
+							.pickerStyle(SegmentedPickerStyle())
+							.accentColor(.white)
+							.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
+								gameStatusData.update_role_CONFIG()
+							}
+						Text("\(gameStatusData.werewolf_Count_CONFIG)")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						Stepper("占い師の数:", value: $gameStatusData.seer_Count_CONFIG, in: 0...1)
+							.font(.title2)
+							.pickerStyle(SegmentedPickerStyle())
+							.accentColor(.white)
+							.onChange(of: gameStatusData.seer_Count_CONFIG) {
+								gameStatusData.update_role_CONFIG()
+							}
+						Text("\(gameStatusData.seer_Count_CONFIG)")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						Stepper("霊媒師の数:", value: $gameStatusData.medium_Count_CONFIG, in: 0...1)
+							.font(.title2)
+							.pickerStyle(SegmentedPickerStyle())
+							.accentColor(.white)
+							.onChange(of: gameStatusData.medium_Count_CONFIG) {
+								gameStatusData.update_role_CONFIG()
+							}
+						Text("\(gameStatusData.medium_Count_CONFIG)")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						Stepper("狩人の数:", value: $gameStatusData.hunter_Count_CONFIG, in: 0...1)
+							.font(.title2)
+							.pickerStyle(SegmentedPickerStyle())
+							.accentColor(.white)
+							.onChange(of: gameStatusData.hunter_Count_CONFIG) {
+								gameStatusData.update_role_CONFIG()
+							}
+						Text("\(gameStatusData.hunter_Count_CONFIG)")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
 				}
+				.textFrameDesignProxy()
 				
-				ZStack{
-					Stepper("占い師の数:", value: $gameStatusData.seer_Count_CONFIG, in: 0...1)
-						.font(.title2)
-						.pickerStyle(SegmentedPickerStyle())
-						.textFrameDesignProxy()
-						.accentColor(.white)
-						.onChange(of: gameStatusData.seer_Count_CONFIG) {
-							gameStatusData.update_role_CONFIG()
-						}
-					Text("\(gameStatusData.seer_Count_CONFIG)")
-						.foregroundStyle(highlightColor)
-						.font(.title)
-				}
 				
-				ZStack{
-					Stepper("霊媒師の数:", value: $gameStatusData.medium_Count_CONFIG, in: 0...1)
-						.font(.title2)
-						.pickerStyle(SegmentedPickerStyle())
-						.textFrameDesignProxy()
-						.accentColor(.white)
-						.onChange(of: gameStatusData.medium_Count_CONFIG) {
-							gameStatusData.update_role_CONFIG()
-						}
-					Text("\(gameStatusData.medium_Count_CONFIG)")
-						.foregroundStyle(highlightColor)
-						.font(.title)
-				}
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 10, height: 10)
+				Text("詳細設定")
+					.font(.system(.largeTitle, design: .serif))
+					.foregroundStyle(.black)
+					.padding()
 				
-				ZStack{
-					Stepper("騎士の数:", value: $gameStatusData.hunter_Count_CONFIG, in: 0...1)
-						.font(.title2)
-						.pickerStyle(SegmentedPickerStyle())
-						.textFrameDesignProxy()
-						.accentColor(.white)
-						.onChange(of: gameStatusData.hunter_Count_CONFIG) { 
-							gameStatusData.update_role_CONFIG()
-						}
-					Text("\(gameStatusData.hunter_Count_CONFIG)")
-						.foregroundStyle(highlightColor)
-						.font(.title)
+				VStack{
+					Toggle(isOn: $gameStatusData.isVoteCountVisible) {
+						Text("投票中に得票数が見えるようにする")
+							.font(.title3)
+							.foregroundColor(.white)
+					}
+					.padding()
+					
+					Toggle(isOn: $gameStatusData.isConsecutiveProtectionAllowed) {
+						Text("狩人の同一人物連続ガードを有効にする")
+							.font(.title3)
+							.foregroundColor(.white)
+					}
+					.padding()
+					
+					Toggle(isOn: $gameStatusData.requiresRunoffVote) {
+						Text("処刑投票で同票の場合に決選投票をする")
+							.font(.title3)
+							.foregroundColor(.white)
+					}
+					.padding()
 				}
+				.textFrameDesignProxy()
 			}
 		}
 	}
@@ -207,7 +239,7 @@ struct ReorderingPlayerView: View {
 							HStack{
 								Spacer()
 								Button(action: {
-									gameStatusData.players_CONFIG.append(Player(player_order: gameStatusData.players_CONFIG.count, role: .villager, player_name: "プレイヤー\(gameStatusData.players_CONFIG.count)"))
+									gameStatusData.players_CONFIG.append(Player(player_order: gameStatusData.players_CONFIG.count, role: .villager, player_name: "プレイヤー\(gameStatusData.players_CONFIG.count+1)"))
 								}) {
 									Image(systemName: "person.badge.plus")
 										.font(.title)
@@ -238,6 +270,7 @@ struct ReorderingPlayerView: View {
 									Text("\(gameStatusData.players_CONFIG[index].player_order+1)番目")
 										.foregroundStyle(.white)
 										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
+										.font(.title2)
 									Spacer()
 									TextField("プレイヤー名", text: $gameStatusData.players_CONFIG[index].player_name)
 										.foregroundStyle(.blue)

@@ -6,16 +6,15 @@ import SwiftUI
 struct AssignRole: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
-	@Binding var TempView: GameView_display_status
 	@State var Temp_index_num: Int = 0
 	@State var isPlayerConfirmationDone = false
 	
 	var body: some View {
 		if isPlayerConfirmationDone == false {
-			BeforeOnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num,
+			BeforeOnePlayerRole(Temp_index_num: $Temp_index_num,
 								isPlayerConfirmationDone: $isPlayerConfirmationDone)
 		} else if isPlayerConfirmationDone == true {
-			OnePlayerRole(TempView: $TempView, Temp_index_num: $Temp_index_num,
+			OnePlayerRole(Temp_index_num: $Temp_index_num,
 						  isPlayerConfirmationDone: $isPlayerConfirmationDone)
 		}
 	}
@@ -25,7 +24,6 @@ struct AssignRole: View{
 struct BeforeOnePlayerRole: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
-	@Binding var TempView: GameView_display_status
 	@Binding var Temp_index_num: Int
 	@State private var isAlertShown = false
 	@Binding var isPlayerConfirmationDone: Bool
@@ -42,7 +40,6 @@ struct BeforeOnePlayerRole: View{
 						Text("\(gameProgress.players[Temp_index_num].player_name)")
 							.foregroundStyle(highlightColor)
 						Text("」")
-						
 					}
 				}
 				.textFrameSimple()
@@ -79,7 +76,6 @@ struct BeforeOnePlayerRole: View{
 struct OnePlayerRole: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
-	@Binding var TempView: GameView_display_status
 	@Binding var Temp_index_num: Int
 	@Binding var isPlayerConfirmationDone: Bool
 	@State private var isCardTapped = false
@@ -93,7 +89,7 @@ struct OnePlayerRole: View {
 	
 	var body: some View {
 		ZStack{
-			TempTexts(TempView: $TempView, Temp_index_num: $Temp_index_num, isPlayerConfirmationDone: $isPlayerConfirmationDone, isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked, cardScale: $cardScale, textScale: $textScale, textOpacity: $textOpacity)
+			TempTexts(Temp_index_num: $Temp_index_num, isPlayerConfirmationDone: $isPlayerConfirmationDone, isRoleNameShown: $isRoleNameShown, isRoleNameChecked: $isRoleNameChecked, cardScale: $cardScale, textScale: $textScale, textOpacity: $textOpacity)
 			
 			ZStack{
 				ZStack{  // for Modifier
@@ -140,7 +136,6 @@ struct OnePlayerRole: View {
 struct TempTexts: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
-	@Binding var TempView: GameView_display_status
 	@Binding var Temp_index_num: Int
 	@Binding var isPlayerConfirmationDone: Bool
 	@Binding var isRoleNameShown: Bool
@@ -183,7 +178,7 @@ struct TempTexts: View {
 							Temp_index_num = Temp_index_num + 1
 							isPlayerConfirmationDone = false
 						}else{
-							TempView = .Before_discussion
+							gameProgress.stageView = .Before_discussion
 						}
 						isAlertShown = false
 						

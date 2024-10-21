@@ -135,7 +135,6 @@ enum Role {
 			return "狂人"
 		}
 	}
-	
 }
 
 
@@ -150,14 +149,18 @@ class Player: Identifiable, NSCopying {
 	var role_name: Role
 	var isAlive: Bool
 	var voteCount: Int
+	var werewolvesTargetCount: Int
+	var suspectedCount: Int
 	
-	init(player_order: Int, role: Role, player_name: String, isAlive: Bool = true, voteCount: Int = 0) {
+	init(player_order: Int, role: Role, player_name: String, isAlive: Bool = true, voteCount: Int = 0, werewolvesTargetCount: Int = 0, suspectedCount: Int = 0) {
 		self.id = UUID()
 		self.player_order = player_order
 		self.role_name = role
 		self.player_name = player_name
 		self.isAlive = isAlive
 		self.voteCount = voteCount
+		self.werewolvesTargetCount = werewolvesTargetCount
+		self.suspectedCount = suspectedCount
 	}
 	
 	func copy(with zone: NSZone? = nil) -> Any {
@@ -172,6 +175,10 @@ class DailyLog: Identifiable, NSCopying{
 	var day: Int
 	var murderedPlayer: Player?
 	var executedPlayer: Player?
+	var werewolvesTarget: Player?
+	var mostSuspectedPlayer: Player?
+	var hunterTarget: Player?
+	var seerTarget: Player?
 	
 	init(day: Int) {
 		self.id = UUID()
@@ -188,7 +195,6 @@ class DailyLog: Identifiable, NSCopying{
 class GameStatusData: ObservableObject {
 	@Published var game_status: gameStatus = .titleScreen
 	@Published var players_CONFIG: [Player] = []
-	@Published var roundNumber_CONFIG: Int = 0
 	@Published var view_status_CONFIG: Int = 0
 	@Published var discussion_minutes_CONFIG: Int = 2
 	@Published var discussion_seconds_CONFIG: Int = 0
@@ -205,6 +211,11 @@ class GameStatusData: ObservableObject {
 	@Published var titleTextSize: CGSize = .zero
 	@Published var fullScreenSize: CGSize = .zero
 	@Published var cardSize: CGSize = CGSize(width: 630, height: 880)
+	@Published var isAnimeShown: Bool = true
+	@Published var isConsecutiveProtectionAllowed: Bool = false
+	@Published var isVoteCountVisible: Bool = true
+	@Published var isCardRoleImageShown: Bool = true
+	@Published var requiresRunoffVote: Bool = true
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存
@@ -254,7 +265,7 @@ class GameStatusData: ObservableObject {
 	func makePlayerList(playersNum: Int)->[Player]{
 		var tempPlayersList: [Player] = []
 		for order in 0...playersNum-1 {
-			let player = Player(player_order: order, role: Role.villager, player_name: "プレイヤー\(order)", isAlive: true)
+			let player = Player(player_order: order, role: Role.villager, player_name: "プレイヤー\(order+1)", isAlive: true)
 			tempPlayersList.append(player)
 		}
 		return tempPlayersList
@@ -268,18 +279,23 @@ class GameStatusData: ObservableObject {
 class GameProgress: ObservableObject {
 	@Published var players: [Player] = []
 	@Published var diary: [DailyLog] = []
-	@Published var day_currrent_game: Int = 0
+	@Published var highestVotePlayers: [Player] = []
+	@Published var highestWerewolvesTargets: [Player] = []
+	@Published var highestSuspectedPlayers: [Player] = []
+	@Published var day_current_game: Int = 0
 	@Published var roundNumber: Int = 0
 	@Published var discussion_time: Int = 10
 	@Published var game_start_flag: Bool = false
-	@Published var stage: String = "夜時間" // 例: "夜時間", "議論時間"など
 	@Published var game_result: Int = 0
+	@Published var stageView: GameView_display_status = GameView_display_status.Show_player_role
 	
 	func init_gameProgress() {
+		stageView = .Show_player_role
 		players.removeAll()
-		day_currrent_game = 0
-		roundNumber = 0
 		diary.removeAll()
+		diary.append(DailyLog(day: 1))
+		day_current_game = 1
+		roundNumber = 0
 	}
 	
 	func game_Result() {
@@ -296,11 +312,27 @@ class GameProgress: ObservableObject {
 	}
 	
 	func init_player(){
-		self.players = []
+		self.players.removeAll()
+	}
+	
+	func remove_HighestVotePlayers(){
+		self.highestVotePlayers.removeAll()
+	}
+	
+	func remove_HighestSuspectedPlayers(){
+		self.highestSuspectedPlayers.removeAll()
+	}
+	
+	func remove_HighestWerewolvesTargets(){
+		self.highestWerewolvesTargets.removeAll()
 	}
 	
 	func get_player_from_UUID(targetPlayerID: UUID) -> Player{
 		return self.players.first(where: { $0.id == targetPlayerID })!
+	}
+	
+	func get_diary_cur_day() -> DailyLog{
+		return self.diary.first(where: { $0.day == self.day_current_game })!
 	}
 	
 	func get_diary_from_day(target_day: Int) -> DailyLog{
@@ -316,14 +348,44 @@ class GameProgress: ObservableObject {
 		return self.players.filter { $0.isAlive }.map { $0.player_order }.sorted()
 	}
 	
-	func get_hightst_vote() -> Player?{
-		let highestVotePlayer: Player? = self.players.max(by: { $0.voteCount < $1.voteCount })
-		return highestVotePlayer
+	func get_list_highest_vote() -> [Player]{
+		let maxCount = self.players.map({ $0.voteCount }).max()
+		let highestPlayers = self.players.filter { $0.voteCount == maxCount }
+		return highestPlayers
+	}
+	
+	func get_list_highest_suspected() -> [Player?]{
+		let maxCount = self.players.map({ $0.suspectedCount }).max()
+		let highestPlayers = self.players.filter { $0.suspectedCount == maxCount }
+		return highestPlayers
+	}
+	
+	func get_list_highest_werewolvesTarget() -> [Player]{
+		let maxCount = self.players.map({ $0.werewolvesTargetCount }).max()
+		let highestPlayers = self.players.filter { $0.werewolvesTargetCount == maxCount }
+		return highestPlayers
+	}
+	
+	func choose_one_random_player(highestList: [Player]) -> Player?{
+		let chosenPlayer = highestList.randomElement()
+		return chosenPlayer
 	}
 	
 	func reset_vote_count() {
 		for order in self.players.indices {
 			self.players[order].voteCount = 0
+		}
+	}
+	
+	func reset_werewolvesTarget_count() {
+		for order in self.players.indices {
+			self.players[order].werewolvesTargetCount = 0
+		}
+	}
+	
+	func reset_suspected_count() {
+		for order in self.players.indices {
+			self.players[order].suspectedCount = 0
 		}
 	}
 	
@@ -333,18 +395,13 @@ class GameProgress: ObservableObject {
 	
 	func try_murdering(target: Player, hunter_target: Player?) -> Bool{
 		guard let hunter_target = hunter_target else{
-			let _ = print("1")
-			let _ = print(target)
 			target.isAlive = false
 			return true
 		}
 		
 		if target.id == hunter_target.id{
-			let _ = print("2")
 			return false
 		}else{
-			let _ = print("3")
-			let _ = print(target)
 			target.isAlive = false
 			return true
 		}
@@ -375,7 +432,7 @@ class GameProgress: ObservableObject {
 				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
 			}
 		}
-		temp
+		
 		for _ in 0..<hunterNum {
 			if let randomIndex = indexes.randomElement() {
 				self.players[randomIndex].role_name = .hunter

@@ -27,8 +27,6 @@ struct BeforeGameView: View {
 					.myButtonBounce()
 					.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
 						Button("ゲームスタート"){
-							isParameterSet = false
-							gameStatusData.calcDiscussionTime()
 							initiateGameProgress()
 							DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
 								gameStatusData.game_status = .gameScreen
@@ -73,6 +71,8 @@ struct BeforeGameView: View {
 	}
 	
 	func initiateGameProgress(){
+		isParameterSet = false
+		gameStatusData.calcDiscussionTime()
 		gameProgress.init_gameProgress()
 		gameProgress.players = gameStatusData.players_CONFIG.map { $0.copy() as! Player }
 		//gameProgress.players = gameStatusData.players_CONFIG  // initiate players property

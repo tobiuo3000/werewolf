@@ -251,12 +251,7 @@ struct CardFlippedAndRtoL: ViewModifier{
 			self.card_offset = CGSize(width: 400, height: 0)
 		}
 	}
-	
 }
-
-
-
-
 
 
 struct UIAnimationRToL: ViewModifier {

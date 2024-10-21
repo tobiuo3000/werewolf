@@ -14,7 +14,17 @@ struct ContentView: View {
 								.frame(maxHeight: .infinity)
 								.ignoresSafeArea()
 							
-							LoopVideoPlayerView(videoFileName: "Wolf", videoFileType: "MOV")
+							if gameStatusData.isAnimeShown == true {
+								LoopVideoPlayerView(videoFileName: "Wolf", videoFileType: "MOV")
+							}else{
+								Image("still_Wolf")
+									.resizable()
+									.scaledToFill()
+									.ignoresSafeArea()
+									.frame(width: gameStatusData.fullScreenSize.width,
+										   height: gameStatusData.fullScreenSize.height)
+									.clipped()
+							}
 							ScrollView{
 							}
 							
@@ -35,7 +45,17 @@ struct ContentView: View {
 							Rectangle()
 								.fill(.black)
 								.ignoresSafeArea()
-							LoopVideoPlayerView(videoFileName: "Table", videoFileType: "mov")
+							if gameStatusData.isAnimeShown == true {
+								LoopVideoPlayerView(videoFileName: "Table", videoFileType: "mov")
+							}else{
+								Image("still_Table")
+									.resizable()
+									.scaledToFill()
+									.ignoresSafeArea()
+									.frame(width: gameStatusData.fullScreenSize.width,
+										   height: gameStatusData.fullScreenSize.height)
+									.clipped()
+							}
 							ScrollView{
 							}
 							/*
