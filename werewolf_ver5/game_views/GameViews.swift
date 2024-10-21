@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum GameView_display_status{
-	case Show_player_role, Before_discussion, Morning_time, Discussion_time, Vote_time, Vote_result, Runoff_Vote,  Night_time, Before_night_time
+	case Show_player_role, Before_discussion, Morning_time, Discussion_time, Vote_time, Vote_result, Runoff_Vote, RunoffVote_result, Night_time, Before_night_time
 	
 	var japaneseName: String {
 		switch self {
@@ -11,6 +11,7 @@ enum GameView_display_status{
 		case .Vote_time: return "投票時間"
 		case .Vote_result: return "投票結果"
 		case .Runoff_Vote: return "決選投票"
+		case .RunoffVote_result: return "投票結果"
 		case .Before_night_time: return "夜時間"
 		case .Night_time: return "夜時間"
 		case .Morning_time: return "夜明け時間"
@@ -52,15 +53,9 @@ struct GameView: View {
 					
 				}else if gameProgress.stageView == .Vote_result{
 					VoteResult()
-					let _ = print(gameProgress.get_diary_cur_day())
-					let _ = print(gameProgress.get_diary_cur_day().day)
-					let _ = print(gameProgress.get_diary_cur_day().id)
-					if let p1 = gameProgress.get_diary_cur_day().executedPlayer {
-						let _ = print(gameProgress.get_diary_cur_day().executedPlayer!.player_name)
-					}
-					if let p2 = gameProgress.get_diary_cur_day().murderedPlayer {
-						let _ = print(gameProgress.get_diary_cur_day().murderedPlayer!.player_name)
-					}
+					
+				}else if gameProgress.stageView == .Runoff_Vote{
+					RunoffView(player_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
 					
 				}else if gameProgress.stageView == .Before_night_time {
 					Before_night_time()
@@ -214,7 +209,7 @@ struct MorningView: View {
 					Text("残り人数： \(gameProgress.get_num_survivors())")
 				}
 			}
-				.textFrameDesignProxy()
+			.textFrameDesignProxy()
 			
 			Spacer()
 			Button("次へ") {
@@ -241,45 +236,75 @@ struct VoteResult: View{
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	
 	var body: some View{
-		VStack{
-			Spacer()
+		
+		if gameProgress.get_list_highest_vote().count == 1{
+			let tmpPlayer = gameProgress.choose_one_random_player(highestList: gameProgress.get_list_highest_vote())!
 			VStack{
-				Text("最も多くの得票を得たプレイヤーは")
-					.foregroundStyle(.white)
+				Spacer()
+				VStack{
+					Text("最も多くの得票を得たプレイヤーは")
+						.foregroundStyle(.white)
+					HStack{
+						Text("「")
+						Text("\(tmpPlayer.player_name)")
+							.foregroundStyle(highlightColor)
+						Text("」です")
+					}
+				}
+				.textFrameDesignProxy()
+				
 				HStack{
 					Text("「")
-					Text("\(gameProgress.get_hightst_vote()!.player_name)")
+					Text("\(tmpPlayer.player_name)")
 						.foregroundStyle(highlightColor)
-					Text("」です")
+					Text("」は処刑されます")
 				}
-			}
-			.textFrameDesignProxy()
-			
-			HStack{
-				Text("「")
-				Text("\(gameProgress.get_hightst_vote()!.player_name)")
-					.foregroundStyle(highlightColor)
-				Text("」は処刑されます")
-			}
-			.textFrameDesignProxy()
-			Spacer()
-			Button("次へ") {
-				gameProgress.sentence_to_death(suspect_id: gameProgress.get_hightst_vote()!.id)
-				gameProgress.get_diary_cur_day().executedPlayer = gameProgress.get_hightst_vote()!
-				gameProgress.reset_vote_count()
-				gameProgress.game_Result()
-				if gameProgress.game_result == 0{
-					gameProgress.stageView = .Before_night_time
-				}else if gameProgress.game_result == 1{
-					gameStatusData.game_status = .gameOverScreen
-				}else if gameProgress.game_result == 2{
-					gameStatusData.game_status = .gameOverScreen
+				.textFrameDesignProxy()
+				Spacer()
+				Button("次へ") {
+					gameProgress.sentence_to_death(suspect_id: tmpPlayer.id)
+					gameProgress.get_diary_cur_day().executedPlayer = tmpPlayer
+					gameProgress.reset_vote_count()
+					gameProgress.game_Result()
+					if gameProgress.game_result == 0{
+						gameProgress.stageView = .Before_night_time
+					}else if gameProgress.game_result == 1{
+						gameStatusData.game_status = .gameOverScreen
+					}else if gameProgress.game_result == 2{
+						gameStatusData.game_status = .gameOverScreen
+					}
 				}
+				.myTextBackground()
+				.myButtonBounce()
+				.padding()
 			}
-			.myTextBackground()
-			.myButtonBounce()
-			.padding()
+		}else{  // multiple most voted players
+			VStack{
+				Spacer()
+				VStack{
+					Text("最も多くの得票を得たプレイヤーは\(gameProgress.get_list_highest_vote().count)名います")
+					Text("これから決選投票を行います")
+				}
+				.textFrameDesignProxy()
+				
+				VStack{
+					ForEach(gameProgress.get_list_highest_vote()){ player in
+						Text("\(player.player_name)")
+					}
+				}
+				.textFrameDesignProxy()
+				
+				Spacer()
+				Button("次へ") {
+					gameProgress.reset_vote_count()
+					gameProgress.stageView = .Runoff_Vote
+				}
+				.myTextBackground()
+				.myButtonBounce()
+				.padding()
+			}
 		}
+		
 	}
 }
 
@@ -305,8 +330,9 @@ struct VoteTime: View {
 				.textFrameDesignProxy()
 				
 				ScrollView(.vertical) {
-					ForEach(gameProgress.players.filter {$0.isAlive}) { player in
-						if gameProgress.players[player_index].player_order != player.player_order{
+					ForEach() { player in
+						if (gameProgress.players[player_index].player_order != player.player_order)
+						{
 							HStack{
 								Button(player.player_name) {
 									tmpPlayer = player
@@ -395,6 +421,209 @@ struct VoteTime: View {
 }
 
 
+struct RunoffView: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
+	@State var player_index: Int = 0
+	@State var survivors_index: Int = 0
+	@State var voteDone: Bool = false
+	@State var isAlertShown: Bool = false
+	var survivors_list: [Int]
+	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	@State var tmpPlayer:Player = Player(player_order: 1000, role: .villager, player_name: "none")
+	
+	var body: some View {
+		VStack{
+			if voteDone == false{
+				VStack{
+					Text("決選投票です")
+					Text("「\(gameProgress.players[player_index].player_name)」さん")
+					Text("人狼だと思う人物を選択してください")
+				}
+				.textFrameDesignProxy()
+				
+				ScrollView(.vertical) {
+					ForEach(gameProgress.players.filter {$0.isAlive}) { player in
+						if gameProgress.players[player_index].player_order != player.player_order{
+							HStack{
+								Button(player.player_name) {
+									tmpPlayer = player
+									isAlertShown = true
+								}
+								.myTextBackground()
+								.myButtonBounce()
+								.alert("\(tmpPlayer.player_name)さんに投票しますか？", isPresented: $isAlertShown){
+									Button("投票する"){
+										tmpPlayer.voteCount += 1
+										voteDone = true
+										isAlertShown = false
+									}
+									Button("キャンセル", role: .cancel){
+									}
+								}
+								if gameStatusData.isVoteCountVisible == true {
+									Text(": \(player.voteCount)票")
+										.font(.title3)
+										.foregroundStyle(.white)
+								}
+							}
+							.padding(12)
+						}else{
+							HStack{
+								ZStack{
+									Text(player.player_name)
+										.padding(12)
+										.background(.white)
+										.strikethrough(true, color: .white)  // 横棒を赤色で表示
+										.cornerRadius(gameStatusData.currentTheme.cornerRadius)
+									Text(player.player_name)
+										.foregroundColor(.white)
+										.padding(10)
+										.background(
+											Color(.gray)
+										)
+										.cornerRadius(gameStatusData.currentTheme.cornerRadius)
+								}
+								if gameStatusData.isVoteCountVisible == true {
+									Text(": \(player.voteCount)票")
+										.font(.title3)
+										.foregroundStyle(.white)
+								}
+							}
+							.padding(12)
+						}
+					}
+				}
+			}else{
+				if survivors_index+1 < gameProgress.get_num_survivors(){
+					VStack{
+						Text("次のプレイヤーに端末を渡してください:")
+						HStack{
+							Text("「")
+							Text("\(gameProgress.players[survivors_list[survivors_index+1]].player_name)")
+								.foregroundStyle(highlightColor)
+							Text("」")
+						}
+					}
+					.textFrameDesignProxy()
+				}else{
+					VStack{
+						Text("投票結果を表示します")
+					}
+					.textFrameDesignProxy()
+				}
+				
+				Spacer()
+				Button("次へ") {
+					voteDone = false
+					if survivors_index+1 == gameProgress.get_num_survivors(){
+						gameProgress.stageView = .RunoffVote_result
+					}else{
+						survivors_index += 1
+						player_index = survivors_list[survivors_index]
+						
+					}
+				}
+				.myTextBackground()
+				.myButtonBounce()
+				.padding()
+			}
+		}
+	}
+}
+
+
+struct RunoffVoteResult: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
+	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	
+	var body: some View{
+		let tmpPlayer = gameProgress.choose_one_random_player(highestList: gameProgress.get_list_highest_vote())!
+		if gameProgress.get_list_highest_vote().count == 1{
+			VStack{
+				Spacer()
+				VStack{
+					Text("最も多くの得票を得たプレイヤーは")
+						.foregroundStyle(.white)
+					HStack{
+						Text("「")
+						Text("\(tmpPlayer.player_name)")
+							.foregroundStyle(highlightColor)
+						Text("」です")
+					}
+				}
+				.textFrameDesignProxy()
+				
+				HStack{
+					Text("「")
+					Text("\(tmpPlayer.player_name)")
+						.foregroundStyle(highlightColor)
+					Text("」は処刑されます")
+				}
+				.textFrameDesignProxy()
+				Spacer()
+				Button("次へ") {
+					gameProgress.sentence_to_death(suspect_id: tmpPlayer.id)
+					gameProgress.get_diary_cur_day().executedPlayer = tmpPlayer
+					gameProgress.reset_vote_count()
+					gameProgress.game_Result()
+					if gameProgress.game_result == 0{
+						gameProgress.stageView = .Before_night_time
+					}else if gameProgress.game_result == 1{
+						gameStatusData.game_status = .gameOverScreen
+					}else if gameProgress.game_result == 2{
+						gameStatusData.game_status = .gameOverScreen
+					}
+				}
+				.myTextBackground()
+				.myButtonBounce()
+				.padding()
+			}
+		}else{  // multiple most voted players
+			
+			VStack{
+				Spacer()
+				VStack{
+					Text("最も多くの得票を得たプレイヤーは\(gameProgress.get_list_highest_vote().count)名います")
+					Text("\(gameProgress.get_list_highest_vote().count)名の中からランダムで処刑する人物を決めます")
+				}
+				.textFrameDesignProxy()
+				
+				
+				
+				Spacer()
+				HStack{
+					Text("「")
+					Text("\(tmpPlayer.player_name)")
+						.foregroundStyle(highlightColor)
+					Text("」は処刑されます")
+				}
+				.textFrameDesignProxy()
+				Spacer()
+				Button("次へ") {
+					gameProgress.sentence_to_death(suspect_id: tmpPlayer.id)
+					gameProgress.get_diary_cur_day().executedPlayer = tmpPlayer
+					gameProgress.reset_vote_count()
+					gameProgress.game_Result()
+					if gameProgress.game_result == 0{
+						gameProgress.stageView = .Before_night_time
+					}else if gameProgress.game_result == 1{
+						gameStatusData.game_status = .gameOverScreen
+					}else if gameProgress.game_result == 2{
+						gameStatusData.game_status = .gameOverScreen
+					}
+				}
+				.myTextBackground()
+				.myButtonBounce()
+				.padding()
+			}
+			
+		}
+	}
+	
+}
+
 struct ListSurviversView: View{
 	@EnvironmentObject var gameProgress: GameProgress
 	
@@ -433,11 +662,12 @@ struct Before_discussion: View{
 	
 	var body: some View{
 		VStack{
-			if let tmpSuspectedPlayer = gameProgress.get_hightst_suspected(){
+			let tmpSuspectedPlayers = gameProgress.get_list_highest_vote()
+			if let tmpMostSuspectedPlayer = gameProgress.choose_one_random_player(highestList: tmpSuspectedPlayers){
 				VStack{
 					Text("昨晩もっとも疑われた人物は...")
 					HStack{
-						Text("\(tmpSuspectedPlayer.player_name)")
+						Text("\(tmpMostSuspectedPlayer.player_name)")
 							.foregroundStyle(highlightColor)
 						Text("さんです")
 					}
@@ -455,7 +685,6 @@ struct Before_discussion: View{
 			.alert("\(GameStatusData.discussion_minutes_CONFIG)分\(GameStatusData.discussion_seconds_CONFIG)秒間の議論が開始します", isPresented: $isAlertShown){
 				Button("議論を開始する"){
 					gameProgress.reset_suspected_count()
-					gameProgress.reset_werewolvesTarget_count()
 					gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
 					gameProgress.stageView = .Discussion_time
 					let _ = print(gameProgress.get_diary_cur_day())

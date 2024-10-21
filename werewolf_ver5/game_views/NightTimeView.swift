@@ -71,7 +71,7 @@ struct Night_Action_EachPlayer_View: View{
 }
 
 
-struct Night_Between_EachPlayer_View:View {
+struct Night_Between_EachPlayer_View: View{
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var whole_players_index: Int
 	@Binding var survivors_index: Int
@@ -114,7 +114,7 @@ struct Night_Between_EachPlayer_View:View {
 				
 				Spacer()  // to keep objects' position elevated
 				Button("次へ") {
-					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.get_hightst_werewolvesTarget()
+					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.choose_one_random_player(highestList: gameProgress.highestWerewolvesTargets)
 					if let tmpWolfTarget = gameProgress.get_diary_cur_day().werewolvesTarget{
 						if let tmpHunterTarget = gameProgress.get_diary_cur_day().hunterTarget{
 							if gameProgress.try_murdering(target: tmpWolfTarget,

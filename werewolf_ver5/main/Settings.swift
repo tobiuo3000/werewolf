@@ -279,6 +279,9 @@ class GameStatusData: ObservableObject {
 class GameProgress: ObservableObject {
 	@Published var players: [Player] = []
 	@Published var diary: [DailyLog] = []
+	@Published var highestVotePlayers: [Player] = []
+	@Published var highestWerewolvesTargets: [Player] = []
+	@Published var highestSuspectedPlayers: [Player] = []
 	@Published var day_current_game: Int = 0
 	@Published var roundNumber: Int = 0
 	@Published var discussion_time: Int = 10
@@ -309,7 +312,19 @@ class GameProgress: ObservableObject {
 	}
 	
 	func init_player(){
-		self.players = []
+		self.players.removeAll()
+	}
+	
+	func remove_HighestVotePlayers(){
+		self.highestVotePlayers.removeAll()
+	}
+	
+	func remove_HighestSuspectedPlayers(){
+		self.highestSuspectedPlayers.removeAll()
+	}
+	
+	func remove_HighestWerewolvesTargets(){
+		self.highestWerewolvesTargets.removeAll()
 	}
 	
 	func get_player_from_UUID(targetPlayerID: UUID) -> Player{
@@ -333,22 +348,28 @@ class GameProgress: ObservableObject {
 		return self.players.filter { $0.isAlive }.map { $0.player_order }.sorted()
 	}
 	
-	func get_hightst_vote() -> Player?{
-		let highestVotePlayer: Player? = self.players.max(by: { $0.voteCount < $1.voteCount })
-		return highestVotePlayer
+	func get_list_highest_vote() -> [Player]{
+		let maxCount = self.players.map({ $0.voteCount }).max()
+		let highestPlayers = self.players.filter { $0.voteCount == maxCount }
+		return highestPlayers
 	}
 	
-	func get_hightst_suspected() -> Player?{
-		let highestVotePlayer: Player? = self.players.max(by: { $0.suspectedCount < $1.suspectedCount })
-		return highestVotePlayer
+	func get_list_highest_suspected() -> [Player?]{
+		let maxCount = self.players.map({ $0.suspectedCount }).max()
+		let highestPlayers = self.players.filter { $0.suspectedCount == maxCount }
+		return highestPlayers
 	}
 	
-	func get_hightst_werewolvesTarget() -> Player?{
-		let highestVotePlayer: Player? = self.players.max(by: { $0.werewolvesTargetCount < $1.werewolvesTargetCount })
-		return highestVotePlayer
+	func get_list_highest_werewolvesTarget() -> [Player]{
+		let maxCount = self.players.map({ $0.werewolvesTargetCount }).max()
+		let highestPlayers = self.players.filter { $0.werewolvesTargetCount == maxCount }
+		return highestPlayers
 	}
 	
-	
+	func choose_one_random_player(highestList: [Player]) -> Player?{
+		let chosenPlayer = highestList.randomElement()
+		return chosenPlayer
+	}
 	
 	func reset_vote_count() {
 		for order in self.players.indices {
