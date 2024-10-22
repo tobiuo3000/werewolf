@@ -30,18 +30,18 @@ struct GameSettingView: View{
 					.foregroundStyle(.black)
 					.padding()
 				
-				
 				VStack{
 					VStack(alignment: .leading){
 						ZStack{
 							HStack {
+								Text("参加プレイヤー数:")
+									.font(.title2)
 								Spacer()
-								Text("プレイヤー人数:")
-									.font(.title2)
 								Text("\(gameStatusData.players_CONFIG.count)人")
-									.font(.title2)
+									.font(.title)
 									.foregroundStyle(highlightColor)
-								
+								Spacer()
+								Spacer()
 								Spacer()
 							}
 							HStack{
@@ -50,14 +50,16 @@ struct GameSettingView: View{
 									isReorderingViewShown = true
 								}) {
 									Image(systemName: "rectangle.and.pencil.and.ellipsis.rtl")
-										.font(.title)
+										.font(.largeTitle)
 										.foregroundColor(.blue)
 								}
 								.myButtonBounce()
 								.bouncingUI(interval: 3)
+								.padding()
 							}
 						}
 						
+						/*
 						ForEach(gameStatusData.players_CONFIG.indices, id: \.self) { index in
 							HStack{
 								Spacer()
@@ -74,8 +76,9 @@ struct GameSettingView: View{
 								Spacer()
 							}
 						}
+						*/
 					}
-					.onChange(of: gameStatusData.players_CONFIG.count) {
+					.onChange(of: gameStatusData.players_CONFIG.count) { _ in
 						gameStatusData.update_role_CONFIG()
 					}
 				}
@@ -89,6 +92,7 @@ struct GameSettingView: View{
 						Text("\(gameStatusData.discussion_minutes_CONFIG)分 \(gameStatusData.discussion_seconds_CONFIG)秒")
 							.foregroundStyle(highlightColor)
 							.font(.title)
+						Spacer()
 					}
 					let minutes_range = 1...59
 					let seconds_range = 0...50
@@ -97,7 +101,7 @@ struct GameSettingView: View{
 						Stepper("minutes(分):", value: $gameStatusData.discussion_minutes_CONFIG, in: minutes_range)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
+							.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
 								gameStatusData.update_role_CONFIG()
 								gameStatusData.calcDiscussionTime()
 							}
@@ -105,7 +109,7 @@ struct GameSettingView: View{
 						Stepper("seconds(秒):", value: $gameStatusData.discussion_seconds_CONFIG, in: seconds_range, step: 10)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
+							.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
 								gameStatusData.update_role_CONFIG()
 								gameStatusData.calcDiscussionTime()
 							}
@@ -119,7 +123,7 @@ struct GameSettingView: View{
 							.font(.title2)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.werewolf_Count_CONFIG) {
+							.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
 								gameStatusData.update_role_CONFIG()
 							}
 						Text("\(gameStatusData.werewolf_Count_CONFIG)")
@@ -132,7 +136,7 @@ struct GameSettingView: View{
 							.font(.title2)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.seer_Count_CONFIG) {
+							.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
 								gameStatusData.update_role_CONFIG()
 							}
 						Text("\(gameStatusData.seer_Count_CONFIG)")
@@ -145,7 +149,7 @@ struct GameSettingView: View{
 							.font(.title2)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.medium_Count_CONFIG) {
+							.onChange(of: gameStatusData.medium_Count_CONFIG) { _ in
 								gameStatusData.update_role_CONFIG()
 							}
 						Text("\(gameStatusData.medium_Count_CONFIG)")
@@ -158,7 +162,7 @@ struct GameSettingView: View{
 							.font(.title2)
 							.pickerStyle(SegmentedPickerStyle())
 							.accentColor(.white)
-							.onChange(of: gameStatusData.hunter_Count_CONFIG) {
+							.onChange(of: gameStatusData.hunter_Count_CONFIG) { _ in
 								gameStatusData.update_role_CONFIG()
 							}
 						Text("\(gameStatusData.hunter_Count_CONFIG)")
@@ -210,14 +214,19 @@ struct ReorderingPlayerView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@Binding var isReorderingViewShown: Bool
 	@State var isAlertShown: Bool = false
-	let viewColor: Color = Color(red: 0.1, green: 0.1, blue: 0.1)
+	let viewColor: Color = Color(red: 0.2, green: 0.2, blue: 0.2)
+	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	let lineWidth: CGFloat = 6
+	let baseColor: Color = Color(red: 0.05, green: 0.05, blue: 0.1)
 	
 	var body: some View{
 		ZStack{
 			Color.black.opacity(0.6)
 				.ignoresSafeArea()
+			Rectangle()
+				.foregroundStyle(.clear)
+				.frame(height: gameStatusData.fullScreenSize.height/30)
 			VStack{
-				
 				Rectangle()
 					.foregroundStyle(.clear)
 					.frame(height: gameStatusData.fullScreenSize.height/8)
@@ -226,59 +235,89 @@ struct ReorderingPlayerView: View {
 						.fill(viewColor)
 					
 					VStack{
-						ZStack{
-							HStack{
-								Spacer()
-								EditButton()
-									.foregroundColor(.blue)
-									.font(.title2)
-								Rectangle()
-									.fill(.clear)
-									.frame(width: 10, height: 10)
-							}
-							HStack{
-								Spacer()
-								Button(action: {
-									gameStatusData.players_CONFIG.append(Player(player_order: gameStatusData.players_CONFIG.count, role: .villager, player_name: "プレイヤー\(gameStatusData.players_CONFIG.count+1)"))
-								}) {
-									Image(systemName: "person.badge.plus")
-										.font(.title)
-										.padding(4)
+						VStack{
+							ZStack{
+								HStack{  // EditButton
+									Spacer()
+									EditButton()
+										.foregroundColor(.blue)
+										.font(.title2)
+									Rectangle()
+										.fill(.clear)
+										.frame(width: 10, height: 10)
 								}
-								.myButtonBounce()
-								.bouncingUI(interval: 3)
-								
-								Spacer()
-								Text("プレイヤー設定")
-									.foregroundStyle(.white)
-									.font(.title)
-									.padding(4)
-									.cornerRadius(18)
-									.border(Color(red: 0.8, green: 0.8, blue: 0.8, opacity: 1.0), width: 2)
-								
-								Spacer()
-								Rectangle()
-									.fill(.clear)
-									.frame(width: 10, height: 10)
-								Spacer()
+								HStack{
+									Rectangle()
+										.fill(.clear)
+										.frame(width: 10, height: 10)
+									Button(action: {
+										gameStatusData.players_CONFIG.append(Player(player_order: gameStatusData.players_CONFIG.count, role: .villager, player_name: "プレイヤー\(gameStatusData.players_CONFIG.count+1)"))
+									}) {
+										Image(systemName: "person.badge.plus")
+											.font(.title)
+											.padding(4)
+									}
+									.myButtonBounce()
+									.bouncingUI(interval: 3)
+									Spacer()
+								}
+								HStack{
+									
+									Spacer()
+									VStack{
+										Text("プレイヤー編集画面")
+											.font(.title2)
+											.padding(4)
+											.border(Color(red: 0.8, green: 0.8, blue: 0.8, opacity: 1.0), width: 2)
+											.padding(lineWidth)
+										
+										HStack{
+											Text("合計人数:")
+												.foregroundStyle(.white)
+											Text("\(gameStatusData.players_CONFIG.count)人")
+												.foregroundStyle(highlightColor)
+										}
+										.font(.title2)
+									}
+									
+									Spacer()
+									Rectangle()
+										.fill(.clear)
+										.frame(width: 10, height: 10)
+								}
 							}
+							Rectangle()
+								.fill(.clear)
+								.frame(height: lineWidth*3)
 						}
+						.background(baseColor)
 						
 						List {
+							HStack{
+								Text("プレイ順序")
+									.foregroundStyle(.white)
+									.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
+									.font(.title2)
+								Text("プレイヤー名")
+									.foregroundStyle(.white)
+									.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
+									.font(.title2)
+							}
+							.listRowBackground(viewColor)
+							.padding(lineWidth)
+							
 							ForEach(gameStatusData.players_CONFIG.indices, id: \.self) { index in
 								HStack {
 									Text("\(gameStatusData.players_CONFIG[index].player_order+1)番目")
 										.foregroundStyle(.white)
 										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
 										.font(.title2)
-									Spacer()
 									TextField("プレイヤー名", text: $gameStatusData.players_CONFIG[index].player_name)
 										.foregroundStyle(.blue)
 										.textFieldStyle(RoundedBorderTextFieldStyle())
 										.autocorrectionDisabled()
 										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .trailing)
 								}
-								.listRowBackground(viewColor)
 								.padding()
 							}
 							.onMove { indices, newOffset in
@@ -286,6 +325,7 @@ struct ReorderingPlayerView: View {
 								gameStatusData.updatePlayerOrder()
 							}
 							.onDelete(perform: confirmDelete)
+							.listRowBackground(viewColor)
 						}
 						.listStyle(PlainListStyle())
 						.alert("プレイヤーを4名以下にすることはできません", isPresented: $isAlertShown) {
@@ -308,13 +348,15 @@ struct ReorderingPlayerView: View {
 								.fill(.clear)
 								.frame(width: 10, height: 10)
 						}
+						.background(baseColor)
 					}
 				}
 				.cornerRadius(18)
+				.frame(width: gameStatusData.fullScreenSize.width-2*lineWidth)
 				
 				Rectangle()
 					.foregroundStyle(.clear)
-					.frame(height: gameStatusData.fullScreenSize.height/20)
+					.frame(height: gameStatusData.fullScreenSize.height/40)
 			}
 		}
 	}

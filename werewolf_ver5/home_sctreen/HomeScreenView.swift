@@ -223,7 +223,6 @@ struct SettingsView: View {
 						.fill(.clear)
 						.frame(width: gameStatusData.fullScreenSize.width/16)
 					ZStack{
-						Color(viewColor)
 						
 						VStack{
 							ZStack{
@@ -244,11 +243,7 @@ struct SettingsView: View {
 								}
 							}
 							Spacer()
-							Toggle(isOn: $gameStatusData.isAnimeShown) {
-								Text("背景アニメーションを動かす")
-									.font(.title)
-									.foregroundColor(.white)
-							}
+							
 							Toggle(isOn: $gameStatusData.isAnimeShown) {
 								Text("背景アニメーションを動かす")
 									.font(.title)
@@ -258,7 +253,7 @@ struct SettingsView: View {
 							Spacer()
 						}
 					}  // ZStack closure
-					.background(.black)
+					.background(viewColor)
 					.cornerRadius(20)
 					
 					Rectangle()
@@ -342,6 +337,7 @@ struct ScrollBarView: View{
 	@Binding var iconSize2: CGFloat
 	@State var isBounced: Bool = true
 	let triangleConst:CGFloat = 46
+	let intervalTriangle: CGFloat = 0.8
 	
 	var body: some View{
 		//let _ = print("\(threeOffSetTab), SIZE(\(gameStatusData.fullScreenSize.width))")
@@ -378,7 +374,7 @@ struct ScrollBarView: View{
 					Image(systemName: "arrowtriangle.right.fill")
 						.foregroundColor(.white)
 						.offset(x: -(gameStatusData.fullScreenSize.width/6)*2+triangleConst, y: iconOffsetTab0)
-						.flickeringUI(interval: 1.2)
+						.flickeringUI(interval: intervalTriangle)
 				}
 				Image(systemName: iconSize0 == 30 ? "square.and.pencil.circle" : "square.and.pencil.circle.fill")
 					.foregroundColor(.white)
@@ -391,11 +387,11 @@ struct ScrollBarView: View{
 					Image(systemName: "arrowtriangle.backward.fill")
 						.foregroundColor(.white)
 						.offset(x: -triangleConst, y: iconOffsetTab0-8)
-						.flickeringUI(interval: 1.2)
+						.flickeringUI(interval: intervalTriangle)
 					Image(systemName: "arrowtriangle.right.fill")
 						.foregroundColor(.white)
 						.offset(x: +triangleConst, y: iconOffsetTab0-8)
-						.flickeringUI(interval: 1.2)
+						.flickeringUI(interval: intervalTriangle)
 				}
 				Image(systemName: iconSize1 == 30 ? "gamecontroller" : "gamecontroller.fill")
 					.foregroundColor(.white)
@@ -408,7 +404,7 @@ struct ScrollBarView: View{
 					Image(systemName: "arrowtriangle.backward.fill")
 						.foregroundColor(.white)
 						.offset(x: (gameStatusData.fullScreenSize.width/6)*2-triangleConst, y: iconOffsetTab2)
-						.flickeringUI(interval: 1.2)
+						.flickeringUI(interval: intervalTriangle)
 				}
 				Image(systemName: iconSize2 == 30 ? "text.book.closed" : "text.book.closed.fill")
 					.foregroundColor(.white)

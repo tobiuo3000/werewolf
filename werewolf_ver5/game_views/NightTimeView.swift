@@ -65,7 +65,6 @@ struct Night_Action_EachPlayer_View: View{
 				.myTextBackground()
 				.myButtonBounce()
 			}
-			
 		}
 	}
 }
@@ -107,6 +106,7 @@ struct Night_Between_EachPlayer_View: View{
 					}
 				}
 			}else{  // NightTime Processes are done here
+				
 				VStack{
 					Text("恐ろしい夜が明けます")
 				}
@@ -114,13 +114,20 @@ struct Night_Between_EachPlayer_View: View{
 				
 				Spacer()  // to keep objects' position elevated
 				Button("次へ") {
-					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.choose_one_random_player(highestList: gameProgress.highestWerewolvesTargets)
+					gameProgress.highestWerewolvesTargets = gameProgress.get_list_highest_werewolvesTarget()
+					gameProgress.get_diary_cur_day().murderedPlayer = gameProgress.choose_one_random_player(highestList: gameProgress.highestWerewolvesTargets)!
+					
+					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.get_diary_cur_day().murderedPlayer
+					
 					if let tmpWolfTarget = gameProgress.get_diary_cur_day().werewolvesTarget{
 						if let tmpHunterTarget = gameProgress.get_diary_cur_day().hunterTarget{
 							if gameProgress.try_murdering(target: tmpWolfTarget,
 														  hunter_target: tmpHunterTarget) == true {
+								gameProgress.sentence_to_death(suspect_id: tmpWolfTarget.id)
 								gameProgress.get_diary_cur_day().murderedPlayer = gameProgress.get_diary_cur_day().werewolvesTarget!  // a werewolf target is decided by poll
 							}
+						}else{
+							gameProgress.sentence_to_death(suspect_id: tmpWolfTarget.id)
 						}
 					}
 					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -267,7 +274,8 @@ struct Night_Medium:View{
 			Spacer()
 			VStack{  // fot Modifier
 				Text("霊媒師の行動結果：")
-				if let _tmpPlayer = (gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).executedPlayer){
+				
+				if let _tmpPlayer = (gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game).executedPlayer){
 					Text("処刑された\(_tmpPlayer.player_name)さんは")
 					if _tmpPlayer.role_name == .werewolf{
 						HStack{
@@ -280,9 +288,8 @@ struct Night_Medium:View{
 						Text("人狼ではありません")
 							.font(.title2)
 					}
-				}else{
-					Text("まだ誰も処刑されていません")
 				}
+				
 			}
 			.textFrameDesignProxy()
 		}else{
@@ -291,7 +298,7 @@ struct Night_Medium:View{
 					Text("あなたは霊媒師です")
 					Text("処刑された人物が人狼かどうかわかります")
 				}
-				.textFrameDesignProxy()
+				Text("")
 				Text("あやしいと思う人物を一人選んでください")
 			}
 			.textFrameDesignProxy()
@@ -367,26 +374,7 @@ struct Night_hunter:View {
 					
 					Text("※現在連続で同じ人を守ることはできません")
 					
-					if let tmpHunterTargetYesterday = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).hunterTarget{
-						ForEach(gameProgress.players.filter { ($0.isAlive) && ($0.id != tmpHunterTargetYesterday.id) && ($0.id != gameProgress.players[whole_players_index].id)}) { player_hunter in
-							Button(player_hunter.player_name) {
-								tmpPlayer = player_hunter
-								isAlertShown = true
-							}
-							.myTextBackground()
-							.myButtonBounce()
-							.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
-								Button("決定"){
-									gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
-									isTargetConfirmed = true
-									isAlertShown = false
-								}
-								
-								Button("キャンセル", role: .cancel){
-								}
-							}
-						}
-					} else {
+					if gameProgress.day_current_game == 1{
 						ForEach(gameProgress.players.filter { ($0.isAlive) && ($0.id != gameProgress.players[whole_players_index].id)}) { player_hunter in
 							Button(player_hunter.player_name) {
 								tmpPlayer = player_hunter
@@ -401,6 +389,27 @@ struct Night_hunter:View {
 									isAlertShown = false
 								}
 								Button("キャンセル", role: .cancel){
+								}
+							}
+						}
+					}else{
+						if let tmpHunterTargetYesterday = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).hunterTarget{
+							ForEach(gameProgress.players.filter { ($0.isAlive) && ($0.id != tmpHunterTargetYesterday.id) && ($0.id != gameProgress.players[whole_players_index].id)}) { player_hunter in
+								Button(player_hunter.player_name) {
+									tmpPlayer = player_hunter
+									isAlertShown = true
+								}
+								.myTextBackground()
+								.myButtonBounce()
+								.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
+									Button("決定"){
+										gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
+										isTargetConfirmed = true
+										isAlertShown = false
+									}
+									
+									Button("キャンセル", role: .cancel){
+									}
 								}
 							}
 						}
@@ -446,7 +455,7 @@ struct Night_Werewolf:View{
 			.padding()
 			
 			ScrollView(.vertical) {
-				ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[whole_players_index].id}) { player_wolf in
+				ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[whole_players_index].id && $0.role_name != .werewolf}) { player_wolf in
 					HStack{
 						Button(player_wolf.player_name) {
 							tmpPlayer = player_wolf

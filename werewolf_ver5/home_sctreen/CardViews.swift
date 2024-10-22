@@ -103,7 +103,7 @@ struct CardView: View {
 					}
 				}
 				Color.clear.frame(width: 0, height: 0)
-					.onChange(of: showAllText){ 
+					.onChange(of: showAllText){ _ in
 						showText = showAllText
 					}
 			}else{

@@ -107,7 +107,7 @@ struct CardAnimationLToR: ViewModifier {
 					}
 				}
 				.offset(x: offset, y: 0)
-				.onChange(of: threeOffSetTab){
+				.onChange(of: threeOffSetTab){ _ in
 					if (viewOffsetThreshold2 < threeOffSetTab && threeOffSetTab < viewOffsetThreshold3) && !hasAppeared {
 						performAnimation(imageIndex: imageIndex)
 						hasAppeared = true
@@ -225,7 +225,7 @@ struct CardFlippedAndRtoL: ViewModifier{
 			content
 				.offset(card_offset)
 				.rotation3DEffect(Angle(degrees: isCardFlipped ? 180 : 360), axis: (x: 0, y: 1, z: 0))
-				.onChange(of: gameProgress.game_start_flag){
+				.onChange(of: gameProgress.game_start_flag){ _ in
 					performAnimation(imageIndex: imageIndex)
 				}
 		}
@@ -263,7 +263,7 @@ struct UIAnimationRToL: ViewModifier {
 		ZStack{
 			content
 				.offset(x: offset, y: 0)
-				.onChange(of: animationFlag){
+				.onChange(of: animationFlag){ _ in
 					if animationFlag == true{
 						performAnimation()
 					}
@@ -291,7 +291,7 @@ struct UIAnimationLToR: ViewModifier {
 		ZStack{
 			content
 				.offset(x: offset, y: 0)
-				.onChange(of: animationFlag){
+				.onChange(of: animationFlag){ _ in
 					if animationFlag == true{
 						performAnimation()
 					}
