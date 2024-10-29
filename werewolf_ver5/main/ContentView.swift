@@ -4,7 +4,7 @@ import SwiftUI
 struct ContentView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 
-	var body: some View {
+	var body: some View {tmp3
 		GeometryReader{ proxy_ContentView in
 				VStack{  // closure for .onAppear()
 					if gameStatusData.game_status == .titleScreen{
