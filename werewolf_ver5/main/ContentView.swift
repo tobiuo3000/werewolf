@@ -15,7 +15,7 @@ struct ContentView: View {
 								.ignoresSafeArea()
 							
 							if gameStatusData.isAnimeShown == true {
-								LoopVideoPlayerView(videoFileName: "Wolf", videoFileType: "MOV")
+								LoopVideoPlayerView(videoFileName: "Wolf", videoFileType: "mp4")
 							}else{
 								Image("still_Wolf")
 									.resizable()
@@ -25,8 +25,8 @@ struct ContentView: View {
 										   height: gameStatusData.fullScreenSize.height)
 									.clipped()
 							}
-							ScrollView{
-							}
+							
+							
 							
 							/*Image(gameStatusData.currentTheme.titleScreenBackground)
 								.resizable()
@@ -46,7 +46,7 @@ struct ContentView: View {
 								.fill(.black)
 								.ignoresSafeArea()
 							if gameStatusData.isAnimeShown == true {
-								LoopVideoPlayerView(videoFileName: "Table", videoFileType: "mov")
+								LoopVideoPlayerView(videoFileName: "Table", videoFileType: "mp4")
 							}else{
 								Image("still_Table")
 									.resizable()
@@ -56,8 +56,7 @@ struct ContentView: View {
 										   height: gameStatusData.fullScreenSize.height)
 									.clipped()
 							}
-							ScrollView{
-							}
+							
 							/*
 							Rectangle()
 								.ignoresSafeArea()

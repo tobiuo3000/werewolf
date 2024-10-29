@@ -12,7 +12,7 @@ struct ViewSizePreferenceKey: PreferenceKey {
 }
 
 struct TextBackgroundModifier: ViewModifier {
-	@EnvironmentObject var GameStatusData: GameStatusData
+	@EnvironmentObject var gameStatusData: GameStatusData
 	var outerSquare: CGFloat
 	var innerSquare: CGFloat
 	
@@ -21,22 +21,19 @@ struct TextBackgroundModifier: ViewModifier {
 			content
 				.padding(outerSquare)
 				.background(.white)
-				.cornerRadius(GameStatusData.currentTheme.cornerRadius)
+				.cornerRadius(gameStatusData.currentTheme.cornerRadius)
 			content
 				.foregroundColor(.white)
 				.padding(innerSquare)
 				.background(
 					Color(red: 0.3, green: 0.4, blue: 0.5)
 				)
-				.cornerRadius(GameStatusData.currentTheme.cornerRadius)
+				.cornerRadius(gameStatusData.currentTheme.cornerRadius)
 			
 			//.allowsHitTesting(false)
 		}
 	}
 }
-
-
-
 
 
 struct ButtonAnimationModifier: ViewModifier {
@@ -57,7 +54,7 @@ struct ButtonAnimationModifier: ViewModifier {
 
 
 struct TextFrameSimple: ViewModifier {
-	@EnvironmentObject var GameStatusData: GameStatusData
+	@EnvironmentObject var gameStatusData: GameStatusData
 	
 	func body(content: Content) -> some View {
 		ZStack{
@@ -66,7 +63,29 @@ struct TextFrameSimple: ViewModifier {
 				.padding(10)
 				.background(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.8))
 				.border(Color(red: 0.8, green: 0.6, blue: 0.24, opacity: 1.0), width: 2)
-			
+		}
+	}
+}
+
+struct InactiveButtonDesign: ViewModifier {
+	@EnvironmentObject var gameStatusData: GameStatusData
+	
+	func body(content: Content) -> some View {
+		HStack{
+			ZStack{
+				content
+					.padding(12)
+					.background(.white)
+					.strikethrough(true, color: .white)  // 横棒を赤色で表示
+					.cornerRadius(gameStatusData.currentTheme.cornerRadius)
+				content
+					.foregroundColor(.white)
+					.padding(10)
+					.background(
+						Color(.gray)
+					)
+					.cornerRadius(gameStatusData.currentTheme.cornerRadius)
+			}
 		}
 	}
 }
@@ -77,6 +96,7 @@ struct TextFrameDesignProxy: ViewModifier {
 	
 	func body(content: Content) -> some View {
 		content
+			.font(.title2)
 			.textFrameSimple()
 	}
 }
@@ -425,6 +445,10 @@ extension View {
 	
 	func myTextBackground(outerSquare: CGFloat = 12, innerSquare: CGFloat = 10) -> some View {
 		self.modifier(TextBackgroundModifier(outerSquare: outerSquare, innerSquare: innerSquare))
+	}
+	
+	func myInactiveButton() -> some View {
+		self.modifier(InactiveButtonDesign())
 	}
 	
 	func textFrameSimple() -> some View {

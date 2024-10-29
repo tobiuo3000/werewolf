@@ -53,6 +53,7 @@ struct Night_Action_EachPlayer_View: View{
 				
 			}else if gameProgress.players[whole_players_index].role_name == Role.werewolf{
 				Night_Werewolf(isTargetConfirmed: $isTargetConfirmed, whole_players_index: $whole_players_index)
+				
 			}
 			
 			Spacer()  // to keep objects' position elevated
@@ -115,9 +116,8 @@ struct Night_Between_EachPlayer_View: View{
 				Spacer()  // to keep objects' position elevated
 				Button("次へ") {
 					gameProgress.highestWerewolvesTargets = gameProgress.get_list_highest_werewolvesTarget()
-					gameProgress.get_diary_cur_day().murderedPlayer = gameProgress.choose_one_random_player(highestList: gameProgress.highestWerewolvesTargets)!
+					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.choose_one_random_player(highestList: gameProgress.highestWerewolvesTargets)!
 					
-					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.get_diary_cur_day().murderedPlayer
 					
 					if let tmpWolfTarget = gameProgress.get_diary_cur_day().werewolvesTarget{
 						if let tmpHunterTarget = gameProgress.get_diary_cur_day().hunterTarget{
@@ -146,7 +146,7 @@ struct Night_Between_EachPlayer_View: View{
 }
 
 
-struct Night_Villager:View{
+struct Night_Villager: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var isTargetConfirmed: Bool
@@ -172,32 +172,36 @@ struct Night_Villager:View{
 			
 			Spacer()
 			ScrollView(.vertical) {
-				ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[whole_players_index].id}) { player_vil in
-					Button(player_vil.player_name) {
-						tmpPlayer = player_vil
-						isAlertShown = true
-					}
-					.myTextBackground()
-					.myButtonBounce()
-					.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
-						Button("次へ"){
-							tmpPlayer.suspectedCount += 1
-							isTargetConfirmed = true
-							isAlertShown = false
+				ForEach(gameProgress.players) { player_vil in
+					if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
+						Button(player_vil.player_name) {
+							tmpPlayer = player_vil
+							isAlertShown = true
 						}
-						
-						Button("キャンセル", role: .cancel){
+						.myTextBackground()
+						.myButtonBounce()
+						.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
+							Button("次へ"){
+								tmpPlayer.suspectedCount += 1
+								isTargetConfirmed = true
+								isAlertShown = false
+							}
+							
+							Button("キャンセル", role: .cancel){
+							}
 						}
+					}else{
+						Text(player_vil.player_name)
+							.myInactiveButton()
 					}
 				}
 			}
 		}
-		
 	}
 }
 
 
-struct Night_Seer:View{
+struct Night_Seer: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var isTargetConfirmed: Bool
@@ -233,22 +237,31 @@ struct Night_Seer:View{
 			
 		}else{
 			ScrollView(.vertical) {
-				ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[whole_players_index].id}) { player_seer in
-					Button(player_seer.player_name) {
-						tmpPlayer = player_seer
-						isAlertShown = true
-					}
-					.myTextBackground()
-					.myButtonBounce()
-					.alert("\(tmpPlayer.player_name)を占いますか？", isPresented: $isAlertShown){
-						Button("決定"){
-							gameProgress.get_diary_cur_day().seerTarget = tmpPlayer  // avoids nil while unrapping an opt value
-							isTargetConfirmed = true
-							isAlertShown = false
+				ForEach(gameProgress.players){ player_seer in
+					if player_seer.isAlive && 
+						player_seer.id != gameProgress.players[whole_players_index].id &&
+						player_seer.isInspectedBySeer == false{
+						Button(player_seer.player_name) {
+							tmpPlayer = player_seer
+							isAlertShown = true
 						}
-						
-						Button("キャンセル", role: .cancel){
+						.myTextBackground()
+						.myButtonBounce()
+						.alert("\(tmpPlayer.player_name)を占いますか？", isPresented: $isAlertShown){
+							Button("決定"){
+								gameProgress.get_diary_cur_day().seerTarget = tmpPlayer  // avoids nil while unrapping an opt value
+								isTargetConfirmed = true
+								tmpPlayer.isInspectedBySeer = true
+								isAlertShown = false
+								tmpPlayer.isInspectedBySeer = true
+							}
+							
+							Button("キャンセル", role: .cancel){
+							}
 						}
+					}else{
+						Text(player_seer.player_name)
+							.myInactiveButton()
 					}
 				}
 			}
@@ -269,8 +282,6 @@ struct Night_Medium:View{
 	
 	var body: some View{
 		if isTargetConfirmed == true{
-			Text("\(tmpPlayer.player_name)を選択しました")
-				.textFrameDesignProxy()
 			Spacer()
 			VStack{  // fot Modifier
 				Text("霊媒師の行動結果：")
@@ -296,31 +307,37 @@ struct Night_Medium:View{
 			VStack{
 				VStack{
 					Text("あなたは霊媒師です")
-					Text("処刑された人物が人狼かどうかわかります")
+					Text("本日処刑された人物が")
+					Text("人狼かどうかわかります")
 				}
-				Text("")
-				Text("あやしいと思う人物を一人選んでください")
+				Text("この画面ではあやしいと思う人物")
+				Text("に対して投票を行ってください")
 			}
 			.textFrameDesignProxy()
 			
 			Spacer()
 			ScrollView(.vertical) {
-				ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[whole_players_index].id}) { player_vil in
-					Button(player_vil.player_name) {
-						tmpPlayer = player_vil
-						isAlertShown = true
-					}
-					.myTextBackground()
-					.myButtonBounce()
-					.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
-						Button("次へ"){
-							tmpPlayer.suspectedCount += 1
-							isTargetConfirmed = true
-							isAlertShown = false
+				ForEach(gameProgress.players) { player_vil in
+					if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
+						Button(player_vil.player_name) {
+							tmpPlayer = player_vil
+							isAlertShown = true
 						}
-						
-						Button("キャンセル", role: .cancel){
+						.myTextBackground()
+						.myButtonBounce()
+						.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
+							Button("次へ"){
+								tmpPlayer.suspectedCount += 1
+								isTargetConfirmed = true
+								isAlertShown = false
+							}
+							
+							Button("キャンセル", role: .cancel){
+							}
 						}
+					}else{
+						Text(player_vil.player_name)
+							.myInactiveButton()
 					}
 				}
 			}
@@ -329,7 +346,7 @@ struct Night_Medium:View{
 }
 
 
-struct Night_hunter:View {
+struct Night_hunter: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var isTargetConfirmed: Bool
@@ -342,7 +359,6 @@ struct Night_hunter:View {
 		if isTargetConfirmed == true{
 			Text("あなたは今晩\(tmpPlayer.player_name)さんを守ります")
 				.textFrameDesignProxy()
-			
 		}else{
 			VStack{
 				Text("あなたは狩人です")
@@ -351,31 +367,11 @@ struct Night_hunter:View {
 			.textFrameDesignProxy()
 			.padding()
 			ScrollView(.vertical) {
-				if gameStatusData.isConsecutiveProtectionAllowed == true {
-					ForEach(gameProgress.players.filter { ($0.isAlive) && ($0.id != gameProgress.players[whole_players_index].id)}) { player_hunter in
-						Button(player_hunter.player_name) {
-							tmpPlayer = player_hunter
-							isAlertShown = true
-						}
-						.myTextBackground()
-						.myButtonBounce()
-						.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
-							Button("決定"){
-								gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
-								isTargetConfirmed = true
-								isAlertShown = false
-							}
-							
-							Button("キャンセル", role: .cancel){
-							}
-						}
-					}
-				} else {
+				ForEach(gameProgress.players) { player_hunter in
 					
-					Text("※現在連続で同じ人を守ることはできません")
-					
-					if gameProgress.day_current_game == 1{
-						ForEach(gameProgress.players.filter { ($0.isAlive) && ($0.id != gameProgress.players[whole_players_index].id)}) { player_hunter in
+					if gameStatusData.isConsecutiveProtectionAllowed == true {
+						if (player_hunter.isAlive) &&
+							(player_hunter.id != gameProgress.players[whole_players_index].id){
 							Button(player_hunter.player_name) {
 								tmpPlayer = player_hunter
 								isAlertShown = true
@@ -388,13 +384,44 @@ struct Night_hunter:View {
 									isTargetConfirmed = true
 									isAlertShown = false
 								}
+								
 								Button("キャンセル", role: .cancel){
 								}
 							}
+						}else{
+							Text(player_hunter.player_name)
+								.myInactiveButton()
 						}
-					}else{
-						if let tmpHunterTargetYesterday = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).hunterTarget{
-							ForEach(gameProgress.players.filter { ($0.isAlive) && ($0.id != tmpHunterTargetYesterday.id) && ($0.id != gameProgress.players[whole_players_index].id)}) { player_hunter in
+					}else {
+						if gameProgress.day_current_game > 1{
+							if let tmpHunterTargetYesterday = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).hunterTarget{
+								if (player_hunter.isAlive) &&
+									(player_hunter.id != tmpHunterTargetYesterday.id) &&
+									(player_hunter.id != gameProgress.players[whole_players_index].id){
+									Button(player_hunter.player_name) {
+										tmpPlayer = player_hunter
+										isAlertShown = true
+									}
+									.myTextBackground()
+									.myButtonBounce()
+									.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
+										Button("決定"){
+											gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
+											isTargetConfirmed = true
+											isAlertShown = false
+										}
+										
+										Button("キャンセル", role: .cancel){
+										}
+									}
+								}else{
+									Text(player_hunter.player_name)
+										.myInactiveButton()
+								}
+							}
+						}else{  // after 1st day
+							if (player_hunter.isAlive) &&
+								(player_hunter.id != gameProgress.players[whole_players_index].id){
 								Button(player_hunter.player_name) {
 									tmpPlayer = player_hunter
 									isAlertShown = true
@@ -407,10 +434,12 @@ struct Night_hunter:View {
 										isTargetConfirmed = true
 										isAlertShown = false
 									}
-									
 									Button("キャンセル", role: .cancel){
 									}
 								}
+							}else{
+								Text(player_hunter.player_name)
+									.myInactiveButton()
 							}
 						}
 					}
@@ -421,7 +450,7 @@ struct Night_hunter:View {
 }
 
 
-struct Night_Werewolf:View{
+struct Night_Werewolf: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var isTargetConfirmed: Bool
@@ -455,45 +484,52 @@ struct Night_Werewolf:View{
 			.padding()
 			
 			ScrollView(.vertical) {
-				ForEach(gameProgress.players.filter { $0.isAlive && $0.id != gameProgress.players[whole_players_index].id && $0.role_name != .werewolf}) { player_wolf in
-					HStack{
-						Button(player_wolf.player_name) {
-							tmpPlayer = player_wolf
-							isAlertShown = true
-						}
-						.myTextBackground()
-						.myButtonBounce()
-						.alert("\(tmpPlayer.player_name)に投票しますか？", isPresented: $isAlertShown){
-							if gameStatusData.werewolf_Count_CONFIG > 1 {
-								Button("強く投票する(3票)"){
-									tmpPlayer.werewolvesTargetCount += 3
-									isTargetConfirmed = true
-									isAlertShown = false
+				VStack(alignment: .leading){
+					ForEach(gameProgress.players) { player_wolf in
+						if player_wolf.isAlive && player_wolf.id != gameProgress.players[whole_players_index].id && player_wolf.role_name != .werewolf{
+							HStack{
+								Button(player_wolf.player_name) {
+									tmpPlayer = player_wolf
+									isAlertShown = true
 								}
-								Button("投票する(2票)"){
-									tmpPlayer.werewolvesTargetCount += 2
-									isTargetConfirmed = true
-									isAlertShown = false
+								.myTextBackground()
+								.myButtonBounce()
+								.alert("\(tmpPlayer.player_name)を選択しますか？", isPresented: $isAlertShown){
+									if gameStatusData.werewolf_Count_CONFIG > 1 {
+										Button("強く選択する(3票)"){
+											tmpPlayer.werewolvesTargetCount += 3
+											isTargetConfirmed = true
+											isAlertShown = false
+										}
+										Button("選択する(2票)"){
+											tmpPlayer.werewolvesTargetCount += 2
+											isTargetConfirmed = true
+											isAlertShown = false
+										}
+										Button("弱く選択する(1票)"){
+											tmpPlayer.werewolvesTargetCount += 1
+											isTargetConfirmed = true
+											isAlertShown = false
+										}
+									}else{
+										Button("選択する"){
+											tmpPlayer.werewolvesTargetCount += 1
+											isTargetConfirmed = true
+											isAlertShown = false
+										}
+									}
+									Button("キャンセル", role: .cancel){
+									}
 								}
-								Button("弱く投票する(1票)"){
-									tmpPlayer.werewolvesTargetCount += 1
-									isTargetConfirmed = true
-									isAlertShown = false
-								}
-							}else{
-								Button("投票する"){
-									tmpPlayer.werewolvesTargetCount += 1
-									isTargetConfirmed = true
-									isAlertShown = false
-								}
+								
+								Text(": \(player_wolf.werewolvesTargetCount)票")
+									.font(.title3)
+									.foregroundStyle(.white)
 							}
-							Button("キャンセル", role: .cancel){
-							}
+						}else{
+							Text(player_wolf.player_name)
+								.myInactiveButton()
 						}
-						
-						Text(": \(player_wolf.werewolvesTargetCount)票")
-							.font(.title3)
-							.foregroundStyle(.white)
 					}
 				}
 			}

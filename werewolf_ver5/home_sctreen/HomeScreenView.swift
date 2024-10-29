@@ -199,8 +199,6 @@ struct HomeScreenView: View {
 			iconSize.wrappedValue = 30
 		}
 	}
-	
-	
 }
 
 
@@ -449,7 +447,7 @@ struct BeforeHomeScreen: View {
 					//VideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
 					//	.frame(maxHeight: gameStatusData.fullScreenSize.height)
 					if gameStatusData.isAnimeShown == true {
-						LoopVideoPlayerView(videoFileName: "loghouse", videoFileType: "mov")
+						LoopVideoPlayerView(videoFileName: "loghouse", videoFileType: "mp4")
 					}else{
 						Image("still_House")
 							.resizable()

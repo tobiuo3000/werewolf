@@ -20,7 +20,9 @@ struct VoteResult: View{
 			VStack{
 				Spacer()
 				VStack{
-					Text("最も多くの得票を得たプレイヤーは")
+					Text("最も多くの得票を得た")
+						.foregroundStyle(.white)
+					Text("処刑されるプレイヤーは")
 						.foregroundStyle(.white)
 					HStack{
 						Text("「")
@@ -29,15 +31,9 @@ struct VoteResult: View{
 						Text("」です")
 					}
 				}
+				.font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
 				.textFrameDesignProxy()
 				
-				HStack{
-					Text("「")
-					Text("\(randomlySelectedPlayer.player_name)")
-						.foregroundStyle(highlightColor)
-					Text("」は処刑されます")
-				}
-				.textFrameDesignProxy()
 				Spacer()
 				Button("次へ") {
 					gameProgress.sentence_to_death(suspect_id: randomlySelectedPlayer.id)

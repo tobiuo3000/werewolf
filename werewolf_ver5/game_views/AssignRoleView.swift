@@ -1,8 +1,6 @@
 import SwiftUI
 
 
-
-
 struct AssignRole: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
@@ -19,6 +17,7 @@ struct AssignRole: View{
 		}
 	}
 }
+
 
 
 struct BeforeOnePlayerRole: View{
@@ -72,6 +71,7 @@ struct BeforeOnePlayerRole: View{
 		}
 	}
 }
+
 
 struct OnePlayerRole: View {
 	@EnvironmentObject var gameStatusData: GameStatusData

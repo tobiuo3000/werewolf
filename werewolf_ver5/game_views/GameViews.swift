@@ -35,15 +35,6 @@ struct GameView: View {
 					
 				}else if gameProgress.stageView == .Before_discussion {
 					Before_discussion()
-					let _ = print(gameProgress.get_diary_cur_day())
-					let _ = print(gameProgress.get_diary_cur_day().day)
-					let _ = print(gameProgress.get_diary_cur_day().id)
-					if let p1 = gameProgress.get_diary_cur_day().executedPlayer {
-						let _ = print(gameProgress.get_diary_cur_day().executedPlayer!.player_name)
-					}
-					if let p2 = gameProgress.get_diary_cur_day().murderedPlayer {
-						let _ = print(gameProgress.get_diary_cur_day().murderedPlayer!.player_name)
-					}
 					
 				}else if gameProgress.stageView == .Discussion_time {
 					Discussion_time(discussion_time: gameStatusData.discussion_time_CONFIG)
@@ -175,78 +166,6 @@ struct MenuDuringGameView: View{
 }
 
 
-struct MorningView: View {
-	@EnvironmentObject var gameStatusData: GameStatusData
-	@EnvironmentObject var gameProgress: GameProgress
-	@State var isAlertShown: Bool = false
-	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
-	
-	var body: some View {
-		VStack{
-			VStack{
-				HStack{
-					Text("\(gameProgress.day_current_game)日目")
-						.foregroundStyle(highlightColor)
-					Text("の朝が来ました")
-				}
-			}
-			.textFrameDesignProxy()
-			VStack{
-				Text("昨晩の犠牲者は...")
-				if let tmpPlayer = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).murderedPlayer{
-					Text("\(tmpPlayer.player_name)")
-						.foregroundStyle(highlightColor)
-						.font(.title2)
-					Text("さんでした")
-					Text("残り人数： \(gameProgress.get_num_survivors())")
-					
-				}else{
-					Text("いませんでした")
-					Text("残り人数： \(gameProgress.get_num_survivors())")
-				}
-			}
-			.textFrameDesignProxy()
-			
-			let tmpSuspectedPlayers = gameProgress.get_list_highest_vote()
-			if let tmpMostSuspectedPlayer = gameProgress.choose_one_random_player(highestList: tmpSuspectedPlayers){
-				VStack{
-					Text("また、昨晩もっとも疑われた人物は...")
-					HStack{
-						Text("\(tmpMostSuspectedPlayer.player_name)")
-							.foregroundStyle(highlightColor)
-						Text("さんです")
-					}
-				}
-				.textFrameDesignProxy()
-			}
-			
-			Spacer()
-			Button("次へ") {
-				isAlertShown = true
-			}
-			.myTextBackground()
-			.myButtonBounce()
-			.alert("次へ", isPresented: $isAlertShown){
-				Button("はい"){
-					isAlertShown = false
-					gameProgress.reset_werewolvesTarget_count()
-					gameProgress.game_Result()
-					if gameProgress.game_result == 0{
-						gameProgress.stageView = .Before_discussion
-					}else if gameProgress.game_result == 1{
-						gameStatusData.game_status = .gameOverScreen
-					}else if gameProgress.game_result == 2{
-						gameStatusData.game_status = .gameOverScreen
-					}
-				}
-				Button("いいえ", role:.cancel){}
-			}
-		}
-	}
-}
-
-
-
 struct ListSurviversView: View{
 	@EnvironmentObject var gameProgress: GameProgress
 	
@@ -276,111 +195,6 @@ struct ListSurviversView: View{
 }
 
 
-struct Before_discussion: View{
-	@EnvironmentObject var GameStatusData: GameStatusData
-	@EnvironmentObject var gameProgress: GameProgress
-	private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
-	@State var isAlertShown: Bool = false
-	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
-	
-	var body: some View{
-		VStack{
-			
-			ListSurviversView()
-			
-			Spacer()
-			Button("議論開始") {
-				isAlertShown = true
-			}
-			.myTextBackground()
-			.myButtonBounce()
-			.alert("\(GameStatusData.discussion_minutes_CONFIG)分\(GameStatusData.discussion_seconds_CONFIG)秒間の議論が開始します", isPresented: $isAlertShown){
-				Button("議論を開始する"){
-					gameProgress.reset_suspected_count()
-					gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
-					gameProgress.stageView = .Discussion_time
-					let _ = print(gameProgress.get_diary_cur_day())
-					let _ = print(gameProgress.get_diary_cur_day().day)
-					let _ = print(gameProgress.get_diary_cur_day().id)
-					if let p1 = gameProgress.get_diary_cur_day().executedPlayer {
-						print("executed: \(p1)")
-					}
-					if let p2 = gameProgress.get_diary_cur_day().murderedPlayer {
-						print("executed: \(p2)")
-					}
-				}
-				Button("キャンセル", role: .cancel){
-				}
-			}
-		}
-	}
-}
-
-
-struct Discussion_time: View{
-	@EnvironmentObject var gameProgress: GameProgress
-	@State var discussion_time: Int
-	@State var isAlertShown: Bool = false
-	
-	var body: some View{
-		VStack{
-			Text("議論時間")
-				.textFrameDesignProxy()
-				.font(.title2)
-			Spacer()
-			Text("残り時間: \(discussion_time) 秒")
-				.font(.largeTitle)
-				.foregroundStyle(.white)
-				.onAppear {
-					Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-						if gameProgress.stageView != .Discussion_time {
-							timer.invalidate()
-						}
-						
-						if discussion_time > 0 {
-							discussion_time -= 1
-						} else {
-							timer.invalidate()
-							gameProgress.stageView = .Vote_time
-						}
-					}
-				}
-				.padding()
-				.background(Color(red: 0.3, green: 0.3, blue: 0.4))
-				.cornerRadius(20)
-			HStack{
-				Text("議論時間に１分追加: ")
-					.foregroundStyle(.white)
-					.font(.title3)
-				Button(action: {
-					discussion_time = discussion_time + 60
-				}) {
-					Image(systemName: "plus.app")
-						.font(.title2)
-						.foregroundColor(.blue)
-				}
-				.myButtonBounce()
-			}
-			.padding()
-			Spacer()
-			
-			Button("議論終了") {
-				isAlertShown = true
-			}
-			.myTextBackground()
-			.myButtonBounce()
-			.alert("投票を開始しますか？", isPresented: $isAlertShown){
-				Button("次へ"){
-					gameProgress.stageView = .Vote_time
-				}
-				Button("キャンセル", role: .cancel){
-				}
-			}
-		}
-	}
-}
-
-
 struct Before_night_time: View{
 	@EnvironmentObject var GameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
@@ -393,13 +207,14 @@ struct Before_night_time: View{
 			
 			Spacer()
 			VStack{
-				Text("おそろしい夜の時間がやってきます")
+				Text("夜の時間がやってきます")
 				HStack{
 					Text("「")
 					Text("\(gameProgress.players[gameProgress.get_survivors_list()[0]].player_name)")
 						.foregroundStyle(highlightColor)
-					Text("」に端末を渡してください")
+					Text("」")
 				}
+				Text("さんに端末を渡してください")
 			}
 			.textFrameDesignProxy()
 			
@@ -426,7 +241,108 @@ struct Before_night_time: View{
 }
 
 
-
+struct GameOverView: View {
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
+	@State var opacity_color: CGFloat = 1.0
+	@State var opacity_text: CGFloat = 1.0
+	@State var opacity_button: CGFloat = 1.0
+	var winColor: Color = Color(red: 1.0, green: 1.0, blue: 0.9)
+	var loseColor: Color = Color(red: 0.15, green: 0.1, blue: 0.15)
+	var body: some View {
+		VStack{
+			if gameProgress.game_result == 1{
+				ZStack{
+					Image("wolf_Win")
+						.resizable()
+						.ignoresSafeArea()
+						.scaledToFill()
+					VStack{
+						Text("人狼の勝利")
+							.font(.title)
+							.foregroundColor(.white)
+							.opacity(opacity_text)
+						
+						Button("改めてゲームスタート") {
+							gameProgress.init_player()
+							gameStatusData.game_status = .homeScreen
+						}
+						.foregroundColor(.white)
+						.padding()
+						.background(Color.blue)
+						.cornerRadius(10)
+						.opacity(opacity_button)
+						
+					}
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.navigationBarHidden(true)
+					
+					Rectangle()
+						.fill(loseColor)
+						.frame(width: .infinity,
+							   height: .infinity)
+						.ignoresSafeArea()
+						.opacity(opacity_color)
+					
+				}
+			}else if gameProgress.game_result == 2{
+				ZStack{
+					Image("villager_Win")
+						.resizable()
+						.ignoresSafeArea()
+						.scaledToFill()
+					VStack{
+						ZStack{
+							Text("村人陣営の勝利")
+								.font(.title)
+								.foregroundColor(.white)
+								.padding(10)
+								.background(.black.opacity(0.1))
+								.cornerRadius(14)
+								.opacity(opacity_text)
+						}
+						Button("ホーム画面に戻る") {
+							gameProgress.init_player()
+							gameStatusData.game_status = .homeScreen
+						}
+						.foregroundColor(winColor)
+						.padding()
+						.background(Color.blue)
+						.cornerRadius(10)
+						.opacity(opacity_button)
+						
+					}
+					.frame(maxWidth: .infinity, maxHeight: .infinity)
+					.navigationBarHidden(true)
+					
+					Rectangle()
+						.fill(.white)
+						.frame(maxWidth: .infinity,
+							   maxHeight: .infinity)
+						.ignoresSafeArea()
+						.opacity(opacity_color)
+				}
+			}
+		}
+		.onAppear(){
+			DispatchQueue.main.asyncAfter(deadline: .now()) {
+				withAnimation(.easeInOut(duration: 4)) {
+					opacity_color = 0
+				}
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+				withAnimation(.easeInOut(duration: 2)) {
+					opacity_text = 1.0
+				}
+			}
+			DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+				withAnimation(.easeInOut(duration: 2)) {
+					opacity_button = 1.0
+				}
+			}
+		}
+	}
+}
 
 
 

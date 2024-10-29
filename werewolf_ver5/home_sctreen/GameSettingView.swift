@@ -266,6 +266,7 @@ struct ReorderingPlayerView: View {
 									Spacer()
 									VStack{
 										Text("プレイヤー編集画面")
+											.foregroundStyle(.white)
 											.font(.title2)
 											.padding(4)
 											.border(Color(red: 0.8, green: 0.8, blue: 0.8, opacity: 1.0), width: 2)

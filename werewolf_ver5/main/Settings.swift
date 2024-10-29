@@ -148,16 +148,18 @@ class Player: Identifiable, NSCopying {
 	var player_name: String
 	var role_name: Role
 	var isAlive: Bool
+	var isInspectedBySeer: Bool
 	var voteCount: Int
 	var werewolvesTargetCount: Int
 	var suspectedCount: Int
 	
-	init(player_order: Int, role: Role, player_name: String, isAlive: Bool = true, voteCount: Int = 0, werewolvesTargetCount: Int = 0, suspectedCount: Int = 0) {
+	init(player_order: Int, role: Role, player_name: String, isAlive: Bool = true, isInspectedBySeer: Bool = false, voteCount: Int = 0, werewolvesTargetCount: Int = 0, suspectedCount: Int = 0) {
 		self.id = UUID()
 		self.player_order = player_order
 		self.role_name = role
 		self.player_name = player_name
 		self.isAlive = isAlive
+		self.isInspectedBySeer = isInspectedBySeer
 		self.voteCount = voteCount
 		self.werewolvesTargetCount = werewolvesTargetCount
 		self.suspectedCount = suspectedCount
@@ -283,7 +285,6 @@ class GameProgress: ObservableObject {
 	@Published var highestWerewolvesTargets: [Player] = []
 	@Published var highestSuspectedPlayers: [Player] = []
 	@Published var day_current_game: Int = 0
-	@Published var roundNumber: Int = 0
 	@Published var discussion_time: Int = 10
 	@Published var game_start_flag: Bool = false
 	@Published var game_result: Int = 0
@@ -295,7 +296,6 @@ class GameProgress: ObservableObject {
 		diary.removeAll()
 		diary.append(DailyLog(day: 1))
 		day_current_game = 1
-		roundNumber = 0
 	}
 	
 	func game_Result() {
@@ -332,10 +332,12 @@ class GameProgress: ObservableObject {
 	}
 	
 	func get_diary_cur_day() -> DailyLog{
+		let _ = print("get_diary_cur_day() called")
 		return self.diary.first(where: { $0.day == self.day_current_game })!
 	}
 	
 	func get_diary_from_day(target_day: Int) -> DailyLog{
+		let _ = print("get_diary_from_day() called")
 		return self.diary.first(where: { $0.day == target_day })!
 	}
 	
@@ -358,6 +360,15 @@ class GameProgress: ObservableObject {
 		let maxCount = self.players.map({ $0.suspectedCount }).max()
 		let highestPlayers = self.players.filter { $0.suspectedCount == maxCount }
 		return highestPlayers
+	}
+	
+	func choose_one_random_suspected(highestList: [Player?]) -> Player?{
+		if highestList.isEmpty{
+			return nil
+		}else{
+			let chosenPlayer = highestList.randomElement()
+			return chosenPlayer!
+		}
 	}
 	
 	func get_list_highest_werewolvesTarget() -> [Player]{
