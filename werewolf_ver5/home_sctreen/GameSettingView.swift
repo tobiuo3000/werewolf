@@ -16,7 +16,6 @@ struct GameSettingView: View{
 		self._isReorderingViewShown = isReorderingViewShown
 	}
 	
-	
 	var body: some View {
 		ZStack{
 			Image(gameStatusData.currentTheme.textBackgroundImage)  // BACKGROUND SHEEPSKIN

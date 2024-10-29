@@ -19,7 +19,6 @@ struct AssignRole: View{
 }
 
 
-
 struct BeforeOnePlayerRole: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
