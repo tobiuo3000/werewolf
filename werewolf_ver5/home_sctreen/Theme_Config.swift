@@ -16,13 +16,15 @@ struct Theme_Config: View {
 					.frame(height:20)
 				ZStack{
 					Text("役職紹介")
+						.padding()
 						.font(.system(.largeTitle, design: .serif))
+						.fontWeight(.bold)
 						.foregroundStyle(.black)
 						.background(){
 							Image(gameStatusData.currentTheme.textBackgroundImage)
 								.aspectRatio(contentMode: .fill)
 						}
-						.padding()
+						.cornerRadius(20.0)
 						.clipped()
 				}
 				
@@ -86,6 +88,7 @@ struct ThemeConfigScreen_CardView: View {
 			HStack{
 				Text(self.role.japaneseName)
 					.font(.title)
+					.fontWeight(.bold)
 					.textFrameDesignProxy()
 				
 				Button(action: {
@@ -135,7 +138,9 @@ struct ExplanationsRole: View {
 		VStack{
 			ZStack{
 				Text("\(role.japaneseName)")
-					.font(.title)
+					.font(.system(.title, design: .rounded))
+					.fontWeight(.heavy)
+				
 				
 				HStack{
 					Spacer()

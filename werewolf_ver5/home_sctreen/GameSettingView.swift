@@ -27,6 +27,7 @@ struct GameSettingView: View{
 			ScrollView(.vertical){
 				Text("ゲーム設定")
 					.font(.system(.largeTitle, design: .serif))
+					.fontWeight(.bold)
 					.foregroundStyle(.black)
 					.padding()
 				
@@ -178,6 +179,7 @@ struct GameSettingView: View{
 					.frame(width: 10, height: 10)
 				Text("詳細設定")
 					.font(.system(.largeTitle, design: .serif))
+					.fontWeight(.bold)
 					.foregroundStyle(.black)
 					.padding()
 				

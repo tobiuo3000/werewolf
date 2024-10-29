@@ -23,7 +23,8 @@ struct BeforeGameView: View {
 					Button("ゲームスタート"){
 						isAlertShown = true
 					}
-					.font(.title2)
+					.font(.system(.title2, design: .rounded))
+					.fontWeight(.bold)
 					.myTextBackground()
 					.myButtonBounce()
 					.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){

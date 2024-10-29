@@ -21,6 +21,7 @@ struct MorningView: View {
 					Text("\(gameProgress.day_current_game)日目")
 						.foregroundStyle(highlightColor)
 					Text("の朝が来ました")
+					
 				}
 			}
 			.textFrameDesignProxy()

@@ -4,7 +4,7 @@ import SwiftUI
 struct ContentView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 
-	var body: some View {tmp3
+	var body: some View {
 		GeometryReader{ proxy_ContentView in
 				VStack{  // closure for .onAppear()
 					if gameStatusData.game_status == .titleScreen{
@@ -25,13 +25,6 @@ struct ContentView: View {
 										   height: gameStatusData.fullScreenSize.height)
 									.clipped()
 							}
-							
-							
-							
-							/*Image(gameStatusData.currentTheme.titleScreenBackground)
-								.resizable()
-								.frame(maxHeight: .infinity)
-								.ignoresSafeArea()*/
 							
 							GameStartView()
 						}
@@ -57,22 +50,6 @@ struct ContentView: View {
 									.clipped()
 							}
 							
-							/*
-							Rectangle()
-								.ignoresSafeArea()
-								.foregroundColor(.black)
-								.frame(width: gameStatusData.fullScreenSize.width,
-									   height: gameStatusData.fullScreenSize.height)
-							 */
-							/*
-							Image(gameStatusData.currentTheme.loghouseBackground)
-								.resizable()
-								.scaledToFit()
-								.ignoresSafeArea()
-								.frame(width: gameStatusData.fullScreenSize.width,
-									   height: gameStatusData.fullScreenSize.height)
-								.clipped()
-							 */
 							GameView()
 						}
 						
@@ -88,4 +65,52 @@ struct ContentView: View {
 		}
 	}
 
+
+
+
+struct GameStartView: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@State private var isAnimated = false
+	
+	private let tempWerewolfCount = 1
+	private let tempSeerCount = 0
+	private let tempPlayerCount = 4
+	private let tempDiscussionTime = 30
+	
+	
+	var body: some View{
+		VStack {
+			/*
+			 HStack{
+			 Spacer()
+			 Image("temp_title_logo")
+			 .resizable()
+			 .aspectRatio(contentMode: .fit)
+			 .frame(width: gameStatusData.fullScreenSize.width/4)
+			 .opacity(isAnimated ? -1 : 1) // フェードアウト効果
+			 .offset(y: isAnimated ? -200 : 0) // 上に移動
+			 .animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用
+			 }
+			 */
+			Spacer()
+			Spacer()
+			Button("ホーム画面へ") {
+				isAnimated.toggle()
+				
+				DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { // 1秒のディレイ
+					gameStatusData.game_status = .homeScreen
+					isAnimated.toggle()
+				}
+			}
+			fontWeight(.bold)
+			.myTextBackground()
+			.myButtonBounce()
+			.opacity(isAnimated ? -1 : 1) // フェードアウト効果
+			.offset(y: isAnimated ? 200 : 0) // 上に移動
+			.animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用
+			
+			Spacer()
+		}
+	}
+}
 
