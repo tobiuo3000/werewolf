@@ -25,6 +25,8 @@ struct ContentView: View {
 										   height: gameStatusData.fullScreenSize.height)
 									.clipped()
 							}
+							ScrollView{
+							}
 							
 							GameStartView()
 						}
@@ -48,6 +50,8 @@ struct ContentView: View {
 									.frame(width: gameStatusData.fullScreenSize.width,
 										   height: gameStatusData.fullScreenSize.height)
 									.clipped()
+							}
+							ScrollView{
 							}
 							
 							GameView()
@@ -94,15 +98,17 @@ struct GameStartView: View{
 			 */
 			Spacer()
 			Spacer()
-			Button("ホーム画面へ") {
+			Button(action: {
 				isAnimated.toggle()
-				
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { // 1秒のディレイ
 					gameStatusData.game_status = .homeScreen
 					isAnimated.toggle()
 				}
+			}, label: {
+				Text("ホーム画面へ")
+					.fontWeight(.bold)
 			}
-			fontWeight(.bold)
+				   )
 			.myTextBackground()
 			.myButtonBounce()
 			.opacity(isAnimated ? -1 : 1) // フェードアウト効果

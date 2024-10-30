@@ -22,7 +22,7 @@ struct VoteResult: View{
 				VStack{
 					Text("最も多くの得票を得た")
 						.foregroundStyle(.white)
-					Text("処刑されるプレイヤーは")
+					Text("今夜処刑されるプレイヤーは")
 						.foregroundStyle(.white)
 					HStack{
 						Text("「")
@@ -31,7 +31,7 @@ struct VoteResult: View{
 						Text("」です")
 					}
 				}
-				.font(/*@START_MENU_TOKEN@*/.title/*@END_MENU_TOKEN@*/)
+				.font(.title2)
 				.textFrameDesignProxy()
 				
 				Spacer()

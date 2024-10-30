@@ -14,9 +14,7 @@ struct wolf_ver5App: App {
 			ContentView()
 				.environmentObject(GameStatusData())
 				.environmentObject(GameProgress())
-			
 		}
-		
 	}
 }
 

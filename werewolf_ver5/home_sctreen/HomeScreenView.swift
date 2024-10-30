@@ -45,9 +45,8 @@ struct TransitionLoopBackGround: View {
 				ForEach(0...12, id: \.self){ _ in
 					Image(gameStatusData.currentTheme.transitionBackground)
 						.resizable()
-						.ignoresSafeArea()
 						.frame(width: gameStatusData.fullScreenSize.width,
-							   height: gameStatusData.fullScreenSize.height)
+							   height: gameStatusData.fullScreenSize.height+40)
 						.offset(offset)
 				}
 			}
@@ -55,8 +54,8 @@ struct TransitionLoopBackGround: View {
 			Rectangle()
 				.fill(Color.black)
 				.opacity(opacity)
-				.ignoresSafeArea()
 		}
+		.ignoresSafeArea()
 	}
 	
 	func startScrolling() {
@@ -107,6 +106,7 @@ struct HomeScreenView: View {
 							self.offsetTab0 = offset
 							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
 							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
+							gameStatusData.update_role_CONFIG()
 						}
 					
 					BeforeGameView(threeOffSetTab: $threeOffSetTab)
@@ -243,8 +243,8 @@ struct SettingsView: View {
 							Spacer()
 							
 							Toggle(isOn: $gameStatusData.isAnimeShown) {
-								Text("背景アニメーションを動かす")
-									.font(.title)
+								Text("背景アニメを動かす")
+									.font(.title2)
 									.foregroundColor(.white)
 							}
 							.padding()
@@ -274,23 +274,46 @@ struct HomeScreenMenu: View {
 	@State var isAlertShown = false
 	@State var gearImageName = "gearshape"
 	@Binding var showingSettings: Bool
+	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	
 	var body: some View{
 		HStack{
 			Button(action: {
 				isAlertShown = true
 			}){
-				Text("TITLE")
-					.frame(height: 30)
-					.font(.title)
+				HStack(spacing: 2){
+					Image(systemName: "arrowshape.turn.up.left")
+						.font(.title2)
+					Text("TITLE")
+						.font(.title)
+				}
+				.frame(height: 30)
+				.fontWeight(.semibold)
+				.foregroundColor(.blue)
 			}
-			.textFrameSimple()
 			.alert("タイトルに戻りますか？", isPresented: $isAlertShown){
 				Button("はい"){
 					gameStatusData.game_status = .toTitleScreen
 					isAlertShown = false
 				}
 				Button("いいえ", role:.cancel){}
+			}
+			Spacer()
+			
+			VStack{
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 2, height: 2)
+				HStack(spacing: 1){
+					Text("プレイヤー数：")
+						.foregroundStyle(.white)
+					Text("\(gameStatusData.players_CONFIG.count)")
+						.foregroundStyle(highlightColor)
+					Text("人")
+						.foregroundStyle(.white)
+				}
+				.fontWeight(.semibold)
+				.font(.title3)
 			}
 			
 			Spacer()
@@ -456,6 +479,8 @@ struct BeforeHomeScreen: View {
 							.frame(width: gameStatusData.fullScreenSize.width,
 								   height: gameStatusData.fullScreenSize.height)
 							.clipped()
+					}
+					ScrollView{
 					}
 					
 					

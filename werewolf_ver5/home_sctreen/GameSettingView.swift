@@ -23,7 +23,7 @@ struct GameSettingView: View{
 				.frame(maxWidth: .infinity, maxHeight:.infinity)
 				.allowsHitTesting(false)
 			
-			ScrollView(.vertical){
+			ScrollView{
 				Text("ゲーム設定")
 					.font(.system(.largeTitle, design: .serif))
 					.fontWeight(.bold)
@@ -119,53 +119,85 @@ struct GameSettingView: View{
 				
 				VStack{
 					ZStack{
-						Stepper("人狼の数:", value: $gameStatusData.werewolf_Count_CONFIG, in: 1...gameStatusData.max_werewolf_CONFIG)
-							.font(.title2)
-							.pickerStyle(SegmentedPickerStyle())
-							.accentColor(.white)
-							.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
-								gameStatusData.update_role_CONFIG()
-							}
+						HStack{
+							Text("人狼の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.werewolf_Count_CONFIG, range: 0...gameStatusData.max_werewolf_CONFIG)
+								.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
 						Text("\(gameStatusData.werewolf_Count_CONFIG)")
 							.foregroundStyle(highlightColor)
 							.font(.title)
 					}
 					
 					ZStack{
-						Stepper("占い師の数:", value: $gameStatusData.seer_Count_CONFIG, in: 0...1)
-							.font(.title2)
-							.pickerStyle(SegmentedPickerStyle())
-							.accentColor(.white)
-							.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
-								gameStatusData.update_role_CONFIG()
-							}
+						HStack{
+							Text("見習い占の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.trainee_Count_CONFIG, range: 0...gameStatusData.max_trainee_CONFIG)
+								.onChange(of: gameStatusData.trainee_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.trainee_Count_CONFIG)")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						HStack{
+							Text("占い師の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.seer_Count_CONFIG, range: 0...1)
+								.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
 						Text("\(gameStatusData.seer_Count_CONFIG)")
 							.foregroundStyle(highlightColor)
 							.font(.title)
 					}
 					
 					ZStack{
-						Stepper("霊媒師の数:", value: $gameStatusData.medium_Count_CONFIG, in: 0...1)
-							.font(.title2)
-							.pickerStyle(SegmentedPickerStyle())
-							.accentColor(.white)
-							.onChange(of: gameStatusData.medium_Count_CONFIG) { _ in
-								gameStatusData.update_role_CONFIG()
-							}
+						HStack{
+							Text("霊媒師の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.medium_Count_CONFIG, range: 0...1)
+								.onChange(of: gameStatusData.medium_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
 						Text("\(gameStatusData.medium_Count_CONFIG)")
 							.foregroundStyle(highlightColor)
 							.font(.title)
 					}
 					
 					ZStack{
-						Stepper("狩人の数:", value: $gameStatusData.hunter_Count_CONFIG, in: 0...1)
-							.font(.title2)
-							.pickerStyle(SegmentedPickerStyle())
-							.accentColor(.white)
-							.onChange(of: gameStatusData.hunter_Count_CONFIG) { _ in
-								gameStatusData.update_role_CONFIG()
-							}
+						HStack{
+							Text("狩人の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.hunter_Count_CONFIG, range: 0...1)
+								.onChange(of: gameStatusData.hunter_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
 						Text("\(gameStatusData.hunter_Count_CONFIG)")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						HStack{
+							Text("狂人の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.madman_Count_CONFIG, range: 0...1)
+								.onChange(of: gameStatusData.madman_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.madman_Count_CONFIG)")
 							.foregroundStyle(highlightColor)
 							.font(.title)
 					}
@@ -377,147 +409,3 @@ struct ReorderingPlayerView: View {
 	}
 }
 
-
-struct WheelPickerView: UIViewRepresentable {
-	@Binding private var selection: Int
-	private let content: [Int] = Array(0...59)
-	private let textTimeUnit: String
-	
-	init(selection: Binding<Int>, textArg: String) {
-		self._selection = selection
-		self.textTimeUnit = textArg
-	}
-	
-	func makeUIView(context: Context) -> UIPickerView {
-		let picker = UIPickerView(frame: .zero)
-		picker.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-		picker.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-		
-		picker.dataSource = context.coordinator
-		picker.delegate = context.coordinator
-		
-		return picker
-	}
-	
-	func updateUIView(_ picker: UIPickerView, context: Context) {
-		picker.selectRow(selection, inComponent: 0, animated: true)
-	}
-	
-	func makeCoordinator() -> Coordinator {
-		return Coordinator(self)
-	}
-	
-	class Coordinator: NSObject, UIPickerViewDataSource, UIPickerViewDelegate {
-		private var wheelPickerView: WheelPickerView
-		
-		init(_ wheelPickerView: WheelPickerView) {
-			self.wheelPickerView = wheelPickerView
-		}
-		
-		func numberOfComponents(in pickerView: UIPickerView) -> Int {
-			return 1
-		}
-		
-		func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-			return wheelPickerView.content.count
-		}
-		
-		private func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> Int? {
-			return wheelPickerView.content[row]
-		}
-		
-		func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-			wheelPickerView.selection = row
-		}
-		
-		func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-			let label = (view as? UILabel) ?? UILabel()
-			label.text = "\(String(wheelPickerView.content[row])) \(String(wheelPickerView.textTimeUnit))"
-			label.textAlignment = .center
-			label.adjustsFontSizeToFitWidth = true
-			label.font = UIFont.systemFont(ofSize: 20)  // define font size
-			label.textColor = .white  // define text color
-			return label
-		}
-	}
-}
-
-
-
-struct HorizontalWheelPickerView: UIViewRepresentable {
-	@Binding var selection: Int
-	let content = Array(0...59)
-	let textTimeUnit: String
-	
-	func makeUIView(context: Context) -> UICollectionView {
-		let layout = UICollectionViewFlowLayout()
-		layout.scrollDirection = .horizontal
-		layout.minimumLineSpacing = 10
-		layout.itemSize = CGSize(width: 80, height: 80) // セルのサイズを指定
-		
-		let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-		collectionView.dataSource = context.coordinator
-		collectionView.delegate = context.coordinator
-		collectionView.register(LabelCell.self, forCellWithReuseIdentifier: "cell")
-		collectionView.backgroundColor = .clear
-		collectionView.showsHorizontalScrollIndicator = false
-		
-		return collectionView
-	}
-	
-	func updateUIView(_ uiView: UICollectionView, context: Context) {
-		let indexPath = IndexPath(item: selection, section: 0)
-		uiView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
-	}
-	
-	func makeCoordinator() -> Coordinator {
-		Coordinator(self)
-	}
-	
-	class Coordinator: NSObject, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-		var parent: HorizontalWheelPickerView
-		
-		init(_ parent: HorizontalWheelPickerView) {
-			self.parent = parent
-		}
-		
-		func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-			return parent.content.count
-		}
-		
-		func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-			let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! LabelCell
-			let value = parent.content[indexPath.item]
-			cell.label.text = "\(value) \(parent.textTimeUnit)"
-			return cell
-		}
-		
-		func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-			parent.selection = indexPath.item
-		}
-	}
-	
-	class LabelCell: UICollectionViewCell {
-		let label = UILabel()
-		
-		override init(frame: CGRect) {
-			super.init(frame: frame)
-			label.textAlignment = .center
-			label.font = UIFont.systemFont(ofSize: 20)
-			label.textColor = .white
-			label.adjustsFontSizeToFitWidth = true
-			contentView.addSubview(label)
-			label.translatesAutoresizingMaskIntoConstraints = false
-			NSLayoutConstraint.activate([
-				label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-				label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-				label.widthAnchor.constraint(equalTo: contentView.widthAnchor),
-				label.heightAnchor.constraint(equalTo: contentView.heightAnchor)
-			])
-		}
-		
-		required init?(coder: NSCoder) {
-			fatalError("init(coder:) has not been implemented")
-		}
-	}
-}

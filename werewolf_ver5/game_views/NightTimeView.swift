@@ -42,6 +42,9 @@ struct Night_Action_EachPlayer_View: View{
 			if gameProgress.players[whole_players_index].role_name == Role.villager{
 				Night_Villager(isTargetConfirmed: $isTargetConfirmed, whole_players_index: $whole_players_index)
 				
+			}else if gameProgress.players[whole_players_index].role_name == Role.trainee{
+				Night_Trainee(isTargetConfirmed: $isTargetConfirmed, whole_players_index: $whole_players_index)
+				
 			}else if gameProgress.players[whole_players_index].role_name == Role.seer{
 				Night_Seer(isTargetConfirmed: $isTargetConfirmed, whole_players_index: $whole_players_index)
 				
@@ -50,6 +53,9 @@ struct Night_Action_EachPlayer_View: View{
 				
 			}else if gameProgress.players[whole_players_index].role_name == Role.hunter{
 				Night_hunter(isTargetConfirmed: $isTargetConfirmed, whole_players_index: $whole_players_index)
+				
+			}else if gameProgress.players[whole_players_index].role_name == Role.madman{
+				Night_Madman(isTargetConfirmed: $isTargetConfirmed, whole_players_index: $whole_players_index)
 				
 			}else if gameProgress.players[whole_players_index].role_name == Role.werewolf{
 				Night_Werewolf(isTargetConfirmed: $isTargetConfirmed, whole_players_index: $whole_players_index)
@@ -84,8 +90,13 @@ struct Night_Between_EachPlayer_View: View{
 		VStack{
 			if survivors_index+1 < gameProgress.get_num_survivors(){  // if there are players who haven't finished actions
 				VStack{
-					Text("次のプレイヤーに端末を渡してください")
-					Text("次のプレイヤー：「\(gameProgress.players[survivors_list[survivors_index+1]].player_name)」")
+					Text("次の人に端末を渡してください")
+					Text("次のプレイヤー：")
+					HStack{
+						Text("「")
+						Text("\(gameProgress.players[survivors_list[survivors_index+1]].player_name)")
+						Text("」")
+					}
 				}
 				.textFrameDesignProxy()
 				
@@ -158,20 +169,22 @@ struct Night_Villager: View{
 	
 	var body: some View{
 		if isTargetConfirmed == true{
-			Text("\(tmpPlayer.player_name)を選択しました")
-				.textFrameDesignProxy()
-			Spacer()
+			VStack{
+				Spacer()
+				Text("\(tmpPlayer.player_name)を選択しました")
+					.textFrameDesignProxy()
+				Spacer()
+			}
 			
 		}else{
 			VStack{
-				Text("あなたは市民です")
-				Text("他役職の方と同じタップ動作にするため")
-				Text("あやしいと思う人物を一人選んでください")
+				Text("あなたは村人です")
+				Text("あやしいと思う人を選んでください")
 			}
 			.textFrameDesignProxy()
 			
 			Spacer()
-			ScrollView(.vertical) {
+			FadingScrollView {
 				ForEach(gameProgress.players) { player_vil in
 					if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
 						Button(player_vil.player_name) {
@@ -201,6 +214,72 @@ struct Night_Villager: View{
 }
 
 
+struct Night_Trainee: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
+	@Binding var isTargetConfirmed: Bool
+	@State private var isAlertShown: Bool = false
+	@Binding var whole_players_index: Int
+	@State var tmpPlayer: Player = Player(player_order: 1000, role: .noRole, player_name: "tmp_no_name")  // to avoid nil
+	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	
+	var body: some View{
+		if isTargetConfirmed == false{
+			VStack{
+				Text("あなたは見習い占い師です")
+				Text("間違っているかもしれませんが")
+				Text("選択した人が人狼かわかります")
+			}
+			.textFrameDesignProxy()
+		}
+		
+		if isTargetConfirmed == true{
+			VStack{
+				Text("\(tmpPlayer.player_name)さんは...")
+				HStack{
+					if gameStatusData.traineeCheckIfWerewolf(player: tmpPlayer){
+						Text("人狼")
+							.foregroundStyle(highlightColor)
+						Text("です")
+					}else{
+						Text("人狼ではありません")
+					}
+				}
+				.font(.title2)
+			}
+			.textFrameDesignProxy()
+			
+		}else{
+			FadingScrollView {
+				ForEach(gameProgress.players){ player_seer in
+					if player_seer.isAlive &&
+						player_seer.id != gameProgress.players[whole_players_index].id {
+						Button(player_seer.player_name) {
+							tmpPlayer = player_seer
+							isAlertShown = true
+						}
+						.myTextBackground()
+						.myButtonBounce()
+						.alert("\(tmpPlayer.player_name)を占いますか？", isPresented: $isAlertShown){
+							Button("決定"){
+								isTargetConfirmed = true
+								isAlertShown = false
+							}
+							
+							Button("キャンセル", role: .cancel){
+							}
+						}
+					}else{
+						Text(player_seer.player_name)
+							.myInactiveButton()
+					}
+				}
+			}
+		}
+	}
+}
+
+
 struct Night_Seer: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
@@ -214,7 +293,7 @@ struct Night_Seer: View{
 		if isTargetConfirmed == false{
 			VStack{
 				Text("あなたは占い師です")
-				Text("一人の役職を知ることができます")
+				Text("選択した人物が人狼かどうかわかります")
 			}
 			.textFrameDesignProxy()
 		}
@@ -236,9 +315,9 @@ struct Night_Seer: View{
 			.textFrameDesignProxy()
 			
 		}else{
-			ScrollView(.vertical) {
+			FadingScrollView {
 				ForEach(gameProgress.players){ player_seer in
-					if player_seer.isAlive && 
+					if player_seer.isAlive &&
 						player_seer.id != gameProgress.players[whole_players_index].id &&
 						player_seer.isInspectedBySeer == false{
 						Button(player_seer.player_name) {
@@ -251,7 +330,6 @@ struct Night_Seer: View{
 							Button("決定"){
 								gameProgress.get_diary_cur_day().seerTarget = tmpPlayer  // avoids nil while unrapping an opt value
 								isTargetConfirmed = true
-								tmpPlayer.isInspectedBySeer = true
 								isAlertShown = false
 								tmpPlayer.isInspectedBySeer = true
 							}
@@ -270,7 +348,7 @@ struct Night_Seer: View{
 }
 
 
-struct Night_Medium:View{
+struct Night_Medium: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var isTargetConfirmed: Bool
@@ -284,7 +362,7 @@ struct Night_Medium:View{
 		if isTargetConfirmed == true{
 			Spacer()
 			VStack{  // fot Modifier
-				Text("霊媒師の行動結果：")
+				Text("霊媒師の占い結果")
 				
 				if let _tmpPlayer = (gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game).executedPlayer){
 					Text("処刑された\(_tmpPlayer.player_name)さんは")
@@ -310,13 +388,13 @@ struct Night_Medium:View{
 					Text("本日処刑された人物が")
 					Text("人狼かどうかわかります")
 				}
-				Text("この画面ではあやしいと思う人物")
-				Text("に対して投票を行ってください")
+				Text("この画面では人狼としてあやしい")
+				Text("人物を１人選んでください")
 			}
 			.textFrameDesignProxy()
 			
 			Spacer()
-			ScrollView(.vertical) {
+			FadingScrollView {
 				ForEach(gameProgress.players) { player_vil in
 					if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
 						Button(player_vil.player_name) {
@@ -346,6 +424,75 @@ struct Night_Medium:View{
 }
 
 
+struct Night_Madman: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
+	@Binding var isTargetConfirmed: Bool
+	@State private var madman_target: Player?
+	@State var tmpPlayer: Player = Player(player_order: 1000, role: .noRole, player_name: "tmp_no_name")  // to avoid nil
+	@State private var isAlertShown: Bool = false
+	@Binding var whole_players_index: Int
+	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	
+	var body: some View{
+		if isTargetConfirmed == true{
+			Spacer()
+			Text("\(tmpPlayer.player_name)を選択しました")
+				.textFrameDesignProxy()
+			Spacer()
+		}else{
+			FadingScrollView{
+				VStack{
+					VStack{
+						Text("あなたは狂人です")
+						HStack{
+							Text("人狼陣営")
+								.foregroundStyle(highlightColor)
+							Text("の一員として")
+						}
+						Text("議論をかき乱しましょう")
+					}
+					Text("この画面ではあやしいと思う人物")
+					Text("を選んでください")
+					Text("最も投票数の多い人は")
+					Text("「人狼と疑われている人物」")
+					Text("として朝に公表されます")
+				}
+				.textFrameDesignProxy()
+				
+				Spacer()
+				ScrollView(.vertical) {
+					ForEach(gameProgress.players) { player_vil in
+						if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
+							Button(player_vil.player_name) {
+								tmpPlayer = player_vil
+								isAlertShown = true
+							}
+							.myTextBackground()
+							.myButtonBounce()
+							.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
+								Button("次へ"){
+									tmpPlayer.suspectedCount += 1
+									isTargetConfirmed = true
+									isAlertShown = false
+								}
+								
+								Button("キャンセル", role: .cancel){
+								}
+							}
+						}else{
+							Text(player_vil.player_name)
+								.myInactiveButton()
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
 struct Night_hunter: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
@@ -366,9 +513,8 @@ struct Night_hunter: View {
 			}
 			.textFrameDesignProxy()
 			.padding()
-			ScrollView(.vertical) {
+			FadingScrollView {
 				ForEach(gameProgress.players) { player_hunter in
-					
 					if gameStatusData.isConsecutiveProtectionAllowed == true {
 						if (player_hunter.isAlive) &&
 							(player_hunter.id != gameProgress.players[whole_players_index].id){
@@ -483,7 +629,7 @@ struct Night_Werewolf: View{
 			.textFrameDesignProxy()
 			.padding()
 			
-			ScrollView(.vertical) {
+			FadingScrollView {
 				VStack(alignment: .leading){
 					ForEach(gameProgress.players) { player_wolf in
 						if player_wolf.isAlive && player_wolf.id != gameProgress.players[whole_players_index].id && player_wolf.role_name != .werewolf{

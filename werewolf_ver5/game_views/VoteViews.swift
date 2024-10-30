@@ -30,56 +30,60 @@ struct VoteTime: View {
 				}
 				.textFrameDesignProxy()
 				
-				ScrollView(.vertical) {
+				FadingScrollView {
 					ForEach(gameProgress.players.filter {$0.isAlive}) { player in
-						if (gameProgress.players[player_index].player_order != player.player_order)
-						{
-							HStack{
-								Button(player.player_name) {
-									tmpPlayer = player
-									isAlertShown = true
-								}
-								.myTextBackground()
-								.myButtonBounce()
-								.alert("\(tmpPlayer.player_name)さんに投票しますか？", isPresented: $isAlertShown){
-									Button("投票する"){
-										tmpPlayer.voteCount += 1
-										voteDone = true
-										isAlertShown = false
+						ZStack{
+							Spacer()  // to expand toutchable space
+							
+							if (gameProgress.players[player_index].player_order != player.player_order)
+							{
+								HStack{
+									Button(player.player_name) {
+										tmpPlayer = player
+										isAlertShown = true
 									}
-									Button("キャンセル", role: .cancel){
+									.myTextBackground()
+									.myButtonBounce()
+									.alert("\(tmpPlayer.player_name)さんに投票しますか？", isPresented: $isAlertShown){
+										Button("投票する"){
+											tmpPlayer.voteCount += 1
+											voteDone = true
+											isAlertShown = false
+										}
+										Button("キャンセル", role: .cancel){
+										}
+									}
+									if gameStatusData.isVoteCountVisible == true {
+										Text(": \(player.voteCount)票")
+											.font(.title3)
+											.foregroundStyle(.white)
 									}
 								}
-								if gameStatusData.isVoteCountVisible == true {
-									Text(": \(player.voteCount)票")
-										.font(.title3)
-										.foregroundStyle(.white)
+								.padding(12)
+							}else{
+								HStack{
+									ZStack{
+										Text(player.player_name)
+											.padding(12)
+											.background(.white)
+											.strikethrough(true, color: .white)  // 横棒を赤色で表示
+											.cornerRadius(gameStatusData.currentTheme.cornerRadius)
+										Text(player.player_name)
+											.foregroundColor(.white)
+											.padding(10)
+											.background(
+												Color(.gray)
+											)
+											.cornerRadius(gameStatusData.currentTheme.cornerRadius)
+									}
+									if gameStatusData.isVoteCountVisible == true {
+										Text(": \(player.voteCount)票")
+											.font(.title3)
+											.foregroundStyle(.white)
+									}
 								}
+								.padding(12)
 							}
-							.padding(12)
-						}else{
-							HStack{
-								ZStack{
-									Text(player.player_name)
-										.padding(12)
-										.background(.white)
-										.strikethrough(true, color: .white)  // 横棒を赤色で表示
-										.cornerRadius(gameStatusData.currentTheme.cornerRadius)
-									Text(player.player_name)
-										.foregroundColor(.white)
-										.padding(10)
-										.background(
-											Color(.gray)
-										)
-										.cornerRadius(gameStatusData.currentTheme.cornerRadius)
-								}
-								if gameStatusData.isVoteCountVisible == true {
-									Text(": \(player.voteCount)票")
-										.font(.title3)
-										.foregroundStyle(.white)
-								}
-							}
-							.padding(12)
 						}
 					}
 				}
@@ -143,7 +147,7 @@ struct RunoffView: View{
 				}
 				.textFrameDesignProxy()
 				
-				ScrollView(.vertical) {
+				FadingScrollView {
 					ForEach(gameProgress.highestVotePlayers) { player in
 						if gameProgress.players[player_index].player_order != player.player_order{
 							HStack{

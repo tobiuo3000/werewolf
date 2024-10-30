@@ -96,6 +96,7 @@ enum Role {
 	case hunter
 	case medium
 	case madman
+	case trainee
 	
 	var image_name: String {
 		switch self {
@@ -113,6 +114,8 @@ enum Role {
 			return "card_medium"
 		case .madman:
 			return "role_madman_image"
+		case .trainee:
+			return "role_trainee_image"
 		}
 	}
 	
@@ -133,6 +136,8 @@ enum Role {
 			return "霊媒師"
 		case .madman:
 			return "狂人"
+		case .trainee:
+			return "見習い占"
 		}
 	}
 }
@@ -206,8 +211,13 @@ class GameStatusData: ObservableObject {
 	@Published var seer_Count_CONFIG: Int = 0
 	@Published var medium_Count_CONFIG: Int = 0
 	@Published var hunter_Count_CONFIG: Int = 0
+	@Published var madman_Count_CONFIG: Int = 0
+	@Published var trainee_Count_CONFIG: Int = 0
+	@Published var trainee_Probability: Double = 0.9
+	@Published var _Count_CONFIG: Int = 0
 	@Published var max_werewolf_CONFIG: Int = 1
-	@Published var is_player_with_role_max: Bool = false
+	@Published var max_trainee_CONFIG: Int = 1
+	@Published var existsPlayerWithoutRole: Bool = true
 	@Published var currentTheme: AppTheme = .std_theme
 	@Published var textSize: CGSize = .zero
 	@Published var titleTextSize: CGSize = .zero
@@ -236,26 +246,59 @@ class GameStatusData: ObservableObject {
 	func update_role_CONFIG(){
 		self.calc_max_roles()
 		self.calc_vil_count()
+		let _ = print("role num:")
+		let _ = print(self.villager_Count_CONFIG)
+		let _ = print(self.trainee_Count_CONFIG)
+		let _ = print(self.seer_Count_CONFIG)
+		let _ = print(self.medium_Count_CONFIG)
+		let _ = print(self.hunter_Count_CONFIG)
+		let _ = print(self.madman_Count_CONFIG)
+		let _ = print(self.werewolf_Count_CONFIG)
+		let _ = print()
+	}
+	
+	func modify_role_num(){
+		if self.villager_Count_CONFIG < 0{
+			//  no use
+		}
 	}
 	
 	func calc_max_roles(){
 		let num_player_with_role: Int =
-		self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG
+		self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
 		self.max_werewolf_CONFIG = self.players_CONFIG.count / 2 - 1
-		self.is_player_with_role_max = (self.players_CONFIG.count - num_player_with_role <= 0)
+		self.max_trainee_CONFIG = self.players_CONFIG.count - (self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG + self.madman_Count_CONFIG)
+		self.existsPlayerWithoutRole = (self.players_CONFIG.count - num_player_with_role > 0)
 	}
 	
 	func calc_vil_count(){
-		let num_villager_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG
-		self.villager_Count_CONFIG = self.players_CONFIG.count - num_villager_with_role
+		let num_player_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
+		self.villager_Count_CONFIG = self.players_CONFIG.count - num_player_with_role
 	}
 	
 	func init_player_CONFIG(){
-		self.players_CONFIG = []
+		self.players_CONFIG.removeAll()
 	}
 	
 	func calcDiscussionTime(){
 		self.discussion_time_CONFIG = self.discussion_seconds_CONFIG + 60 * self.discussion_minutes_CONFIG
+	}
+	
+	func traineeCheckIfWerewolf(player: Player)-> Bool {
+		let res_prob = Double.random(in: 0.5..<1) < self.trainee_Probability
+		if res_prob {  // when check_result is True
+			if player.role_name == .werewolf{
+				return true
+			}else{
+				return false
+			}
+		}else{  //  when check_result is False
+			if player.role_name == .werewolf{
+				return false
+			}else{
+				return true
+			}
+		}
 	}
 	
 	func updatePlayerOrder() {
@@ -418,7 +461,7 @@ class GameProgress: ObservableObject {
 		}
 	}
 	
-	func assignRoles(wolfNum:Int, seerNum:Int, mediumNum:Int, hunterNum:Int) {
+	func assignRoles(wolfNum:Int, traineeNum:Int, seerNum:Int, mediumNum:Int, hunterNum:Int, madmanNum:Int) {
 		// プレイヤーのインデックスの配列を作成
 		var indexes = Array(self.players.indices)
 		
@@ -426,6 +469,13 @@ class GameProgress: ObservableObject {
 		for _ in 0..<wolfNum {
 			if let randomIndex = indexes.randomElement() {
 				self.players[randomIndex].role_name = .werewolf
+				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
+			}
+		}
+		
+		for _ in 0..<traineeNum {
+			if let randomIndex = indexes.randomElement() {
+				self.players[randomIndex].role_name = .trainee
 				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
 			}
 		}
@@ -447,6 +497,13 @@ class GameProgress: ObservableObject {
 		for _ in 0..<hunterNum {
 			if let randomIndex = indexes.randomElement() {
 				self.players[randomIndex].role_name = .hunter
+				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
+			}
+		}
+		
+		for _ in 0..<madmanNum {
+			if let randomIndex = indexes.randomElement() {
+				self.players[randomIndex].role_name = .madman
 				indexes.removeAll { $0 == randomIndex } // 選んだプレイヤーをリストから削除
 			}
 		}
