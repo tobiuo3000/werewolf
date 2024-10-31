@@ -147,7 +147,7 @@ enum gameStatus{
 	case titleScreen, homeScreen, gameScreen, gameOverScreen, toTitleScreen
 }
 
-class Player: Identifiable, NSCopying {
+class Player: Identifiable, NSCopying, ObservableObject {
 	var id: UUID
 	var player_order: Int  // id starts from 0 (ex: 0, 1, 2, 3, 4...)
 	var player_name: String

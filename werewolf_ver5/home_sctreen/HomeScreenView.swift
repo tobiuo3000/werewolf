@@ -147,8 +147,7 @@ struct HomeScreenView: View {
 				SettingsView(showingSettings: $showingSettings)
 			}
 			if isReorderingViewShown == true {
-				
-				ReorderingPlayerView(isReorderingViewShown: $isReorderingViewShown)
+				ReorderingPlayerView(isReorderingViewShown: $isReorderingViewShown)  // wanna fix in this View
 				
 			}
 		}
