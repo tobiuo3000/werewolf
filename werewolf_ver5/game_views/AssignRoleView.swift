@@ -39,6 +39,7 @@ struct BeforeOnePlayerRole: View{
 							.foregroundStyle(highlightColor)
 						Text("」")
 					}
+					.font(.title2)
 				}
 				.textFrameSimple()
 			}else{
@@ -67,6 +68,10 @@ struct BeforeOnePlayerRole: View{
 				}
 				Button("いいえ", role:.cancel){}
 			}
+			
+			Rectangle()
+				.fill(.clear)
+				.frame(width: 40, height: 40)
 		}
 	}
 }
@@ -184,6 +189,10 @@ struct TempTexts: View {
 					}
 					Button("いいえ", role:.cancel){}
 				}
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 			
 		}

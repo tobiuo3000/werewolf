@@ -13,6 +13,8 @@ struct MorningView: View {
 	@EnvironmentObject var gameProgress: GameProgress
 	@State var isAlertShown: Bool = false
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	@State private var tmpMostSuspectedPlayer: Player = Player(player_order: 1000, role: .noRole, player_name: "")
+	
 	
 	var body: some View {
 		VStack{
@@ -41,19 +43,20 @@ struct MorningView: View {
 			}
 			.textFrameDesignProxy()
 			
-			let tmpSuspectedPlayers = gameProgress.get_list_highest_suspected()
-			if let tmpMostSuspectedPlayer = gameProgress.choose_one_random_suspected(highestList: tmpSuspectedPlayers){
-				VStack{
-					Text("また、昨晩もっとも疑われた人物は...")
-					HStack{
-						Text("\(tmpMostSuspectedPlayer.player_name)")
-							.foregroundStyle(highlightColor)
-						Text("さんです")
-					}
-				}
-				.textFrameDesignProxy()
-			}
 			
+			VStack{
+				Text("また、昨晩もっとも疑われた人物は...")
+				HStack{
+					Text("\(tmpMostSuspectedPlayer.player_name)")
+						.foregroundStyle(highlightColor)
+					Text("さんです")
+				}
+			}
+			.textFrameDesignProxy()
+			.onAppear {
+				let tmpSuspectedPlayers = gameProgress.get_list_highest_suspected()
+				self.tmpMostSuspectedPlayer = gameProgress.choose_one_random_suspected(highestList: tmpSuspectedPlayers)!
+			}
 			Spacer()
 			Button("次へ") {
 				isAlertShown = true
@@ -64,6 +67,7 @@ struct MorningView: View {
 				Button("はい"){
 					isAlertShown = false
 					gameProgress.reset_werewolvesTarget_count()
+					gameProgress.reset_suspected_count()
 					gameProgress.game_Result()
 					if gameProgress.game_result == 0{
 						gameProgress.stageView = .Before_discussion
@@ -75,6 +79,10 @@ struct MorningView: View {
 				}
 				Button("いいえ", role:.cancel){}
 			}
+			
+			Rectangle()
+				.fill(.clear)
+				.frame(width: 40, height: 40)
 		}
 	}
 }

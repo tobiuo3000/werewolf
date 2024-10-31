@@ -23,6 +23,7 @@ struct VoteTime: View {
 	
 	var body: some View {
 		VStack{
+			Spacer()
 			if voteDone == false{
 				VStack{
 					Text("「\(gameProgress.players[player_index].player_name)」さん")
@@ -30,7 +31,7 @@ struct VoteTime: View {
 				}
 				.textFrameDesignProxy()
 				
-				FadingScrollView {
+				FadingScrollView(fadeHeight: 80, content:  {
 					ForEach(gameProgress.players.filter {$0.isAlive}) { player in
 						ZStack{
 							Spacer()  // to expand toutchable space
@@ -86,7 +87,7 @@ struct VoteTime: View {
 							}
 						}
 					}
-				}
+				})
 			}else{
 				if survivors_index+1 < gameProgress.get_num_survivors(){
 					VStack{
@@ -120,6 +121,10 @@ struct VoteTime: View {
 				.myTextBackground()
 				.myButtonBounce()
 				.padding()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}
 	}
@@ -147,7 +152,7 @@ struct RunoffView: View{
 				}
 				.textFrameDesignProxy()
 				
-				FadingScrollView {
+				FadingScrollView(fadeHeight: 80, content: {
 					ForEach(gameProgress.highestVotePlayers) { player in
 						if gameProgress.players[player_index].player_order != player.player_order{
 							HStack{
@@ -156,7 +161,6 @@ struct RunoffView: View{
 									isAlertShown = true
 								}
 								.myTextBackground()
-								.myButtonBounce()
 								.alert("\(tmpPlayer.player_name)さんに投票しますか？", isPresented: $isAlertShown){
 									Button("投票する"){
 										tmpPlayer.voteCount += 1
@@ -198,7 +202,7 @@ struct RunoffView: View{
 							.padding(12)
 						}
 					}
-				}
+				})
 			}else{
 				if survivors_index+1 < gameProgress.get_num_survivors(){
 					VStack{
@@ -232,6 +236,10 @@ struct RunoffView: View{
 				.myTextBackground()
 				.myButtonBounce()
 				.padding()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}
 	}
@@ -283,6 +291,10 @@ struct RunoffVoteResult: View{
 				.myTextBackground()
 				.myButtonBounce()
 				.padding()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}else{  // multiple most voted players
 			
@@ -324,6 +336,10 @@ struct RunoffVoteResult: View{
 				.myTextBackground()
 				.myButtonBounce()
 				.padding()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}
 	}

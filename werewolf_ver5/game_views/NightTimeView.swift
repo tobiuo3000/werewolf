@@ -1,6 +1,8 @@
 import SwiftUI
 
 
+private let fade_ScrollView_variable: CGFloat = 50
+
 
 struct NightTime: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
@@ -71,6 +73,10 @@ struct Night_Action_EachPlayer_View: View{
 				}
 				.myTextBackground()
 				.myButtonBounce()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}
 	}
@@ -78,6 +84,7 @@ struct Night_Action_EachPlayer_View: View{
 
 
 struct Night_Between_EachPlayer_View: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var whole_players_index: Int
 	@Binding var survivors_index: Int
@@ -95,6 +102,7 @@ struct Night_Between_EachPlayer_View: View{
 					HStack{
 						Text("「")
 						Text("\(gameProgress.players[survivors_list[survivors_index+1]].player_name)")
+							.foregroundStyle(highlightColor)
 						Text("」")
 					}
 				}
@@ -117,6 +125,10 @@ struct Night_Between_EachPlayer_View: View{
 					Button("キャンセル", role: .cancel){
 					}
 				}
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}else{  // NightTime Processes are done here
 				
 				VStack{
@@ -129,28 +141,34 @@ struct Night_Between_EachPlayer_View: View{
 					gameProgress.highestWerewolvesTargets = gameProgress.get_list_highest_werewolvesTarget()
 					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.choose_one_random_player(highestList: gameProgress.highestWerewolvesTargets)!
 					
-					
-					if let tmpWolfTarget = gameProgress.get_diary_cur_day().werewolvesTarget{
-						if let tmpHunterTarget = gameProgress.get_diary_cur_day().hunterTarget{
-							if gameProgress.try_murdering(target: tmpWolfTarget,
-														  hunter_target: tmpHunterTarget) == true {
+					if gameStatusData.hunter_Count_CONFIG == 0{  // if not hunter
+						gameProgress.sentence_to_death(suspect_id: gameProgress.get_diary_cur_day().werewolvesTarget!.id)
+						gameProgress.get_diary_cur_day().murderedPlayer = gameProgress.get_diary_cur_day().werewolvesTarget!
+					}else{  // if a hunter exists
+						if let tmpWolfTarget = gameProgress.get_diary_cur_day().werewolvesTarget{
+							if let tmpHunterTarget = gameProgress.get_diary_cur_day().hunterTarget{
+								if gameProgress.try_murdering(target: tmpWolfTarget,
+															  hunter_target: tmpHunterTarget) == true {
+									gameProgress.sentence_to_death(suspect_id: tmpWolfTarget.id)
+									gameProgress.get_diary_cur_day().murderedPlayer = gameProgress.get_diary_cur_day().werewolvesTarget!  // a werewolf target is decided by poll
+								}
+							}else{
 								gameProgress.sentence_to_death(suspect_id: tmpWolfTarget.id)
-								gameProgress.get_diary_cur_day().murderedPlayer = gameProgress.get_diary_cur_day().werewolvesTarget!  // a werewolf target is decided by poll
 							}
-						}else{
-							gameProgress.sentence_to_death(suspect_id: tmpWolfTarget.id)
 						}
 					}
 					DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
 						gameProgress.stageView = .Morning_time
 						gameProgress.day_current_game = gameProgress.day_current_game + 1
 						gameProgress.diary.append(DailyLog(day: gameProgress.day_current_game))
-						gameProgress.reset_suspected_count()
-						gameProgress.reset_werewolvesTarget_count()
 					}
 				}
 				.myTextBackground()
 				.myButtonBounce()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}
 	}
@@ -184,7 +202,7 @@ struct Night_Villager: View{
 			.textFrameDesignProxy()
 			
 			Spacer()
-			FadingScrollView {
+			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
 				ForEach(gameProgress.players) { player_vil in
 					if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
 						Button(player_vil.player_name) {
@@ -192,14 +210,12 @@ struct Night_Villager: View{
 							isAlertShown = true
 						}
 						.myTextBackground()
-						.myButtonBounce()
 						.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
 							Button("次へ"){
 								tmpPlayer.suspectedCount += 1
 								isTargetConfirmed = true
 								isAlertShown = false
 							}
-							
 							Button("キャンセル", role: .cancel){
 							}
 						}
@@ -208,7 +224,7 @@ struct Night_Villager: View{
 							.myInactiveButton()
 					}
 				}
-			}
+			})
 		}
 	}
 }
@@ -227,7 +243,11 @@ struct Night_Trainee: View{
 		if isTargetConfirmed == false{
 			VStack{
 				Text("あなたは見習い占い師です")
-				Text("間違っているかもしれませんが")
+				HStack{
+					Text("間違うかもしれません")
+						.foregroundStyle(highlightColor)
+					Text("が")
+				}
 				Text("選択した人が人狼かわかります")
 			}
 			.textFrameDesignProxy()
@@ -250,7 +270,7 @@ struct Night_Trainee: View{
 			.textFrameDesignProxy()
 			
 		}else{
-			FadingScrollView {
+			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
 				ForEach(gameProgress.players){ player_seer in
 					if player_seer.isAlive &&
 						player_seer.id != gameProgress.players[whole_players_index].id {
@@ -259,7 +279,6 @@ struct Night_Trainee: View{
 							isAlertShown = true
 						}
 						.myTextBackground()
-						.myButtonBounce()
 						.alert("\(tmpPlayer.player_name)を占いますか？", isPresented: $isAlertShown){
 							Button("決定"){
 								isTargetConfirmed = true
@@ -274,7 +293,7 @@ struct Night_Trainee: View{
 							.myInactiveButton()
 					}
 				}
-			}
+			})
 		}
 	}
 }
@@ -315,7 +334,7 @@ struct Night_Seer: View{
 			.textFrameDesignProxy()
 			
 		}else{
-			FadingScrollView {
+			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
 				ForEach(gameProgress.players){ player_seer in
 					if player_seer.isAlive &&
 						player_seer.id != gameProgress.players[whole_players_index].id &&
@@ -325,7 +344,6 @@ struct Night_Seer: View{
 							isAlertShown = true
 						}
 						.myTextBackground()
-						.myButtonBounce()
 						.alert("\(tmpPlayer.player_name)を占いますか？", isPresented: $isAlertShown){
 							Button("決定"){
 								gameProgress.get_diary_cur_day().seerTarget = tmpPlayer  // avoids nil while unrapping an opt value
@@ -342,7 +360,7 @@ struct Night_Seer: View{
 							.myInactiveButton()
 					}
 				}
-			}
+			})
 		}
 	}
 }
@@ -394,7 +412,7 @@ struct Night_Medium: View{
 			.textFrameDesignProxy()
 			
 			Spacer()
-			FadingScrollView {
+			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
 				ForEach(gameProgress.players) { player_vil in
 					if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
 						Button(player_vil.player_name) {
@@ -402,7 +420,6 @@ struct Night_Medium: View{
 							isAlertShown = true
 						}
 						.myTextBackground()
-						.myButtonBounce()
 						.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
 							Button("次へ"){
 								tmpPlayer.suspectedCount += 1
@@ -418,7 +435,7 @@ struct Night_Medium: View{
 							.myInactiveButton()
 					}
 				}
-			}
+			})
 		}
 	}
 }
@@ -441,7 +458,7 @@ struct Night_Madman: View{
 				.textFrameDesignProxy()
 			Spacer()
 		}else{
-			FadingScrollView{
+			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
 				VStack{
 					VStack{
 						Text("あなたは狂人です")
@@ -459,37 +476,34 @@ struct Night_Madman: View{
 					Text("として朝に公表されます")
 				}
 				.textFrameDesignProxy()
-				
-				Spacer()
-				ScrollView(.vertical) {
-					ForEach(gameProgress.players) { player_vil in
-						if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
-							Button(player_vil.player_name) {
-								tmpPlayer = player_vil
-								isAlertShown = true
-							}
-							.myTextBackground()
-							.myButtonBounce()
-							.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
-								Button("次へ"){
-									tmpPlayer.suspectedCount += 1
-									isTargetConfirmed = true
-									isAlertShown = false
-								}
-								
-								Button("キャンセル", role: .cancel){
-								}
-							}
-						}else{
-							Text(player_vil.player_name)
-								.myInactiveButton()
+				Text("")
+				ForEach(gameProgress.players) { player_vil in
+					if player_vil.isAlive && player_vil.id != gameProgress.players[whole_players_index].id{
+						Button(player_vil.player_name) {
+							tmpPlayer = player_vil
+							isAlertShown = true
 						}
+						.myTextBackground()
+						.alert("\(tmpPlayer.player_name)があやしい", isPresented: $isAlertShown){
+							Button("次へ"){
+								tmpPlayer.suspectedCount += 1
+								isTargetConfirmed = true
+								isAlertShown = false
+							}
+							
+							Button("キャンセル", role: .cancel){
+							}
+						}
+					}else{
+						Text(player_vil.player_name)
+							.myInactiveButton()
 					}
 				}
-			}
+			})
 		}
 	}
 }
+
 
 
 
@@ -513,7 +527,7 @@ struct Night_hunter: View {
 			}
 			.textFrameDesignProxy()
 			.padding()
-			FadingScrollView {
+			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
 				ForEach(gameProgress.players) { player_hunter in
 					if gameStatusData.isConsecutiveProtectionAllowed == true {
 						if (player_hunter.isAlive) &&
@@ -523,7 +537,6 @@ struct Night_hunter: View {
 								isAlertShown = true
 							}
 							.myTextBackground()
-							.myButtonBounce()
 							.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
 								Button("決定"){
 									gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
@@ -549,7 +562,6 @@ struct Night_hunter: View {
 										isAlertShown = true
 									}
 									.myTextBackground()
-									.myButtonBounce()
 									.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
 										Button("決定"){
 											gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
@@ -573,7 +585,6 @@ struct Night_hunter: View {
 									isAlertShown = true
 								}
 								.myTextBackground()
-								.myButtonBounce()
 								.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
 									Button("決定"){
 										gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
@@ -590,7 +601,7 @@ struct Night_hunter: View {
 						}
 					}
 				}
-			}
+			})
 		}
 	}
 }
@@ -629,7 +640,7 @@ struct Night_Werewolf: View{
 			.textFrameDesignProxy()
 			.padding()
 			
-			FadingScrollView {
+			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
 				VStack(alignment: .leading){
 					ForEach(gameProgress.players) { player_wolf in
 						if player_wolf.isAlive && player_wolf.id != gameProgress.players[whole_players_index].id && player_wolf.role_name != .werewolf{
@@ -639,7 +650,6 @@ struct Night_Werewolf: View{
 									isAlertShown = true
 								}
 								.myTextBackground()
-								.myButtonBounce()
 								.alert("\(tmpPlayer.player_name)を選択しますか？", isPresented: $isAlertShown){
 									if gameStatusData.werewolf_Count_CONFIG > 1 {
 										Button("強く選択する(3票)"){
@@ -678,7 +688,7 @@ struct Night_Werewolf: View{
 						}
 					}
 				}
-			}
+			})
 		}
 	}
 }

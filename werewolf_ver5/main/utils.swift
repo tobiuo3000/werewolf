@@ -5,6 +5,7 @@
 //  Created by Masanori Sudo on 2024/10/29.
 //
 
+
 import Foundation
 import SwiftUI
 
@@ -72,7 +73,6 @@ struct WheelPickerView: UIViewRepresentable {
 		}
 	}
 }
-
 
 
 struct HorizontalWheelPickerView: UIViewRepresentable {
@@ -156,15 +156,19 @@ struct HorizontalWheelPickerView: UIViewRepresentable {
 
 struct RoleStepper: View {
 	@Binding var value: Int
-	var range: ClosedRange<Int>
+	var lowerBound: Int
+	var upperBound: Int
 	var step: Int = 1
+	@State private var isButtonDisabled = false
 	
 	var body: some View {
 		HStack {
 			HStack{
-				if value > range.lowerBound{  // working
+				if value > lowerBound{  // working
 					Button(action: {
-						value -= step
+						if value > lowerBound{
+							value -= step
+						}
 					}) {
 						Image(systemName: "minus")
 							.font(.title2)
@@ -184,9 +188,11 @@ struct RoleStepper: View {
 					.opacity(0.12)
 					.padding(4)
 				
-				if (value < range.upperBound){  // working
+				if (value < upperBound){  // working
 					Button(action: {
-						value += step
+						if value < upperBound{
+							value += step
+						}
 					}) {
 						Image(systemName: "plus")
 							.font(.title2)
@@ -207,156 +213,124 @@ struct RoleStepper: View {
 			.cornerRadius(10)
 		}
 	}
+	
+	func buttonTapped() {  // not used
+		isButtonDisabled = true  // ボタンを無効化
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+			isButtonDisabled = false
+		}
+	}
 }
 
 
 
 
-struct ScrollViewWithOffset<Content: View>: UIViewRepresentable {
-	var content: Content
-	@Binding var offset: CGPoint
-	let axis: Axis.Set
+struct OffsetPreferenceKey: PreferenceKey {
+	static var defaultValue = CGFloat.zero
 	
-	init(offset: Binding<CGPoint>, axis: Axis.Set = .vertical, @ViewBuilder content: () -> Content) {
-		self._offset = offset
-		self.axis = axis
-		self.content = content()
-	}
-	
-	func makeCoordinator() -> Coordinator {
-		Coordinator(parent: self)
-	}
-	
-	func makeUIView(context: Context) -> UIScrollView {
-		let scrollView = UIScrollView()
-		
-		// デリゲートを設定
-		scrollView.delegate = context.coordinator
-		
-		// スクロール方向の設定
-		scrollView.showsVerticalScrollIndicator = false
-		scrollView.showsHorizontalScrollIndicator = false
-		scrollView.alwaysBounceVertical = axis == .vertical
-		scrollView.alwaysBounceHorizontal = axis == .horizontal
-		
-		// SwiftUIのコンテンツを追加
-		let hostedView = UIHostingController(rootView: content).view!
-		hostedView.translatesAutoresizingMaskIntoConstraints = false
-		scrollView.addSubview(hostedView)
-		hostedView.backgroundColor = .clear  // 背景を透明に設定
-		
-		// コンテンツの制約を設定
-		NSLayoutConstraint.activate([
-			hostedView.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-			hostedView.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor),
-			hostedView.leadingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.leadingAnchor),
-			hostedView.trailingAnchor.constraint(equalTo: scrollView.contentLayoutGuide.trailingAnchor),
-			hostedView.widthAnchor.constraint(equalTo: scrollView.frameLayoutGuide.widthAnchor)
-		])
-		
-		return scrollView
-	}
-	
-	func updateUIView(_ uiView: UIScrollView, context: Context) {
-		// 何もしない
-	}
-	
-	class Coordinator: NSObject, UIScrollViewDelegate {
-		var parent: ScrollViewWithOffset
-		
-		init(parent: ScrollViewWithOffset) {
-			self.parent = parent
-		}
-		
-		func scrollViewDidScroll(_ scrollView: UIScrollView) {
-			DispatchQueue.main.async {
-				self.parent.offset = scrollView.contentOffset
-			}
-		}
+	static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+		value = nextValue()
 	}
 }
 
 
 struct FadingScrollView<Content: View>: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
-	let content: Content
-	let axis: Axis.Set
-	let fadeHeight: CGFloat
-	
-	@State private var offset: CGPoint = .zero
-	@State private var contentSize: CGSize = .zero
-	@State private var scrollViewSize: CGSize = .zero
+	@State private var offset: CGFloat = 0
+	@State private var scrollViewHeight: CGFloat = .zero
+	@State private var scrollViewDefaultY: CGFloat = .zero
 	@State private var topFadeOpacity: CGFloat = 0
 	@State private var bottomFadeOpacity: CGFloat = 1.0
+	@State private var normalizedOffset: CGFloat = 1.0
+	let axes: Axis.Set
+	let showsIndicators: Bool
+	@ViewBuilder var content: Content
+	//let perform: (CGFloat) -> Void
+	let fadeHeight: CGFloat
 	
-	init(axis: Axis.Set = .vertical, fadeHeight: CGFloat = 60, @ViewBuilder content: () -> Content) {
-		self.axis = axis
+	init(
+		fadeHeight: CGFloat = 40,
+		axes: Axis.Set = .vertical,
+		showsIndicators: Bool = true,
+		@ViewBuilder content: () -> Content, perform: @escaping (CGFloat) -> Void = { _ in }
+	) {
 		self.fadeHeight = fadeHeight
+		self.axes = axes
+		self.showsIndicators = showsIndicators
 		self.content = content()
+		//self.perform = perform
 	}
 	
 	var body: some View {
-		ZStack(alignment: .topLeading) {
-			ScrollViewWithOffset(offset: $offset, axis: axis) {
-				content
-					.background(
+		GeometryReader { geo in
+			ZStack {
+				ScrollView(axes, showsIndicators: showsIndicators) {
+					ZStack {
+						VStack{
+							Text("")  // making space
+							content
+							Text("")  // making space
+						}
+						// スクロールオフセットを取得するためのGeometryReader
 						GeometryReader { proxy in
-							Color.clear
-								.onAppear {
-									self.contentSize = proxy.size
-								}
+							Color.clear.preference(
+								key: OffsetPreferenceKey.self,
+								value: proxy.frame(in: .named("scrollViewCoordinateSpace")).minY
+							)
 						}
-					)
-			}
-			.background(
-				GeometryReader { proxy in
-					Color.clear
-						.onAppear {
-							self.scrollViewSize = proxy.size
-						}
+						.frame(height: 0) // 高さを0にしてレイアウトに影響を与えない
+					}
 				}
-			)
-			.onChange(of: offset) { _ in
-				shouldShowTopFade()
-				shouldShowBottomFade()
-			}
-			
-			// フェード効果のオーバーレイ
-			VStack {
+				.coordinateSpace(name: "scrollViewCoordinateSpace") // カスタム座標空間を定義
+				.onPreferenceChange(OffsetPreferenceKey.self) { value in
+					self.offset = value
+					// self.perform(value)
+					self.updateFadeOpacities()
+				}
+				
+				// フェード効果のオーバーレイ
+				VStack {
 					LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.8), Color.clear]),
-								   startPoint: .top,    // start地点
+								   startPoint: .top,
 								   endPoint: .bottom)
 					.frame(height: fadeHeight)
 					.opacity(topFadeOpacity)
-				
-				Spacer()
-				
-					LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.8), .white.opacity(0)]),
-								   startPoint: .bottom,    // start地点
+					
+					Spacer()
+					
+					LinearGradient(gradient: Gradient(colors: [Color.black.opacity(0.8), Color.clear]),
+								   startPoint: .bottom,
 								   endPoint: .top)
 					.frame(height: fadeHeight)
 					.opacity(bottomFadeOpacity)
+				}
+				.allowsHitTesting(false)
+			}
+			.onAppear {
+				self.scrollViewHeight = geo.size.height
+				self.scrollViewDefaultY = geo.frame(in: .global).minY
 			}
 		}
 	}
 	
-	func shouldShowTopFade() {
-		if offset.y > 0{
-			if topFadeOpacity < 1.0{
-				topFadeOpacity = offset.y / 180
-			}
+	
+	func updateFadeOpacities() {
+		// スクロールオフセットに基づいてフェードの不透明度を更新
+		let _ = print("hi")
+		let _ = print(self.scrollViewHeight)
+		let _ = print(offset)
+		let _ = print(self.scrollViewDefaultY)
+		let maxOffset = self.scrollViewHeight - (offset - self.scrollViewDefaultY)
+		let threshold = fadeHeight  // use fadeHeight as threshold
+		let _ = print(maxOffset)
+		
+		if maxOffset > 0 {
+			normalizedOffset = (offset - self.scrollViewDefaultY) / threshold
+			topFadeOpacity = min(max(1 - normalizedOffset, 0), 1)  // range 0...1
+			bottomFadeOpacity = min(max(normalizedOffset, 0), 1)
 		} else {
 			topFadeOpacity = 0
-		}
-	}
-	
-	func shouldShowBottomFade() {
-		if contentSize.height - scrollViewSize.height - offset.y > 0{
-			if bottomFadeOpacity < 1.0{
-				bottomFadeOpacity = contentSize.height - scrollViewSize.height - offset.y / 180
-			}
-		} else {
-			bottomFadeOpacity = 0
+			bottomFadeOpacity = 1
 		}
 	}
 }

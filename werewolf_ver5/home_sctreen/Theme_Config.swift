@@ -10,8 +10,9 @@ struct Theme_Config: View {
 	var body: some View {
 		ZStack{
 			Color.black
+				.opacity(0.6)
 			
-			ScrollView(.vertical){
+			FadingScrollView{
 				Color.clear
 					.frame(height:20)
 				ZStack{
@@ -27,6 +28,8 @@ struct Theme_Config: View {
 						.cornerRadius(20.0)
 						.clipped()
 				}
+				Text(" ")
+					.font(.largeTitle)
 				
 				Color.clear
 					.frame(height:10)

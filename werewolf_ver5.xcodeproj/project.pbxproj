@@ -33,6 +33,7 @@
 		17AFD2972CC13FA1009DB880 /* loghouse.mov in Resources */ = {isa = PBXBuildFile; fileRef = 17AFD2962CC13FA1009DB880 /* loghouse.mov */; };
 		17DA07A82CC77FB000F4B720 /* VoteViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A72CC77FB000F4B720 /* VoteViews.swift */; };
 		17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A92CC783F000F4B720 /* VoteResultView.swift */; };
+		17F94C852CD321790020D32D /* BeforeNightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F94C842CD321790020D32D /* BeforeNightView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +64,7 @@
 		17AFD2962CC13FA1009DB880 /* loghouse.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = loghouse.mov; sourceTree = "<group>"; };
 		17DA07A72CC77FB000F4B720 /* VoteViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViews.swift; sourceTree = "<group>"; };
 		17DA07A92CC783F000F4B720 /* VoteResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteResultView.swift; sourceTree = "<group>"; };
+		17F94C842CD321790020D32D /* BeforeNightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeNightView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				1749BD392BEBBB97005E9560 /* GameViews.swift */,
+				17F94C842CD321790020D32D /* BeforeNightView.swift */,
 				176B029D2CCFA13F00DE4E2E /* MorningView.swift */,
 				176B029B2CCF8A5300DE4E2E /* DiscussionTimeViews.swift */,
 				17DA07A92CC783F000F4B720 /* VoteResultView.swift */,
@@ -248,6 +251,7 @@
 				1749BD382BEBBB80005E9560 /* Settings.swift in Sources */,
 				1749BD2D2BEBBAFD005E9560 /* CardViews.swift in Sources */,
 				176B029C2CCF8A5300DE4E2E /* DiscussionTimeViews.swift in Sources */,
+				17F94C852CD321790020D32D /* BeforeNightView.swift in Sources */,
 				1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */,
 				17DA07A82CC77FB000F4B720 /* VoteViews.swift in Sources */,
 				1749BD272BEBBABB005E9560 /* HomeScreenView.swift in Sources */,

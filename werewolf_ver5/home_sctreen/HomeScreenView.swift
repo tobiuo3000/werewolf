@@ -106,7 +106,6 @@ struct HomeScreenView: View {
 							self.offsetTab0 = offset
 							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
 							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
-							gameStatusData.update_role_CONFIG()
 						}
 					
 					BeforeGameView(threeOffSetTab: $threeOffSetTab)

@@ -23,7 +23,7 @@ struct GameSettingView: View{
 				.frame(maxWidth: .infinity, maxHeight:.infinity)
 				.allowsHitTesting(false)
 			
-			ScrollView{
+			FadingScrollView(fadeHeight: 30, content: {
 				Text("ゲーム設定")
 					.font(.system(.largeTitle, design: .serif))
 					.fontWeight(.bold)
@@ -60,23 +60,23 @@ struct GameSettingView: View{
 						}
 						
 						/*
-						ForEach(gameStatusData.players_CONFIG.indices, id: \.self) { index in
-							HStack{
-								Spacer()
-								HStack{
-									Text("\(gameStatusData.players_CONFIG[index].player_order+1)番目: ")
-									Spacer()
-									Text("\(gameStatusData.players_CONFIG[index].player_name)")
-										.foregroundStyle(highlightColor)
-										.font(.title3)
-								}
-								.padding()
-								.background(Color(red: 0.2, green: 0.2, blue: 0.2))
-								.cornerRadius(10)
-								Spacer()
-							}
-						}
-						*/
+						 ForEach(gameStatusData.players_CONFIG.indices, id: \.self) { index in
+						 HStack{
+						 Spacer()
+						 HStack{
+						 Text("\(gameStatusData.players_CONFIG[index].player_order+1)番目: ")
+						 Spacer()
+						 Text("\(gameStatusData.players_CONFIG[index].player_name)")
+						 .foregroundStyle(highlightColor)
+						 .font(.title3)
+						 }
+						 .padding()
+						 .background(Color(red: 0.2, green: 0.2, blue: 0.2))
+						 .cornerRadius(10)
+						 Spacer()
+						 }
+						 }
+						 */
 					}
 					.onChange(of: gameStatusData.players_CONFIG.count) { _ in
 						gameStatusData.update_role_CONFIG()
@@ -117,12 +117,58 @@ struct GameSettingView: View{
 				}
 				.textFrameDesignProxy()
 				
+				
+				Text("役職人数")
+					.font(.system(.largeTitle, design: .serif))
+					.fontWeight(.bold)
+					.foregroundStyle(.black)
+					.padding()
+				
 				VStack{
+					VStack{
+						HStack{
+							Text("現在： ")
+							if gameStatusData.num_player_with_role <= gameStatusData.players_CONFIG.count{
+								Text("\(gameStatusData.num_player_with_role)")
+									.foregroundStyle(highlightColor)
+								Text(" / ")
+								Text("\(gameStatusData.players_CONFIG.count) 人 ")
+							}else{
+								VStack{
+									HStack{
+										Text("\(gameStatusData.num_player_with_role)")
+											.foregroundStyle(highlightColor)
+										Text(" / ")
+										Text("\(gameStatusData.players_CONFIG.count) 人 ")
+									}
+									Text("※役職の人数を減らしてください")
+										.foregroundStyle(highlightColor)
+								}
+							}
+						}
+						.font(.title)
+						
+						Text("")  // make space
+						
+						HStack{
+							Spacer()
+							Text("(役職数")
+							Text("/")
+							Text("プレイヤー数)")
+						}
+						.font(.title3)
+						
+						Text(" ")  // make space
+							.font(.title)
+					}
+					
+					
+					
 					ZStack{
 						HStack{
 							Text("人狼の数:")
 							Spacer()
-							RoleStepper(value: $gameStatusData.werewolf_Count_CONFIG, range: 0...gameStatusData.max_werewolf_CONFIG)
+							RoleStepper(value: $gameStatusData.werewolf_Count_CONFIG, lowerBound: 1, upperBound:  gameStatusData.max_werewolf_CONFIG)
 								.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
 									gameStatusData.update_role_CONFIG()
 								}
@@ -136,7 +182,7 @@ struct GameSettingView: View{
 						HStack{
 							Text("見習い占の数:")
 							Spacer()
-							RoleStepper(value: $gameStatusData.trainee_Count_CONFIG, range: 0...gameStatusData.max_trainee_CONFIG)
+							RoleStepper(value: $gameStatusData.trainee_Count_CONFIG, lowerBound: 0, upperBound:  gameStatusData.max_trainee_CONFIG)
 								.onChange(of: gameStatusData.trainee_Count_CONFIG) { _ in
 									gameStatusData.update_role_CONFIG()
 								}
@@ -150,7 +196,7 @@ struct GameSettingView: View{
 						HStack{
 							Text("占い師の数:")
 							Spacer()
-							RoleStepper(value: $gameStatusData.seer_Count_CONFIG, range: 0...1)
+							RoleStepper(value: $gameStatusData.seer_Count_CONFIG, lowerBound: 0, upperBound: 1)
 								.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
 									gameStatusData.update_role_CONFIG()
 								}
@@ -164,7 +210,7 @@ struct GameSettingView: View{
 						HStack{
 							Text("霊媒師の数:")
 							Spacer()
-							RoleStepper(value: $gameStatusData.medium_Count_CONFIG, range: 0...1)
+							RoleStepper(value: $gameStatusData.medium_Count_CONFIG, lowerBound: 0, upperBound: 1)
 								.onChange(of: gameStatusData.medium_Count_CONFIG) { _ in
 									gameStatusData.update_role_CONFIG()
 								}
@@ -178,7 +224,7 @@ struct GameSettingView: View{
 						HStack{
 							Text("狩人の数:")
 							Spacer()
-							RoleStepper(value: $gameStatusData.hunter_Count_CONFIG, range: 0...1)
+							RoleStepper(value: $gameStatusData.hunter_Count_CONFIG, lowerBound: 0, upperBound: 1)
 								.onChange(of: gameStatusData.hunter_Count_CONFIG) { _ in
 									gameStatusData.update_role_CONFIG()
 								}
@@ -192,7 +238,7 @@ struct GameSettingView: View{
 						HStack{
 							Text("狂人の数:")
 							Spacer()
-							RoleStepper(value: $gameStatusData.madman_Count_CONFIG, range: 0...1)
+							RoleStepper(value: $gameStatusData.madman_Count_CONFIG, lowerBound: 0, upperBound: 1)
 								.onChange(of: gameStatusData.madman_Count_CONFIG) { _ in
 									gameStatusData.update_role_CONFIG()
 								}
@@ -208,7 +254,7 @@ struct GameSettingView: View{
 				Rectangle()
 					.fill(.clear)
 					.frame(width: 10, height: 10)
-				Text("詳細設定")
+				Text("その他ゲーム設定")
 					.font(.system(.largeTitle, design: .serif))
 					.fontWeight(.bold)
 					.foregroundStyle(.black)
@@ -238,19 +284,28 @@ struct GameSettingView: View{
 				}
 				.textFrameDesignProxy()
 			}
+				, perform: {
+					print($0)
+				}
+			)
 		}
 	}
 }
 
 
+
+
 struct ReorderingPlayerView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@Binding var isReorderingViewShown: Bool
-	@State var isAlertShown: Bool = false
+	@State private var isAlertShown: Bool = false
 	let viewColor: Color = Color(red: 0.2, green: 0.2, blue: 0.2)
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	let lineWidth: CGFloat = 6
-	let baseColor: Color = Color(red: 0.05, green: 0.05, blue: 0.1)
+	let baseColor: Color = Color(red: 0.15, green: 0.15, blue: 0.2)
+	@State private var borderColor = Color(red: 1.0, green: 0.9, blue: 0.95)
+	@Environment(\.editMode) var editMode
+	
 	
 	var body: some View{
 		ZStack{
@@ -258,15 +313,12 @@ struct ReorderingPlayerView: View {
 				.ignoresSafeArea()
 			Rectangle()
 				.foregroundStyle(.clear)
-				.frame(height: gameStatusData.fullScreenSize.height/30)
+				.frame(height: gameStatusData.fullScreenSize.height/32)
 			VStack{
 				Rectangle()
 					.foregroundStyle(.clear)
-					.frame(height: gameStatusData.fullScreenSize.height/8)
+					.frame(height: gameStatusData.fullScreenSize.height/16)
 				ZStack{
-					Rectangle()
-						.fill(viewColor)
-					
 					VStack{
 						VStack{
 							ZStack{
@@ -300,6 +352,7 @@ struct ReorderingPlayerView: View {
 									VStack{
 										Text("プレイヤー編集画面")
 											.foregroundStyle(.white)
+											.fontWeight(.bold)
 											.font(.title2)
 											.padding(4)
 											.border(Color(red: 0.8, green: 0.8, blue: 0.8, opacity: 1.0), width: 2)
@@ -308,8 +361,10 @@ struct ReorderingPlayerView: View {
 										HStack{
 											Text("合計人数:")
 												.foregroundStyle(.white)
+												.fontWeight(.bold)
 											Text("\(gameStatusData.players_CONFIG.count)人")
 												.foregroundStyle(highlightColor)
+												.fontWeight(.bold)
 										}
 										.font(.title2)
 									}
@@ -317,16 +372,13 @@ struct ReorderingPlayerView: View {
 									Spacer()
 									Rectangle()
 										.fill(.clear)
-										.frame(width: 10, height: 10)
+										.frame(width: 10, height: 10)  // make space for RIGHT SIDE
 								}
 							}
-							Rectangle()
-								.fill(.clear)
-								.frame(height: lineWidth*3)
 						}
 						.background(baseColor)
 						
-						List {
+						FadingScrollView() {
 							HStack{
 								Text("プレイ順序")
 									.foregroundStyle(.white)
@@ -351,19 +403,22 @@ struct ReorderingPlayerView: View {
 										.textFieldStyle(RoundedBorderTextFieldStyle())
 										.autocorrectionDisabled()
 										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .trailing)
+									
 								}
 								.padding()
 							}
-							.onMove { indices, newOffset in
+							.onMove { indices, newOffset in  // FOR EditButton
 								gameStatusData.players_CONFIG.move(fromOffsets: indices, toOffset: newOffset)
 								gameStatusData.updatePlayerOrder()
 							}
-							.onDelete(perform: confirmDelete)
+							.onDelete(perform: confirmDelete)  // FOR EditButton
 							.listRowBackground(viewColor)
-						}
-						.listStyle(PlainListStyle())
-						.alert("プレイヤーを4名以下にすることはできません", isPresented: $isAlertShown) {
-							Button("OK", role: .cancel) {
+							.navigationBarItems(trailing: EditButton())
+							.listStyle(PlainListStyle())
+							.background(baseColor)
+							.alert("プレイヤーを4名以下にすることはできません", isPresented: $isAlertShown) {
+								Button("OK", role: .cancel) {
+								}
 							}
 						}
 						
@@ -379,11 +434,17 @@ struct ReorderingPlayerView: View {
 								.bouncingUI(interval: 3)
 								.padding(8)
 							Rectangle()
-								.fill(.clear)
+								.fill(baseColor)
 								.frame(width: 10, height: 10)
 						}
 						.background(baseColor)
 					}
+					.background(baseColor)
+					.overlay(
+							RoundedRectangle(cornerRadius: 18)
+								.stroke(borderColor, lineWidth: 8)
+								//.frame(width: gameStatusData.fullScreenSize.width, height: gameStatusData.fullScreenSize.height*(29/32))
+						)
 				}
 				.cornerRadius(18)
 				.frame(width: gameStatusData.fullScreenSize.width-2*lineWidth)

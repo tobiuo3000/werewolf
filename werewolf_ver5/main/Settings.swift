@@ -206,6 +206,7 @@ class GameStatusData: ObservableObject {
 	@Published var discussion_minutes_CONFIG: Int = 2
 	@Published var discussion_seconds_CONFIG: Int = 0
 	@Published var discussion_time_CONFIG: Int = 0
+	@Published var num_player_with_role: Int = 0
 	@Published var villager_Count_CONFIG: Int = 0
 	@Published var werewolf_Count_CONFIG: Int = 1
 	@Published var seer_Count_CONFIG: Int = 0
@@ -213,7 +214,7 @@ class GameStatusData: ObservableObject {
 	@Published var hunter_Count_CONFIG: Int = 0
 	@Published var madman_Count_CONFIG: Int = 0
 	@Published var trainee_Count_CONFIG: Int = 0
-	@Published var trainee_Probability: Double = 0.9
+	@Published var trainee_Probability: Double = 0.1
 	@Published var _Count_CONFIG: Int = 0
 	@Published var max_werewolf_CONFIG: Int = 1
 	@Published var max_trainee_CONFIG: Int = 1
@@ -228,6 +229,7 @@ class GameStatusData: ObservableObject {
 	@Published var isVoteCountVisible: Bool = true
 	@Published var isCardRoleImageShown: Bool = true
 	@Published var requiresRunoffVote: Bool = true
+	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存
@@ -245,16 +247,8 @@ class GameStatusData: ObservableObject {
 	
 	func update_role_CONFIG(){
 		self.calc_max_roles()
-		self.calc_vil_count()
-		let _ = print("role num:")
-		let _ = print(self.villager_Count_CONFIG)
-		let _ = print(self.trainee_Count_CONFIG)
-		let _ = print(self.seer_Count_CONFIG)
-		let _ = print(self.medium_Count_CONFIG)
-		let _ = print(self.hunter_Count_CONFIG)
-		let _ = print(self.madman_Count_CONFIG)
-		let _ = print(self.werewolf_Count_CONFIG)
-		let _ = print()
+		self.calc_roles_count()
+		
 	}
 	
 	func modify_role_num(){
@@ -267,13 +261,14 @@ class GameStatusData: ObservableObject {
 		let num_player_with_role: Int =
 		self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
 		self.max_werewolf_CONFIG = self.players_CONFIG.count / 2 - 1
-		self.max_trainee_CONFIG = self.players_CONFIG.count - (self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG + self.madman_Count_CONFIG)
+		self.max_trainee_CONFIG = self.players_CONFIG.count - self.num_player_with_role
 		self.existsPlayerWithoutRole = (self.players_CONFIG.count - num_player_with_role > 0)
 	}
 	
-	func calc_vil_count(){
-		let num_player_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
+	func calc_roles_count(){
+		num_player_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
 		self.villager_Count_CONFIG = self.players_CONFIG.count - num_player_with_role
+	
 	}
 	
 	func init_player_CONFIG(){
@@ -285,7 +280,7 @@ class GameStatusData: ObservableObject {
 	}
 	
 	func traineeCheckIfWerewolf(player: Player)-> Bool {
-		let res_prob = Double.random(in: 0.5..<1) < self.trainee_Probability
+		let res_prob = Double.random(in: 0..<1) < self.trainee_Probability
 		if res_prob {  // when check_result is True
 			if player.role_name == .werewolf{
 				return true

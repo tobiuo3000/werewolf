@@ -68,7 +68,7 @@ struct BeforeGameView: View {
 			}
 			.onAppear(){
 				if isParameterSet == false {
-					gameStatusData.calc_vil_count()
+					gameStatusData.calc_roles_count()
 					isParameterSet = true
 				}
 			}

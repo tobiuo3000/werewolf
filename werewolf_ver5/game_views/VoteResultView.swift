@@ -51,6 +51,10 @@ struct VoteResult: View{
 				.myTextBackground()
 				.myButtonBounce()
 				.padding()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}else{  // multiple most voted players
 			if gameStatusData.requiresRunoffVote{
@@ -71,6 +75,7 @@ struct BeforeRunoffVoteView: View {
 	var body: some View {
 		if gameStatusData.requiresRunoffVote{
 			VStack{
+				Spacer()
 				VStack{
 					HStack{
 						Text("最も多くの得票を得たプレイヤーは")
@@ -99,6 +104,10 @@ struct BeforeRunoffVoteView: View {
 				.myTextBackground()
 				.myButtonBounce()
 				.padding()
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 40, height: 40)
 			}
 		}
 	}
@@ -112,6 +121,7 @@ struct RandomExecutionView: View{
 	
 	var body: some View{
 		VStack{
+			Spacer()
 			VStack{
 				HStack{
 					Text("最も多くの得票を得たプレイヤーは")
@@ -159,6 +169,10 @@ struct RandomExecutionView: View{
 			.myTextBackground()
 			.myButtonBounce()
 			.padding()
+			
+			Rectangle()
+				.fill(.clear)
+				.frame(width: 40, height: 40)
 		}
 	}
 }

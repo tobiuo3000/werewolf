@@ -108,6 +108,10 @@ struct Discussion_time: View{
 				Button("キャンセル", role: .cancel){
 				}
 			}
+			
+			Rectangle()
+				.fill(.clear)
+				.frame(width: 40, height: 40)
 		}
 	}
 }
