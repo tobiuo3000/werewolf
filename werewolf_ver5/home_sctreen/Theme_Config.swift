@@ -67,6 +67,10 @@ struct CardPreview: View{
 					
 					ThemeConfigScreen_CardView(role: Role.medium, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight, isExplanationViewShown: $isExplanationViewShown, selectedRole: $selectedRole)
 					
+					ThemeConfigScreen_CardView(role: Role.trainee, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight, isExplanationViewShown: $isExplanationViewShown, selectedRole: $selectedRole)
+					
+					ThemeConfigScreen_CardView(role: Role.madman, imageWidth: imageFrameWidth, imageHeight: imageFrameHeight, isExplanationViewShown: $isExplanationViewShown, selectedRole: $selectedRole)
+					
 				}
 				Spacer()
 			}
@@ -165,43 +169,47 @@ struct ExplanationsRole: View {
 					Text("")
 					Text("特別な能力を持たない一般市民です")
 					Text("ゲームの目的は、人狼を見つけ出し村を守ることです")
-					Text("昼の議論で怪しい人物を見つけ")
+					Text("夜には何もできませんが推理で勝利に貢献しましょう")
+					Text("本アプリでは「村人」の代わりに「見習い占」を役職として設定することをお勧めしています")
 						.lineLimit(nil)
-					Text("人狼と思われるプレイヤーを処刑するように投票します")
-					Text("夜には何もできませんが推理で勝利に貢献します")
-					
 				}else if role == .seer{
 					Text("")
-					Text("毎晩他のプレイヤー1人を占い")
-					Text("そのプレイヤーが")
+					Text("毎晩他のプレイヤー1人を占い、そのプレイヤーが「村人」か「人狼」かを知ることができます")
 						.lineLimit(nil)
-					Text("「村人」か「人狼」かを知ることができます")
 					Text("村を守るために重要な情報を持つ役職です")
 					Text("人狼に狙われないように、慎重に行動しましょう")
 				}else if role == .hunter{
 					Text("")
 					Text("毎晩1人のプレイヤーを選んで守ることができます")
-					Text("守られたプレイヤーは")
+					Text("守られたプレイヤーは人狼からの襲撃を生き延びることができます")
 						.lineLimit(nil)
-					Text("人狼からの襲撃を防ぐことができます")
-					Text("自分が生き延びるために護衛先を慎重に選び")
-					Text("村の勝利に貢献しましょう")
+					Text("護衛先を慎重に選び、村の勝利に貢献しましょう")
+						.lineLimit(nil)
 				}else if role == .medium{
 					Text("")
-					Text("昼のターンで処刑されたプレイヤーが")
-					Text("「村人」か「人狼」だったのかを知ることができます")
-					Text("処刑した人物が")
+					Text("昼のターンで処刑されたプレイヤーが「村人」か「人狼」だったのかを知ることができます")
 						.lineLimit(nil)
-					Text("正しかったのか、間違っていたのかを確認し")
-					Text("議論を有利に進めることで")
-					Text("村の勝利に貢献しましょう")
+					Text("処刑した人物が正しかったのかのかを確認し、村の勝利に貢献しましょう")
+						.lineLimit(nil)
 				}else if role == .werewolf{
 					Text("")
 					Text("目的は村人を騙し全滅させることです")
 					Text("夜時間に村人を1人選んで襲撃します")
-					Text("昼の議論では正体を隠し")
-					Text("あたかも村人の一員であるかのようにふるまい")
-					Text("投票から逃れましょう")
+					Text("昼の議論では正体を隠して村人の一員としてふるまい、処刑から逃れましょう")
+						.lineLimit(nil)
+				}else if role == .madman{
+					Text("")
+					Text("目的は村人を騙し全滅させることです")
+					Text("ゲームを通して人狼陣営として人狼が村人を襲うのを手助けしましょう")
+						.lineLimit(nil)
+				}else if role == .trainee{
+					Text("")
+					Text("毎晩他のプレイヤー1人を占い、そのプレイヤーが「村人」か「人狼」かを知ることができます")
+						.lineLimit(nil)
+					Text("しかしまだ修行中の身であるため、間違った占い結果を出してしまうことがあります。")
+						.lineLimit(nil)
+					Text("占い結果が不安なときは、何度も占う、もしくは他の見習い占と一緒に同じ人を占い、間違う可能性を下げましょう")
+						.lineLimit(nil)
 				}
 			}
 		}

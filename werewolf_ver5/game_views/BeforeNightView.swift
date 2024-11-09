@@ -9,7 +9,7 @@ import SwiftUI
 
 
 struct Before_night_time: View{
-	@EnvironmentObject var GameStatusData: GameStatusData
+	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@State var isAlertShown: Bool = false
 	let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)

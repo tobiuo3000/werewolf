@@ -4,7 +4,7 @@
 //
 //  Created by Masanori Sudo on 2024/10/31.
 //
-
+//  this view has PROBLEM
 
 import SwiftUI
 

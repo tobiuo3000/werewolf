@@ -33,6 +33,9 @@ struct GameView: View {
 				if gameProgress.stageView == .Show_player_role {
 					AssignRole()
 					
+				}else if gameProgress.stageView == .Morning_time{
+					MorningView()
+					
 				}else if gameProgress.stageView == .Before_discussion {
 					Before_discussion()
 					
@@ -57,8 +60,6 @@ struct GameView: View {
 				}else if gameProgress.stageView == .Night_time{
 					NightTime(whole_players_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
 					
-				}else if gameProgress.stageView == .Morning_time{
-					MorningView()
 				}
 			}
 			BottomButtonGameView()

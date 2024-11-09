@@ -113,9 +113,9 @@ enum Role {
 		case .medium:
 			return "card_medium"
 		case .madman:
-			return "role_madman_image"
+			return "card_madman"
 		case .trainee:
-			return "role_trainee_image"
+			return "card_trainee_only_sweat"
 		}
 	}
 	
@@ -214,7 +214,7 @@ class GameStatusData: ObservableObject {
 	@Published var hunter_Count_CONFIG: Int = 0
 	@Published var madman_Count_CONFIG: Int = 0
 	@Published var trainee_Count_CONFIG: Int = 0
-	@Published var trainee_Probability: Double = 0.1
+	@Published var trainee_Probability: Int = 60
 	@Published var _Count_CONFIG: Int = 0
 	@Published var max_werewolf_CONFIG: Int = 1
 	@Published var max_trainee_CONFIG: Int = 1
@@ -226,7 +226,8 @@ class GameStatusData: ObservableObject {
 	@Published var cardSize: CGSize = CGSize(width: 630, height: 880)
 	@Published var isAnimeShown: Bool = true
 	@Published var isConsecutiveProtectionAllowed: Bool = false
-	@Published var isVoteCountVisible: Bool = true
+	@Published var isFirstNightRandomSeer: Bool = true
+	@Published var isVoteCountVisible: Bool = false
 	@Published var isCardRoleImageShown: Bool = true
 	@Published var requiresRunoffVote: Bool = true
 	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
@@ -261,13 +262,13 @@ class GameStatusData: ObservableObject {
 		let num_player_with_role: Int =
 		self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
 		self.max_werewolf_CONFIG = self.players_CONFIG.count / 2 - 1
-		self.max_trainee_CONFIG = self.players_CONFIG.count - self.num_player_with_role
+		self.max_trainee_CONFIG = self.players_CONFIG.count - (self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.medium_Count_CONFIG + self.hunter_Count_CONFIG + self.madman_Count_CONFIG)
 		self.existsPlayerWithoutRole = (self.players_CONFIG.count - num_player_with_role > 0)
 	}
 	
 	func calc_roles_count(){
-		num_player_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
-		self.villager_Count_CONFIG = self.players_CONFIG.count - num_player_with_role
+		self.num_player_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
+		self.villager_Count_CONFIG = self.players_CONFIG.count - self.num_player_with_role
 	
 	}
 	
@@ -280,8 +281,10 @@ class GameStatusData: ObservableObject {
 	}
 	
 	func traineeCheckIfWerewolf(player: Player)-> Bool {
-		let res_prob = Double.random(in: 0..<1) < self.trainee_Probability
-		if res_prob {  // when check_result is True
+		let res_prob = (Double.random(in: 0..<1))
+		let res_prob_int:Int = Int(res_prob*100)
+		let isSuccessful = res_prob_int < self.trainee_Probability
+		if isSuccessful {  // when check_result is True
 			if player.role_name == .werewolf{
 				return true
 			}else{
@@ -332,8 +335,8 @@ class GameProgress: ObservableObject {
 		stageView = .Show_player_role
 		players.removeAll()
 		diary.removeAll()
-		diary.append(DailyLog(day: 1))
-		day_current_game = 1
+		diary.append(DailyLog(day: 0))
+		day_current_game = 0
 	}
 	
 	func game_Result() {
@@ -407,6 +410,11 @@ class GameProgress: ObservableObject {
 			let chosenPlayer = highestList.randomElement()
 			return chosenPlayer!
 		}
+	}
+	
+	func get_one_random_vil_side() -> Player{
+		var PlayersExceptWerewolf = self.players.filter {$0.role_name != Role.werewolf}
+		return PlayersExceptWerewolf.randomElement()!
 	}
 	
 	func get_list_highest_werewolvesTarget() -> [Player]{

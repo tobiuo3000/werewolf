@@ -274,6 +274,62 @@ struct CardFlippedAndRtoL: ViewModifier{
 }
 
 
+struct CardPiledAndCoverTheScreen: ViewModifier{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	@EnvironmentObject var gameProgress: GameProgress
+	@State var card_offset: CGPoint = CGPoint(x: 0, y: 0)
+	@State private var storedPosition: CGPoint = .zero // positionへの切り替え時のビューの位置
+	@State var isViewRelatedPositon: Bool = false
+	@Binding var isCardFlipped: Bool
+	@Binding var cardScale: CGFloat
+	var imageIndex: Int
+	
+	func body(content: Content) -> some View {
+		ZStack{
+			if isViewRelatedPositon{
+				content
+					.offset(card_offset)
+					.rotation3DEffect(Angle(degrees: isCardFlipped ? 180 : 360), axis: (x: 0, y: 1, z: 0))
+					.onChange(of: gameProgress.game_start_flag){ _ in
+						performAnimation(imageIndex: imageIndex)
+					}
+			}else{
+				
+			}
+		}
+	}
+	
+	func calculateCurrentPosition() -> CGPoint {
+			let screenSize = UIScreen.main.bounds.size
+			let x = screenSize.width / 2 + currentOffset.width + dragOffset.width
+			let y = screenSize.height / 2 + currentOffset.height + dragOffset.height
+			return CGPoint(x: x, y: y)
+		}
+	
+	private func performAnimation(imageIndex: Int) {
+		let delay = CGFloat(imageIndex) * 0.05
+		let first_duration = CGFloat(0.1)
+		let second_duration = CGFloat(0.2)
+		let duration_untill_flipping = CGFloat(0.3)
+		let duration_before_RtoL = 1.0
+		let duration_RtoL = 0.60
+		withAnimation(.easeInOut(duration: first_duration + delay)) {
+			cardScale = 1.2 // 最初に小さくバウンド
+		}
+		withAnimation(.easeInOut(duration: first_duration).delay(first_duration + delay)) {
+			cardScale = 1.0 // 最初に小さくバウンド
+		}
+		withAnimation(.easeInOut(duration: duration_untill_flipping).delay(second_duration + delay)){
+			self.isCardFlipped.toggle()
+		}
+		withAnimation(.easeInOut(duration: duration_RtoL).delay(duration_before_RtoL + delay)){
+			self.card_offset = CGSize(width: 0,
+									  height: 0)
+		}
+	}
+}
+
+
 struct UIAnimationRToL: ViewModifier {
 	@Binding var animationFlag: Bool
 	@State var offset: CGFloat = 0
@@ -465,6 +521,10 @@ extension View {
 	
 	func cardFlippedAndPiled(isCardFlipped: Binding<Bool>, cardScale: Binding<CGFloat>, imageIndex: Int) -> some View {
 		self.modifier(CardFlippedAndRtoL(isCardFlipped: isCardFlipped, cardScale: cardScale, imageIndex: imageIndex))
+	}
+	
+	func cardPiledAndCoverTheScreen(isCardFlipped: Binding<Bool>, cardScale: Binding<CGFloat>, imageIndex: Int) -> some View {
+		self.modifier(CardPiledAndCoverTheScreen(isCardFlipped: isCardFlipped, cardScale: cardScale, imageIndex: imageIndex))
 	}
 	
 	func cardAnimationLToR(screenWidth: CGFloat, threeOffSetTab: Binding<CGFloat>, imageIndex: Int) -> some View {

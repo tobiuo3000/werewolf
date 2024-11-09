@@ -24,66 +24,175 @@ struct GameSettingView: View{
 				.allowsHitTesting(false)
 			
 			FadingScrollView(fadeHeight: 30, content: {
-				Text("ゲーム設定")
+				Text("ゲームルール設定")
 					.font(.system(.largeTitle, design: .serif))
 					.fontWeight(.bold)
 					.foregroundStyle(.black)
 					.padding()
 				
+				
 				VStack{
-					VStack(alignment: .leading){
-						ZStack{
-							HStack {
-								Text("参加プレイヤー数:")
-									.font(.title2)
-								Spacer()
-								Text("\(gameStatusData.players_CONFIG.count)人")
-									.font(.title)
-									.foregroundStyle(highlightColor)
-								Spacer()
-								Spacer()
-								Spacer()
-							}
-							HStack{
-								Spacer()
-								Button(action: {
-									isReorderingViewShown = true
-								}) {
-									Image(systemName: "rectangle.and.pencil.and.ellipsis.rtl")
-										.font(.largeTitle)
-										.foregroundColor(.blue)
+					VStack{
+						VStack{
+							VStack(alignment: .leading){
+								ZStack{
+									HStack {
+										Text("参加プレイヤー数:")
+											.font(.title)
+										Spacer()
+										Text("\(gameStatusData.players_CONFIG.count)人")
+											.font(.title)
+											.foregroundStyle(highlightColor)
+										Spacer()
+										Spacer()
+										Spacer()
+									}
+									HStack{
+										Spacer()
+										Button(action: {
+											isReorderingViewShown = true
+										}) {
+											Image(systemName: "rectangle.and.pencil.and.ellipsis.rtl")
+												.font(.largeTitle)
+												.foregroundColor(.blue)
+										}
+										.myButtonBounce()
+										.bouncingUI(interval: 3)
+										.padding()
+									}
 								}
-								.myButtonBounce()
-								.bouncingUI(interval: 3)
-								.padding()
+							}
+							.onChange(of: gameStatusData.players_CONFIG.count) { _ in
+								gameStatusData.update_role_CONFIG()
 							}
 						}
 						
-						/*
-						 ForEach(gameStatusData.players_CONFIG.indices, id: \.self) { index in
-						 HStack{
-						 Spacer()
-						 HStack{
-						 Text("\(gameStatusData.players_CONFIG[index].player_order+1)番目: ")
-						 Spacer()
-						 Text("\(gameStatusData.players_CONFIG[index].player_name)")
-						 .foregroundStyle(highlightColor)
-						 .font(.title3)
-						 }
-						 .padding()
-						 .background(Color(red: 0.2, green: 0.2, blue: 0.2))
-						 .cornerRadius(10)
-						 Spacer()
-						 }
-						 }
-						 */
+						if gameStatusData.num_player_with_role > gameStatusData.players_CONFIG.count{
+							Text("※役職人数を減らしてください")
+								.lineLimit(nil)
+								.foregroundStyle(highlightColor)
+								.font(.title)
+						}else{
+							Text(" ")
+								.font(.title)
+						}
 					}
-					.onChange(of: gameStatusData.players_CONFIG.count) { _ in
-						gameStatusData.update_role_CONFIG()
+					
+					Text("〜〜村人陣営〜〜")
+						.font(.system(.title, design: .serif))
+					Text(" ")
+					
+					ZStack{
+						HStack{
+							Text("村人の数:")
+							Spacer()
+						}
+						Text("\(gameStatusData.villager_Count_CONFIG)人")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						HStack{
+							Text("見習い占の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.trainee_Count_CONFIG, lowerBound: 0, upperBound:  gameStatusData.max_trainee_CONFIG)
+								.onChange(of: gameStatusData.trainee_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.trainee_Count_CONFIG)人")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						HStack{
+							Text("占い師の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.seer_Count_CONFIG, lowerBound: 0, upperBound: 1)
+								.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.seer_Count_CONFIG)人")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						HStack{
+							Text("霊媒師の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.medium_Count_CONFIG, lowerBound: 0, upperBound: 1)
+								.onChange(of: gameStatusData.medium_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.medium_Count_CONFIG)人")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						HStack{
+							Text("狩人の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.hunter_Count_CONFIG, lowerBound: 0, upperBound: 1)
+								.onChange(of: gameStatusData.hunter_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.hunter_Count_CONFIG)人")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					Text(" ")
+						.font(.title2)
+					Text("〜〜人狼陣営〜〜")
+						.font(.system(.title, design: .serif))
+					
+					
+					ZStack{
+						HStack{
+							Text("人狼の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.werewolf_Count_CONFIG, lowerBound: 1, upperBound:  gameStatusData.max_werewolf_CONFIG)
+								.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.werewolf_Count_CONFIG)人")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+					}
+					
+					ZStack{
+						HStack{
+							Text("狂人の数:")
+							Spacer()
+							RoleStepper(value: $gameStatusData.madman_Count_CONFIG, lowerBound: 0, upperBound: 1)
+								.onChange(of: gameStatusData.madman_Count_CONFIG) { _ in
+									gameStatusData.update_role_CONFIG()
+								}
+						}
+						Text("\(gameStatusData.madman_Count_CONFIG)人")
+							.foregroundStyle(highlightColor)
+							.font(.title)
 					}
 				}
 				.textFrameDesignProxy()
 				
+				
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 10, height: 10)
+				Text("その他ゲーム設定")
+					.font(.system(.largeTitle, design: .serif))
+					.fontWeight(.bold)
+					.foregroundStyle(.black)
+					.padding()
 				
 				VStack{
 					HStack{
@@ -117,150 +226,33 @@ struct GameSettingView: View{
 				}
 				.textFrameDesignProxy()
 				
-				
-				Text("役職人数")
-					.font(.system(.largeTitle, design: .serif))
-					.fontWeight(.bold)
-					.foregroundStyle(.black)
-					.padding()
-				
 				VStack{
-					VStack{
-						HStack{
-							Text("現在： ")
-							if gameStatusData.num_player_with_role <= gameStatusData.players_CONFIG.count{
-								Text("\(gameStatusData.num_player_with_role)")
-									.foregroundStyle(highlightColor)
-								Text(" / ")
-								Text("\(gameStatusData.players_CONFIG.count) 人 ")
-							}else{
-								VStack{
-									HStack{
-										Text("\(gameStatusData.num_player_with_role)")
-											.foregroundStyle(highlightColor)
-										Text(" / ")
-										Text("\(gameStatusData.players_CONFIG.count) 人 ")
-									}
-									Text("※役職の人数を減らしてください")
-										.foregroundStyle(highlightColor)
-								}
+					HStack{
+						VStack(alignment: .leading){
+							Text("「見習い占」")
+							Text("占い成功確率")
+						}
+						Text("：")
+							.font(.title)
+						Spacer()
+						Text("\(gameStatusData.trainee_Probability)％")
+							.foregroundStyle(highlightColor)
+							.font(.title)
+						Spacer()
+						RoleStepper(value: $gameStatusData.trainee_Probability, lowerBound: 55, upperBound: 100, step: 5, isIndependentDisable: true)
+							.onChange(of: gameStatusData.trainee_Probability) { _ in
+								gameStatusData.update_role_CONFIG()
 							}
-						}
-						.font(.title)
-						
-						Text("")  // make space
-						
-						HStack{
-							Spacer()
-							Text("(役職数")
-							Text("/")
-							Text("プレイヤー数)")
-						}
-						.font(.title3)
-						
-						Text(" ")  // make space
-							.font(.title)
 					}
 					
 					
-					
-					ZStack{
-						HStack{
-							Text("人狼の数:")
-							Spacer()
-							RoleStepper(value: $gameStatusData.werewolf_Count_CONFIG, lowerBound: 1, upperBound:  gameStatusData.max_werewolf_CONFIG)
-								.onChange(of: gameStatusData.werewolf_Count_CONFIG) { _ in
-									gameStatusData.update_role_CONFIG()
-								}
-						}
-						Text("\(gameStatusData.werewolf_Count_CONFIG)")
-							.foregroundStyle(highlightColor)
-							.font(.title)
+					Toggle(isOn: $gameStatusData.isFirstNightRandomSeer) {
+						Text("占い師(見習い占いを含まない)の初日ランダム白(村人)占いを有効にする")
+							.font(.title3)
+							.foregroundColor(.white)
 					}
-					
-					ZStack{
-						HStack{
-							Text("見習い占の数:")
-							Spacer()
-							RoleStepper(value: $gameStatusData.trainee_Count_CONFIG, lowerBound: 0, upperBound:  gameStatusData.max_trainee_CONFIG)
-								.onChange(of: gameStatusData.trainee_Count_CONFIG) { _ in
-									gameStatusData.update_role_CONFIG()
-								}
-						}
-						Text("\(gameStatusData.trainee_Count_CONFIG)")
-							.foregroundStyle(highlightColor)
-							.font(.title)
-					}
-					
-					ZStack{
-						HStack{
-							Text("占い師の数:")
-							Spacer()
-							RoleStepper(value: $gameStatusData.seer_Count_CONFIG, lowerBound: 0, upperBound: 1)
-								.onChange(of: gameStatusData.seer_Count_CONFIG) { _ in
-									gameStatusData.update_role_CONFIG()
-								}
-						}
-						Text("\(gameStatusData.seer_Count_CONFIG)")
-							.foregroundStyle(highlightColor)
-							.font(.title)
-					}
-					
-					ZStack{
-						HStack{
-							Text("霊媒師の数:")
-							Spacer()
-							RoleStepper(value: $gameStatusData.medium_Count_CONFIG, lowerBound: 0, upperBound: 1)
-								.onChange(of: gameStatusData.medium_Count_CONFIG) { _ in
-									gameStatusData.update_role_CONFIG()
-								}
-						}
-						Text("\(gameStatusData.medium_Count_CONFIG)")
-							.foregroundStyle(highlightColor)
-							.font(.title)
-					}
-					
-					ZStack{
-						HStack{
-							Text("狩人の数:")
-							Spacer()
-							RoleStepper(value: $gameStatusData.hunter_Count_CONFIG, lowerBound: 0, upperBound: 1)
-								.onChange(of: gameStatusData.hunter_Count_CONFIG) { _ in
-									gameStatusData.update_role_CONFIG()
-								}
-						}
-						Text("\(gameStatusData.hunter_Count_CONFIG)")
-							.foregroundStyle(highlightColor)
-							.font(.title)
-					}
-					
-					ZStack{
-						HStack{
-							Text("狂人の数:")
-							Spacer()
-							RoleStepper(value: $gameStatusData.madman_Count_CONFIG, lowerBound: 0, upperBound: 1)
-								.onChange(of: gameStatusData.madman_Count_CONFIG) { _ in
-									gameStatusData.update_role_CONFIG()
-								}
-						}
-						Text("\(gameStatusData.madman_Count_CONFIG)")
-							.foregroundStyle(highlightColor)
-							.font(.title)
-					}
-				}
-				.textFrameDesignProxy()
-				
-				
-				Rectangle()
-					.fill(.clear)
-					.frame(width: 10, height: 10)
-				Text("その他ゲーム設定")
-					.font(.system(.largeTitle, design: .serif))
-					.fontWeight(.bold)
-					.foregroundStyle(.black)
 					.padding()
-				
-				VStack{
+					
 					Toggle(isOn: $gameStatusData.isVoteCountVisible) {
 						Text("投票中に得票数が見えるようにする")
 							.font(.title3)
@@ -284,9 +276,7 @@ struct GameSettingView: View{
 				}
 				.textFrameDesignProxy()
 			}
-				, perform: {
-					print($0)
-				}
+				// print($0)  : print coordinates
 			)
 		}
 	}

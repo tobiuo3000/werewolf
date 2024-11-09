@@ -39,14 +39,15 @@ struct TransitionLoopBackGround: View {
 					count = 1
 				}
 			}
-		
 		ZStack{
+			Color.black
+			
 			HStack(spacing: 0){
 				ForEach(0...12, id: \.self){ _ in
 					Image(gameStatusData.currentTheme.transitionBackground)
 						.resizable()
 						.frame(width: gameStatusData.fullScreenSize.width,
-							   height: gameStatusData.fullScreenSize.height+40)
+							   height: gameStatusData.fullScreenSize.height)
 						.offset(offset)
 				}
 			}
@@ -56,17 +57,18 @@ struct TransitionLoopBackGround: View {
 				.opacity(opacity)
 		}
 		.ignoresSafeArea()
+
 	}
 	
 	func startScrolling() {
 		withAnimation(Animation.easeIn(duration: 1.4).repeatForever(autoreverses: false)) {
 			offset.width =  -gameStatusData.fullScreenSize.width*12
 		}
-		withAnimation(Animation.easeInOut(duration: 0.4)) {
+		withAnimation(Animation.easeInOut(duration: 0.15)) {
 			opacity = 0
 		}
 		DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-			withAnimation(.easeInOut(duration: 0.4)) {
+			withAnimation(.easeInOut(duration: 0.15)) {
 				opacity = 1.0
 			}
 		}

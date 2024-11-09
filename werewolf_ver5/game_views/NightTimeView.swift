@@ -219,9 +219,11 @@ struct Night_Villager: View{
 							Button("キャンセル", role: .cancel){
 							}
 						}
-					}else{
-						Text(player_vil.player_name)
-							.myInactiveButton()
+					}else if player_vil.isAlive == false{
+						HStack{
+							Text(player_vil.player_name)
+								.myInactiveButton()
+						}
 					}
 				}
 			})
@@ -528,56 +530,9 @@ struct Night_hunter: View {
 			.textFrameDesignProxy()
 			.padding()
 			FadingScrollView(fadeHeight: fade_ScrollView_variable, content: {
-				ForEach(gameProgress.players) { player_hunter in
-					if gameStatusData.isConsecutiveProtectionAllowed == true {
-						if (player_hunter.isAlive) &&
-							(player_hunter.id != gameProgress.players[whole_players_index].id){
-							Button(player_hunter.player_name) {
-								tmpPlayer = player_hunter
-								isAlertShown = true
-							}
-							.myTextBackground()
-							.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
-								Button("決定"){
-									gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
-									isTargetConfirmed = true
-									isAlertShown = false
-								}
-								
-								Button("キャンセル", role: .cancel){
-								}
-							}
-						}else{
-							Text(player_hunter.player_name)
-								.myInactiveButton()
-						}
-					}else {
-						if gameProgress.day_current_game > 1{
-							if let tmpHunterTargetYesterday = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).hunterTarget{
-								if (player_hunter.isAlive) &&
-									(player_hunter.id != tmpHunterTargetYesterday.id) &&
-									(player_hunter.id != gameProgress.players[whole_players_index].id){
-									Button(player_hunter.player_name) {
-										tmpPlayer = player_hunter
-										isAlertShown = true
-									}
-									.myTextBackground()
-									.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
-										Button("決定"){
-											gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
-											isTargetConfirmed = true
-											isAlertShown = false
-										}
-										
-										Button("キャンセル", role: .cancel){
-										}
-									}
-								}else{
-									Text(player_hunter.player_name)
-										.myInactiveButton()
-								}
-							}
-						}else{  // after 1st day
+				VStack(alignment: .leading){
+					ForEach(gameProgress.players) { player_hunter in
+						if gameStatusData.isConsecutiveProtectionAllowed == true {
 							if (player_hunter.isAlive) &&
 								(player_hunter.id != gameProgress.players[whole_players_index].id){
 								Button(player_hunter.player_name) {
@@ -591,12 +546,81 @@ struct Night_hunter: View {
 										isTargetConfirmed = true
 										isAlertShown = false
 									}
+									
 									Button("キャンセル", role: .cancel){
 									}
 								}
-							}else{
-								Text(player_hunter.player_name)
-									.myInactiveButton()
+							}else if (player_hunter.isAlive == false){
+								HStack{
+									Text(player_hunter.player_name)
+										.myInactiveButton()
+									Text(": 死亡")
+								}
+							}else if (player_hunter.id != gameProgress.players[whole_players_index].id){
+								HStack{
+									Text(player_hunter.player_name)
+										.myInactiveButton()
+									Text(": 自分")
+								}
+							}
+						}else {
+							if gameProgress.day_current_game > 1{
+								if let tmpHunterTargetYesterday = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).hunterTarget{
+									if (player_hunter.isAlive) &&
+										(player_hunter.id != tmpHunterTargetYesterday.id) &&
+										(player_hunter.id != gameProgress.players[whole_players_index].id){
+										Button(player_hunter.player_name) {
+											tmpPlayer = player_hunter
+											isAlertShown = true
+										}
+										.myTextBackground()
+										.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
+											Button("決定"){
+												gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
+												isTargetConfirmed = true
+												isAlertShown = false
+											}
+											
+											Button("キャンセル", role: .cancel){
+											}
+										}
+									}else if (player_hunter.isAlive == false){
+										HStack{
+											Text(player_hunter.player_name)
+												.myInactiveButton()
+											Text(": 死亡")
+										}
+									}else if (player_hunter.id == gameProgress.players[whole_players_index].id){
+										HStack{
+											Text(player_hunter.player_name)
+												.myInactiveButton()
+											Text(": 自分")
+										}
+									}else if (player_hunter.id == tmpHunterTargetYesterday.id){
+										
+									}
+								}
+							}else{  // after 1st day
+								if (player_hunter.isAlive) &&
+									(player_hunter.id != gameProgress.players[whole_players_index].id){
+									Button(player_hunter.player_name) {
+										tmpPlayer = player_hunter
+										isAlertShown = true
+									}
+									.myTextBackground()
+									.alert("\(tmpPlayer.player_name)を守りますか？", isPresented: $isAlertShown){
+										Button("決定"){
+											gameProgress.get_diary_cur_day().hunterTarget = tmpPlayer  // avoids nil while unrapping an opt value
+											isTargetConfirmed = true
+											isAlertShown = false
+										}
+										Button("キャンセル", role: .cancel){
+										}
+									}
+								}else{
+									Text(player_hunter.player_name)
+										.myInactiveButton()
+								}
 							}
 						}
 					}

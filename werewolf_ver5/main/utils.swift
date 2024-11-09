@@ -9,7 +9,6 @@
 import Foundation
 import SwiftUI
 
-
 struct WheelPickerView: UIViewRepresentable {
 	@Binding private var selection: Int
 	private let content: [Int] = Array(0...59)
@@ -155,10 +154,12 @@ struct HorizontalWheelPickerView: UIViewRepresentable {
 
 
 struct RoleStepper: View {
+	@EnvironmentObject var gameStatusData: GameStatusData
 	@Binding var value: Int
 	var lowerBound: Int
 	var upperBound: Int
 	var step: Int = 1
+	var isIndependentDisable: Bool = false
 	@State private var isButtonDisabled = false
 	
 	var body: some View {
@@ -171,40 +172,49 @@ struct RoleStepper: View {
 						}
 					}) {
 						Image(systemName: "minus")
-							.font(.title2)
+							.font(.title)
 					}
 				}else{  // disabled
-					Button(action: {
-					}) {
-						Image(systemName: "minus")
-							.font(.title2)
-					}
-					.disabled(/*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-					.opacity(0.3)
+					Image(systemName: "minus")
+						.font(.title)
+						.opacity(0.3)
 				}
 				
 				Text("|")
-					.font(.title2)
+					.font(.title)
 					.opacity(0.12)
 					.padding(4)
 				
-				if (value < upperBound){  // working
-					Button(action: {
-						if value < upperBound{
-							value += step
+				if isIndependentDisable == false{  // condition for player_num Dependent Disable
+					if (value < upperBound && gameStatusData.existsPlayerWithoutRole){  // working
+						Button(action: {
+							if value < upperBound{
+								value += step
+							}
+						}) {
+							Image(systemName: "plus")
+								.font(.title)
 						}
-					}) {
+					}else{  // disabled
 						Image(systemName: "plus")
-							.font(.title2)
+							.font(.title)
+							.opacity(0.3)
 					}
-				}else{  // disabled
-					Button(action: {
-					}) {
+				}else{  // condition for Independent Disable
+					if (value < upperBound){  // working
+						Button(action: {
+							if value < upperBound{
+								value += step
+							}
+						}) {
+							Image(systemName: "plus")
+								.font(.title)
+						}
+					}else{  // disabled
 						Image(systemName: "plus")
-							.font(.title2)
+							.font(.title)
+							.opacity(0.3)
 					}
-					.disabled(true)
-					.opacity(0.3)
 				}
 			}
 			.padding(8)
@@ -216,7 +226,7 @@ struct RoleStepper: View {
 	
 	func buttonTapped() {  // not used
 		isButtonDisabled = true  // ボタンを無効化
-		DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+		DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 			isButtonDisabled = false
 		}
 	}
@@ -316,13 +326,17 @@ struct FadingScrollView<Content: View>: View {
 	
 	func updateFadeOpacities() {
 		// スクロールオフセットに基づいてフェードの不透明度を更新
-		let _ = print("hi")
-		let _ = print(self.scrollViewHeight)
-		let _ = print(offset)
-		let _ = print(self.scrollViewDefaultY)
+		/*
+		 let _ = print("hi")
+		 let _ = print(self.scrollViewHeight)
+		 let _ = print(offset)
+		 let _ = print(self.scrollViewDefaultY)
+		 let _ = print(maxOffset)
+		 */
 		let maxOffset = self.scrollViewHeight - (offset - self.scrollViewDefaultY)
 		let threshold = fadeHeight  // use fadeHeight as threshold
-		let _ = print(maxOffset)
+		
+		
 		
 		if maxOffset > 0 {
 			normalizedOffset = (offset - self.scrollViewDefaultY) / threshold

@@ -15,7 +15,6 @@ struct MorningView: View {
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	@State private var tmpMostSuspectedPlayer: Player = Player(player_order: 1000, role: .noRole, player_name: "")
 	
-	
 	var body: some View {
 		VStack{
 			VStack{
@@ -23,39 +22,41 @@ struct MorningView: View {
 					Text("\(gameProgress.day_current_game)日目")
 						.foregroundStyle(highlightColor)
 					Text("の朝が来ました")
-					
-				}
-			}
-			.textFrameDesignProxy()
-			VStack{
-				Text("昨晩の犠牲者は...")
-				if let tmpPlayer = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).murderedPlayer{
-					Text("\(tmpPlayer.player_name)")
-						.foregroundStyle(highlightColor)
-						.font(.title2)
-					Text("さんでした")
-					Text("残り人数： \(gameProgress.get_num_survivors())")
-					
-				}else{
-					Text("いませんでした！")
-					Text("残り人数： \(gameProgress.get_num_survivors())")
 				}
 			}
 			.textFrameDesignProxy()
 			
-			
-			VStack{
-				Text("また、昨晩もっとも疑われた人物は...")
-				HStack{
-					Text("\(tmpMostSuspectedPlayer.player_name)")
-						.foregroundStyle(highlightColor)
-					Text("さんです")
+			if gameProgress.day_current_game > 1{
+				VStack{
+					Text("昨晩の犠牲者は...")
+					if let tmpPlayer = gameProgress.get_diary_from_day(target_day: gameProgress.day_current_game-1).murderedPlayer{
+						Text("\(tmpPlayer.player_name)")
+							.foregroundStyle(highlightColor)
+							.font(.title2)
+						Text("さんでした")
+						Text("残り人数： \(gameProgress.get_num_survivors())")
+						
+					}else{
+						Text("いませんでした！")
+						Text("残り人数： \(gameProgress.get_num_survivors())")
+					}
 				}
-			}
-			.textFrameDesignProxy()
-			.onAppear {
-				let tmpSuspectedPlayers = gameProgress.get_list_highest_suspected()
-				self.tmpMostSuspectedPlayer = gameProgress.choose_one_random_suspected(highestList: tmpSuspectedPlayers)!
+				.textFrameDesignProxy()
+				
+				
+				VStack{
+					Text("また、昨晩もっとも疑われた人物は...")
+					HStack{
+						Text("\(tmpMostSuspectedPlayer.player_name)")
+							.foregroundStyle(highlightColor)
+						Text("さんです")
+					}
+				}
+				.textFrameDesignProxy()
+				.onAppear {
+					let tmpSuspectedPlayers = gameProgress.get_list_highest_suspected()
+					self.tmpMostSuspectedPlayer = gameProgress.choose_one_random_suspected(highestList: tmpSuspectedPlayers)!
+				}
 			}
 			Spacer()
 			Button("次へ") {

@@ -19,7 +19,6 @@ struct ReorderingPlayerView: View {
 	let baseColor: Color = Color(red: 0.15, green: 0.15, blue: 0.2)
 	@State private var borderColor = Color(red: 1.0, green: 0.94, blue: 0.98)
 	@FocusState private var isTextFieldFocused: Bool
-	@State private var isKeyboardShown: Bool = false
 	@Environment(\.editMode) var editMode
 	
 	
@@ -66,7 +65,7 @@ struct ReorderingPlayerView: View {
 									
 									Spacer()
 									VStack{
-										Text("プレイヤー編集画面")
+										Text("プレイヤー編集")
 											.foregroundStyle(.white)
 											.fontWeight(.bold)
 											.font(.title2)
@@ -94,7 +93,7 @@ struct ReorderingPlayerView: View {
 						}
 						.background(baseColor)
 						
-						ScrollView() {
+						List {
 							HStack{
 								Text("プレイ順序")
 									.foregroundStyle(.white)
@@ -115,46 +114,25 @@ struct ReorderingPlayerView: View {
 										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
 										.font(.title2)
 									TextField("プレイヤー名", text: $gameStatusData.players_CONFIG[index].player_name)
+										.focused($isTextFieldFocused)
 										.foregroundStyle(.blue)
 										.textFieldStyle(RoundedBorderTextFieldStyle())
 										.autocorrectionDisabled()
 										.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .trailing)
-										.focused($isTextFieldFocused)
-									
+										.submitLabel(.done)
 								}
 								.padding()
 							}
-							.onMove { indices, newOffset in  // FOR EditButton
+							.onMove { indices, newOffset in
 								gameStatusData.players_CONFIG.move(fromOffsets: indices, toOffset: newOffset)
 								gameStatusData.updatePlayerOrder()
 							}
-							.onDelete(perform: confirmDelete)  // FOR EditButton
+							.onDelete(perform: confirmDelete)
 							.listRowBackground(viewColor)
-							.navigationBarItems(trailing: EditButton())
-							.listStyle(PlainListStyle())
-							.background(baseColor)
-							.alert("プレイヤーを4名以下にすることはできません", isPresented: $isAlertShown) {
-								Button("OK", role: .cancel) {
-								}
-							}
-							
-							Text(" ")  // make space
-								.font(.largeTitle)
-							Text(" ")  // make space
-								.font(.largeTitle)
 						}
-						.toolbar {
-							ToolbarItemGroup(placement: .keyboard) {
-								Spacer() // ボタンを右端に配置
-								Button(action:{
-									isTextFieldFocused = false // キーボードを閉じる
-								}, label: {
-									Text("完了")
-										.font(.title2)
-								})
-								Rectangle()
-									.fill(.clear)
-									.frame(width: 10,height:10)
+						.listStyle(PlainListStyle())
+						.alert("プレイヤーを4名以下にすることはできません", isPresented: $isAlertShown) {
+							Button("OK", role: .cancel) {
 							}
 						}
 						
@@ -163,7 +141,7 @@ struct ReorderingPlayerView: View {
 								Spacer()
 								Button(action: {
 									isReorderingViewShown = false
-									let _ = print(isReorderingViewShown)}){
+									}){
 										Image(systemName: "checkmark.circle")
 											.font(.largeTitle)
 									}
