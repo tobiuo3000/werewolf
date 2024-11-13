@@ -17,7 +17,7 @@
                BlueprintIdentifier = "1749BD0F2BEBB9E5005E9560"
                BuildableName = "werewolf_ver5.app"
                BlueprintName = "werewolf_ver5"
-               ReferencedContainer = "container:werewolf_ver5.xcodeproj">
+               ReferencedContainer = "container:OurWerewolf.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,7 +46,7 @@
             BlueprintIdentifier = "1749BD0F2BEBB9E5005E9560"
             BuildableName = "werewolf_ver5.app"
             BlueprintName = "werewolf_ver5"
-            ReferencedContainer = "container:werewolf_ver5.xcodeproj">
+            ReferencedContainer = "container:OurWerewolf.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -63,7 +63,7 @@
             BlueprintIdentifier = "1749BD0F2BEBB9E5005E9560"
             BuildableName = "werewolf_ver5.app"
             BlueprintName = "werewolf_ver5"
-            ReferencedContainer = "container:werewolf_ver5.xcodeproj">
+            ReferencedContainer = "container:OurWerewolf.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

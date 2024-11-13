@@ -53,8 +53,17 @@ struct ContentView: View {
 							}
 							ScrollView{
 							}
+							VStack{
+								GameView()
+								
+								if proxy_ContentView.safeAreaInsets.bottom > 0 {  // te
+									Rectangle()
+										.fill(.black)
+										.frame(width: .infinity, height: 34)
+								}
+							}
+							.ignoresSafeArea(edges: [.bottom])
 							
-							GameView()
 						}
 						
 					}else if gameStatusData.game_status == .gameOverScreen{

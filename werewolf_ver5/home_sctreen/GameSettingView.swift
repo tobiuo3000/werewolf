@@ -23,7 +23,7 @@ struct GameSettingView: View{
 				.frame(maxWidth: .infinity, maxHeight:.infinity)
 				.allowsHitTesting(false)
 			
-			FadingScrollView(fadeHeight: 30, content: {
+			FadingScrollView(fadeHeight: 30){
 				Text("ゲームルール設定")
 					.font(.system(.largeTitle, design: .serif))
 					.fontWeight(.bold)
@@ -226,6 +226,9 @@ struct GameSettingView: View{
 				}
 				.textFrameDesignProxy()
 				
+				Text(" ")
+					.font(.title)
+				
 				VStack{
 					HStack{
 						VStack(alignment: .leading){
@@ -277,7 +280,6 @@ struct GameSettingView: View{
 				.textFrameDesignProxy()
 			}
 				// print($0)  : print coordinates
-			)
 		}
 	}
 }

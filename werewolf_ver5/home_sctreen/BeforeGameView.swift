@@ -6,6 +6,7 @@ struct BeforeGameView: View {
 	@EnvironmentObject var gameProgress: GameProgress
 	@State private var isAlertShown = false
 	@State var showAllText: Bool = false
+	@State var blackOpacity: Double = 0
 	@Binding var threeOffSetTab: CGFloat
 	@State var isParameterSet: Bool = false
 	
@@ -16,6 +17,9 @@ struct BeforeGameView: View {
 	
 	var body: some View {
 		ZStack{
+			Color.black
+				.opacity(blackOpacity)
+			
 			VStack{
 				CardGalleryView(threeOffSetTab: $threeOffSetTab, showAllText: $showAllText)
 				

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:">
+      location = "self:/Users/masanorisudo/Documents/wolf_game/werewolf_ver5/OurWerewolf.xcodeproj">
    </FileRef>
 </Workspace>

@@ -20,7 +20,7 @@ struct CardGalleryView: View {
 						ForEach(0..<numberOfRows, id: \.self) { rowIndex in
 							HStack(spacing: spacing) {
 								ForEach(0..<numberOfImagesInRow, id: \.self) { columnIndex in
-									CardFlippingAnimation(showAllText: $showAllText, threeOffSetTab: $threeOffSetTab, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
+									CardViewWithFlipping(showAllText: $showAllText, threeOffSetTab: $threeOffSetTab, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
 								}
 							}
 						}
@@ -34,7 +34,7 @@ struct CardGalleryView: View {
 	}
 }
 
-struct CardFlippingAnimation: View{
+struct CardViewWithFlipping: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var cardScale: CGFloat = 1.0
 	@State var isCardFlipped: Bool = false
@@ -83,7 +83,7 @@ struct CardFlippingAnimation: View{
 		}
 		.scaleEffect(cardScale)
 		.cardAnimationLToR(screenWidth: gameStatusData.fullScreenSize.width, threeOffSetTab: $threeOffSetTab, imageIndex: imageIndex)
-		.cardPiledAndCoverTheScreen(isCardFlipped: $isCardFlipped, cardScale: $cardScale, imageIndex: imageIndex)
+		.cardFlippedAndPiled(isCardFlipped: $isCardFlipped, cardScale: $cardScale, imageIndex: imageIndex)
 	}
 }
 

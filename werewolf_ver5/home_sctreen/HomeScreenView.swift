@@ -95,6 +95,7 @@ struct HomeScreenView: View {
 	
 	var body: some View {
 		ZStack{
+			
 			VStack(spacing: 0){
 				HomeScreenMenu(showingSettings: $showingSettings)
 				
