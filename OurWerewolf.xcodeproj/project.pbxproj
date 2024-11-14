@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		171DECA62CBD7BD600AF3A12 /* Table.mov in Resources */ = {isa = PBXBuildFile; fileRef = 171DECA52CBD7BD600AF3A12 /* Table.mov */; };
-		1724E4772C999FB600AEC605 /* Wolf.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 1724E4762C999FB600AEC605 /* Wolf.MOV */; };
+		1725D1C52CE5C8CF00A2B961 /* AudioPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */; };
 		1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */; };
 		1749BD1A2BEBB9E6005E9560 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1749BD192BEBB9E6005E9560 /* Assets.xcassets */; };
 		1749BD252BEBBA9D005E9560 /* BeforeGameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */; };
@@ -32,15 +31,13 @@
 		178807D12CCFEA3A001042E9 /* loghouse.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 178807CF2CCFEA3A001042E9 /* loghouse.mp4 */; };
 		179C66972CD38830000ED726 /* ReorderingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179C66962CD38830000ED726 /* ReorderingView.swift */; };
 		179C66992CD38886000ED726 /* ReorderingView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179C66982CD38886000ED726 /* ReorderingView2.swift */; };
-		17AFD2972CC13FA1009DB880 /* loghouse.mov in Resources */ = {isa = PBXBuildFile; fileRef = 17AFD2962CC13FA1009DB880 /* loghouse.mov */; };
 		17DA07A82CC77FB000F4B720 /* VoteViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A72CC77FB000F4B720 /* VoteViews.swift */; };
 		17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A92CC783F000F4B720 /* VoteResultView.swift */; };
 		17F94C852CD321790020D32D /* BeforeNightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F94C842CD321790020D32D /* BeforeNightView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		171DECA52CBD7BD600AF3A12 /* Table.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Table.mov; sourceTree = "<group>"; };
-		1724E4762C999FB600AEC605 /* Wolf.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Wolf.MOV; sourceTree = "<group>"; };
+		1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaying.swift; sourceTree = "<group>"; };
 		1749BD102BEBB9E5005E9560 /* OurWerewolf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OurWerewolf.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = werewolf_ver5App.swift; sourceTree = "<group>"; };
 		1749BD192BEBB9E6005E9560 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -65,7 +62,6 @@
 		178807CF2CCFEA3A001042E9 /* loghouse.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = loghouse.mp4; sourceTree = "<group>"; };
 		179C66962CD38830000ED726 /* ReorderingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderingView.swift; sourceTree = "<group>"; };
 		179C66982CD38886000ED726 /* ReorderingView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderingView2.swift; sourceTree = "<group>"; };
-		17AFD2962CC13FA1009DB880 /* loghouse.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = loghouse.mov; sourceTree = "<group>"; };
 		17DA07A72CC77FB000F4B720 /* VoteViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViews.swift; sourceTree = "<group>"; };
 		17DA07A92CC783F000F4B720 /* VoteResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteResultView.swift; sourceTree = "<group>"; };
 		17F94C842CD321790020D32D /* BeforeNightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeNightView.swift; sourceTree = "<group>"; };
@@ -85,7 +81,7 @@
 		1749BD072BEBB9E5005E9560 = {
 			isa = PBXGroup;
 			children = (
-				1749BD122BEBB9E5005E9560 /* werewolf_ver5 */,
+				1749BD122BEBB9E5005E9560 /* OurWerewolf */,
 				1749BD112BEBB9E5005E9560 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -98,7 +94,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1749BD122BEBB9E5005E9560 /* werewolf_ver5 */ = {
+		1749BD122BEBB9E5005E9560 /* OurWerewolf */ = {
 			isa = PBXGroup;
 			children = (
 				1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */,
@@ -109,12 +105,9 @@
 				176B029F2CCFB9D000DE4E2E /* Wolf.mp4 */,
 				178807CF2CCFEA3A001042E9 /* loghouse.mp4 */,
 				178807CE2CCFEA39001042E9 /* Table.mp4 */,
-				171DECA52CBD7BD600AF3A12 /* Table.mov */,
-				1724E4762C999FB600AEC605 /* Wolf.MOV */,
-				17AFD2962CC13FA1009DB880 /* loghouse.mov */,
 				1749BD402BEBBE4E005E9560 /* Preview Content */,
 			);
-			path = werewolf_ver5;
+			path = OurWerewolf;
 			sourceTree = "<group>";
 		};
 		1749BD232BEBBA80005E9560 /* home_sctreen */ = {
@@ -139,6 +132,7 @@
 				1749BD372BEBBB80005E9560 /* Settings.swift */,
 				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
 				1779FCF02CD1296B001D4248 /* utils.swift */,
+				1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -226,9 +220,6 @@
 			files = (
 				178807D02CCFEA3A001042E9 /* Table.mp4 in Resources */,
 				176B02A02CCFC10E00DE4E2E /* Wolf.mp4 in Resources */,
-				1724E4772C999FB600AEC605 /* Wolf.MOV in Resources */,
-				17AFD2972CC13FA1009DB880 /* loghouse.mov in Resources */,
-				171DECA62CBD7BD600AF3A12 /* Table.mov in Resources */,
 				1749BD1A2BEBB9E6005E9560 /* Assets.xcassets in Resources */,
 				178807D12CCFEA3A001042E9 /* loghouse.mp4 in Resources */,
 			);
@@ -261,6 +252,7 @@
 				176B029C2CCF8A5300DE4E2E /* DiscussionTimeViews.swift in Sources */,
 				17F94C852CD321790020D32D /* BeforeNightView.swift in Sources */,
 				1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */,
+				1725D1C52CE5C8CF00A2B961 /* AudioPlaying.swift in Sources */,
 				17DA07A82CC77FB000F4B720 /* VoteViews.swift in Sources */,
 				1749BD272BEBBABB005E9560 /* HomeScreenView.swift in Sources */,
 			);
@@ -394,11 +386,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.01;
-				DEVELOPMENT_ASSET_PATHS = "\"werewolf_ver5/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 1.02;
 				DEVELOPMENT_TEAM = TPDN26498X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = OurWerewolf;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -426,11 +418,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.01;
-				DEVELOPMENT_ASSET_PATHS = "\"werewolf_ver5/Preview Content\"";
+				CURRENT_PROJECT_VERSION = 1.02;
 				DEVELOPMENT_TEAM = TPDN26498X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = OurWerewolf;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
