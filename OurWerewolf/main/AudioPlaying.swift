@@ -8,22 +8,34 @@
 import SwiftUI
 import AVFoundation
 
-struct AudioPlayer: View {
-   
-	private let kirakiraSound = try!  AVAudioPlayer(data: NSDataAsset(name: "SE_kirakira01")!.data)
+struct AudioPlayerView: View {
+	@EnvironmentObject var gameStatusData: GameStatusData
+	var videoFileName: String
+	let instanceForSound: AVAudioPlayer
+	
+	init(videoFileName: String) {
+		self.videoFileName = videoFileName
+		instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+	}
 	
 	private func playSound(){
-		kirakiraSound.stop()
-		kirakiraSound.currentTime = 0.0
-		kirakiraSound.play()
+		instanceForSound.stop()
+		instanceForSound.currentTime = 0.0
+		instanceForSound.play()
+	}
+	
+	private func stopSound(){
+		instanceForSound.stop()
 	}
 	
 	var body: some View {
-		Button(action: {
-			playSound()//追加④　メソッド発動
-		}) {
-			Text("効果音再生")
-				.font(.title)
+		VStack{
+		}
+		.onAppear(){
+			playSound()
+		}
+		.onDisappear {
+			stopSound()
 		}
 	}
 }

@@ -87,6 +87,46 @@ enum AppTheme: String, CaseIterable {
 }
 
 
+enum SoundTheme: String{
+	case only_SE, only_Envsound, SE_Envsound
+	
+	var titleScreen: String{
+		switch self {
+		case .only_SE: return "SE"
+		case .only_Envsound: return "SE"
+		case .SE_Envsound: return "SE"
+		}
+	}
+	var homeScreen: String{
+		switch self {
+		case .only_SE: return "SE"
+		case .only_Envsound: return "SE"
+		case .SE_Envsound: return "SE"
+		}
+	}
+	var gameScreen: String{
+		switch self {
+		case .only_SE: return "SE"
+		case .only_Envsound: return "SE"
+		case .SE_Envsound: return "SE"
+		}
+	}
+	var werewolfWinScreen: String{
+		switch self {
+		case .only_SE: return "SE"
+		case .only_Envsound: return "SE"
+		case .SE_Envsound: return "SE"
+		}
+	}
+	var villagerWinScreen: String{
+		switch self {
+		case .only_SE: return "SE"
+		case .only_Envsound: return "SE"
+		case .SE_Envsound: return "SE"
+		}
+	}
+}
+
 
 enum Role {
 	case noRole
@@ -231,6 +271,7 @@ class GameStatusData: ObservableObject {
 	@Published var isCardRoleImageShown: Bool = true
 	@Published var requiresRunoffVote: Bool = true
 	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	@Published var soundTheme: SoundTheme = .SE_Envsound
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存
@@ -413,7 +454,7 @@ class GameProgress: ObservableObject {
 	}
 	
 	func get_one_random_vil_side() -> Player{
-		var PlayersExceptWerewolf = self.players.filter {$0.role_name != Role.werewolf}
+		let PlayersExceptWerewolf = self.players.filter {$0.role_name != Role.werewolf}
 		return PlayersExceptWerewolf.randomElement()!
 	}
 	

@@ -112,7 +112,7 @@ struct OnePlayerRoleShown: View {
 	
 	var body: some View {
 		GeometryReader { geometry in
-			let safeAreaInsets = geometry.safeAreaInsets
+			//let safeAreaInsets = geometry.safeAreaInsets
 			VStack{
 				FadingScrollView{
 					VStack{

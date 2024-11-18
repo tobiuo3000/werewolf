@@ -93,18 +93,7 @@ struct GameStartView: View{
 	
 	var body: some View{
 		VStack {
-			/*
-			 HStack{
-			 Spacer()
-			 Image("temp_title_logo")
-			 .resizable()
-			 .aspectRatio(contentMode: .fit)
-			 .frame(width: gameStatusData.fullScreenSize.width/4)
-			 .opacity(isAnimated ? -1 : 1) // フェードアウト効果
-			 .offset(y: isAnimated ? -200 : 0) // 上に移動
-			 .animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用
-			 }
-			 */
+			
 			Spacer()
 			Spacer()
 			Button(action: {
@@ -118,6 +107,7 @@ struct GameStartView: View{
 					.fontWeight(.bold)
 			}
 				   )
+			.buttonSEModifier(soundFlag: isAnimated)
 			.myTextBackground()
 			.myButtonBounce()
 			.opacity(isAnimated ? -1 : 1) // フェードアウト効果

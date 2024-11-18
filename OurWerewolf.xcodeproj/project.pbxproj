@@ -130,8 +130,8 @@
 				1749BD312BEBBB44005E9560 /* ContentView.swift */,
 				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
 				1749BD372BEBBB80005E9560 /* Settings.swift */,
-				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
 				1779FCF02CD1296B001D4248 /* utils.swift */,
+				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
 				1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */,
 			);
 			path = main;
