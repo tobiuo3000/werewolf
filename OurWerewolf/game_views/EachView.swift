@@ -26,6 +26,8 @@ struct GameOverView: View {
 	var winColor: Color = Color(red: 1.0, green: 1.0, blue: 0.9)
 	var loseColor: Color = Color(red: 0.15, green: 0.1, blue: 0.15)
 	var body: some View {
+		AudioPlayerView()
+		
 		VStack{
 			if gameProgress.game_result == 1{
 				ZStack{

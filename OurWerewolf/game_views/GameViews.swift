@@ -30,6 +30,8 @@ struct GameView: View {
 			Spacer()
 			ZStack{
 				
+				AudioPlayerView()
+				
 				if gameProgress.stageView == .Show_player_role {
 					AssignRole()
 					

@@ -87,42 +87,42 @@ enum AppTheme: String, CaseIterable {
 }
 
 
-enum SoundTheme: String{
-	case only_SE, only_Envsound, SE_Envsound
+enum SoundTheme{
+	case only_BGM, only_ENV, mixed
 	
 	var titleScreen: String{
 		switch self {
-		case .only_SE: return "SE"
-		case .only_Envsound: return "SE"
-		case .SE_Envsound: return "SE"
+		case .only_BGM: return "title_BGM"
+		case .only_ENV: return "title_ENV"
+		case .mixed: return  "title_MIXED"
 		}
 	}
 	var homeScreen: String{
 		switch self {
-		case .only_SE: return "SE"
-		case .only_Envsound: return "SE"
-		case .SE_Envsound: return "SE"
+		case .only_BGM: return "title_BGM"
+		case .only_ENV: return "title_ENV"
+		case .mixed: return  "title_MIXED"
 		}
 	}
 	var gameScreen: String{
 		switch self {
-		case .only_SE: return "SE"
-		case .only_Envsound: return "SE"
-		case .SE_Envsound: return "SE"
+		case .only_BGM: return "discussion_BGM"
+		case .only_ENV: return "discussion_ENV"
+		case .mixed: return  "discussion_MIXED"
 		}
 	}
 	var werewolfWinScreen: String{
 		switch self {
-		case .only_SE: return "SE"
-		case .only_Envsound: return "SE"
-		case .SE_Envsound: return "SE"
+		case .only_BGM: return "wolfWin_BGM"
+		case .only_ENV: return "wolfWin_ENV"
+		case .mixed: return  "wolfWin_MIXED"
 		}
 	}
 	var villagerWinScreen: String{
 		switch self {
-		case .only_SE: return "SE"
-		case .only_Envsound: return "SE"
-		case .SE_Envsound: return "SE"
+		case .only_BGM: return "vilWin_BGM"
+		case .only_ENV: return "vilWin_ENV"
+		case .mixed: return  "vilWin_MIXED"
 		}
 	}
 }
@@ -271,7 +271,8 @@ class GameStatusData: ObservableObject {
 	@Published var isCardRoleImageShown: Bool = true
 	@Published var requiresRunoffVote: Bool = true
 	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
-	@Published var soundTheme: SoundTheme = .SE_Envsound
+	@Published var soundTheme: SoundTheme = .mixed
+	@Published var soundMuted: Bool = false
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存

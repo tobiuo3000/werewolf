@@ -94,7 +94,7 @@ struct HomeScreenView: View {
 	var thresholdIcon: CGFloat
 	
 	var body: some View {
-		AudioPlayerView(videoFileName: "discussion_DEMO_BGM")
+		AudioPlayerView()
 		
 		ZStack{
 			

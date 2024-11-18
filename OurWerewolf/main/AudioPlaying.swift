@@ -10,32 +10,49 @@ import AVFoundation
 
 struct AudioPlayerView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
-	var videoFileName: String
-	let instanceForSound: AVAudioPlayer
-	
-	init(videoFileName: String) {
-		self.videoFileName = videoFileName
-		instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
-	}
+	@EnvironmentObject var gameProgress: GameProgress  // to distinguish win/lose
+	@State var videoFileName: String = " "
+	@State var instanceForSound: AVAudioPlayer!
 	
 	private func playSound(){
 		instanceForSound.stop()
 		instanceForSound.currentTime = 0.0
 		instanceForSound.play()
+		instanceForSound.numberOfLoops = -1
 	}
 	
 	private func stopSound(){
 		instanceForSound.stop()
 	}
 	
+	private func detectsFilename(){
+		if gameStatusData.game_status == .titleScreen{
+			self.videoFileName = gameStatusData.soundTheme.titleScreen
+		}else if gameStatusData.game_status == .homeScreen{
+			self.videoFileName = gameStatusData.soundTheme.homeScreen
+		}else if gameStatusData.game_status == .gameScreen{
+			self.videoFileName = gameStatusData.soundTheme.gameScreen
+		}else if gameStatusData.game_status == .gameOverScreen{
+			if gameProgress.game_result == 1{
+				self.videoFileName = gameStatusData.soundTheme.werewolfWinScreen
+			}else{
+				self.videoFileName = gameStatusData.soundTheme.villagerWinScreen
+			}
+		}
+	}
+	
 	var body: some View {
-		VStack{
-		}
-		.onAppear(){
-			playSound()
-		}
-		.onDisappear {
-			stopSound()
+		if gameStatusData.soundMuted == false{
+			VStack{
+			}
+			.onAppear(){
+				detectsFilename()
+				instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+				playSound()
+			}
+			.onDisappear {
+				stopSound()
+			}
 		}
 	}
 }

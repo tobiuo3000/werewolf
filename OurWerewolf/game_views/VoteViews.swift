@@ -9,7 +9,6 @@
 import SwiftUI
 
 
-
 struct VoteTime: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress

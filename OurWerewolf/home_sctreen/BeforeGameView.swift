@@ -53,13 +53,14 @@ struct BeforeGameView: View {
 						Button(action: {
 							showAllText.toggle()
 						}) {
-							if showAllText{
-								Image(systemName: "rectangle.3.offgrid.bubble.left.fill")
-									.font(.title)
-							}else{
-								Image(systemName: "rectangle.3.offgrid.bubble.left")
+							HStack(spacing:1){
+								if showAllText{
+									Image(systemName: "rectangle.3.offgrid.bubble.left.fill")
+								}else{
+									Image(systemName: "rectangle.3.offgrid.bubble.left")
+								}
+								Text("ROLE")
 							}
-							Text("ROLE")
 						}
 						.myButtonBounce()
 						.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)

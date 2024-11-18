@@ -14,6 +14,8 @@ struct ContentView: View {
 								.frame(maxHeight: .infinity)
 								.ignoresSafeArea()
 							
+							AudioPlayerView()
+							
 							if gameStatusData.isAnimeShown == true {
 								LoopVideoPlayerView(videoFileName: "Wolf", videoFileType: "mp4")
 							}else{
@@ -84,6 +86,8 @@ struct ContentView: View {
 struct GameStartView: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State private var isAnimated = false
+	@State var offset: CGFloat = 0
+	@State var opacity: CGFloat = 1.0
 	
 	private let tempWerewolfCount = 1
 	private let tempSeerCount = 0
@@ -98,6 +102,10 @@ struct GameStartView: View{
 			Spacer()
 			Button(action: {
 				isAnimated.toggle()
+				withAnimation(.easeIn(duration: 0.5)) {
+					offset = 50
+					opacity = 0
+				}
 				DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) { // 1秒のディレイ
 					gameStatusData.game_status = .homeScreen
 					isAnimated.toggle()
@@ -105,14 +113,14 @@ struct GameStartView: View{
 			}, label: {
 				Text("ホーム画面へ")
 					.fontWeight(.bold)
+					.opacity(opacity)
 			}
 				   )
 			.buttonSEModifier(soundFlag: isAnimated)
 			.myTextBackground()
 			.myButtonBounce()
-			.opacity(isAnimated ? -1 : 1) // フェードアウト効果
-			.offset(y: isAnimated ? 200 : 0) // 上に移動
-			.animation(.easeInOut(duration: 0.7), value: isAnimated) // アニメーション適用
+			.opacity(opacity)
+			.offset(y: offset) // move it down
 			
 			Spacer()
 		}
