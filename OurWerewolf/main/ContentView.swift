@@ -74,7 +74,8 @@ struct ContentView: View {
 				}
 				.onAppear{
 					gameStatusData.fullScreenSize = proxy_ContentView.size
-					let _ = print(gameStatusData.fullScreenSize)
+					gameStatusData.threeOffSetTab = gameStatusData.fullScreenSize.width
+					let _ = print("SCREEN SIZE: \(gameStatusData.fullScreenSize)")
 				}
 			}
 		}

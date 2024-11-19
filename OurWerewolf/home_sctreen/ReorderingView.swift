@@ -11,7 +11,6 @@ import SwiftUI
 
 struct ReorderingPlayerView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
-	@Binding var isReorderingViewShown: Bool
 	@State private var isAlertShown: Bool = false
 	let viewColor: Color = Color(red: 0.2, green: 0.2, blue: 0.2)
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
@@ -140,7 +139,7 @@ struct ReorderingPlayerView: View {
 							HStack{
 								Spacer()
 								Button(action: {
-									isReorderingViewShown = false
+									gameStatusData.isReorderingViewShown = false
 									}){
 										Image(systemName: "checkmark.circle")
 											.font(.largeTitle)

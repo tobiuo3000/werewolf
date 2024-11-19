@@ -2,7 +2,6 @@ import SwiftUI
 
 struct CardGalleryView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
-	@Binding var threeOffSetTab: CGFloat
 	@Binding var showAllText: Bool
 	private let spacing: CGFloat = 8
 	private let numberOfColumn: CGFloat = 4
@@ -15,13 +14,11 @@ struct CardGalleryView: View {
 		VStack{
 			HStack{
 				Spacer()
-				ScrollView{
-					VStack(alignment: .leading, spacing: spacing) {
-						ForEach(0..<numberOfRows, id: \.self) { rowIndex in
-							HStack(spacing: spacing) {
-								ForEach(0..<numberOfImagesInRow, id: \.self) { columnIndex in
-									CardViewWithFlipping(showAllText: $showAllText, threeOffSetTab: $threeOffSetTab, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
-								}
+				VStack(alignment: .leading, spacing: spacing) {
+					ForEach(0..<numberOfRows, id: \.self) { rowIndex in
+						HStack(spacing: spacing) {
+							ForEach(0..<numberOfImagesInRow, id: \.self) { columnIndex in
+								CardViewWithFlipping(showAllText: $showAllText, rowIndex: rowIndex, numberOfImagesInRow: numberOfImagesInRow, columnIndex: columnIndex, imageFrameWidth: imageFrameWidth, imageFrameHeight: imageFrameHeight)
 							}
 						}
 					}
@@ -39,7 +36,6 @@ struct CardViewWithFlipping: View{
 	@State var cardScale: CGFloat = 1.0
 	@State var isCardFlipped: Bool = false
 	@Binding var showAllText: Bool
-	@Binding var threeOffSetTab: CGFloat
 	
 	let rowIndex: Int
 	let numberOfImagesInRow: Int
@@ -82,7 +78,7 @@ struct CardViewWithFlipping: View{
 			}
 		}
 		.scaleEffect(cardScale)
-		.cardAnimationLToR(screenWidth: gameStatusData.fullScreenSize.width, threeOffSetTab: $threeOffSetTab, imageIndex: imageIndex)
+		.homeCardAnimation(screenWidth: gameStatusData.fullScreenSize.width, imageIndex: imageIndex)
 		.cardFlippedAndPiled(isCardFlipped: $isCardFlipped, cardScale: $cardScale, imageIndex: imageIndex)
 	}
 }
@@ -103,11 +99,6 @@ struct CardView: View {
 				Image(role.image_name)
 					.resizable()
 					.frame(width: imageWidth, height: imageHeight)
-					.onTapGesture {
-						withAnimation {
-							showText.toggle()
-						}
-					}
 				if showText == true{
 					VStack{
 						Spacer()
@@ -125,7 +116,6 @@ struct CardView: View {
 					.frame(width: imageWidth, height: imageHeight)
 			}
 		}
-		.myButtonBounce()
 	}
 }
 

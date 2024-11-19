@@ -7,7 +7,6 @@ struct BeforeGameView: View {
 	@State private var isAlertShown = false
 	@State var showAllText: Bool = false
 	@State var blackOpacity: Double = 0
-	@Binding var threeOffSetTab: CGFloat
 	@State var isParameterSet: Bool = false
 	
 	private let columns: [GridItem] = Array(repeating: .init(), count: 2)
@@ -21,7 +20,11 @@ struct BeforeGameView: View {
 				.opacity(blackOpacity)
 			
 			VStack{
-				CardGalleryView(threeOffSetTab: $threeOffSetTab, showAllText: $showAllText)
+				ScrollView{
+					playerInfoView()
+					
+					CardGalleryView(showAllText: $showAllText)
+				}
 				
 				ZStack{
 					HStack{
@@ -107,5 +110,79 @@ struct BeforeGameView: View {
 		gameProgress.assignRoles(wolfNum: gameStatusData.werewolf_Count_CONFIG, traineeNum: gameStatusData.trainee_Count_CONFIG, seerNum: gameStatusData.seer_Count_CONFIG, mediumNum: gameStatusData.medium_Count_CONFIG, hunterNum: gameStatusData.hunter_Count_CONFIG, madmanNum: gameStatusData.madman_Count_CONFIG)
 		gameProgress.game_start_flag = true
 		showAllText = false
+	}
+}
+
+
+struct playerInfoView: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
+	
+	var body: some View{
+		VStack{
+			ZStack{
+				HStack{
+					Spacer()
+					Text("参加人数:")
+					Spacer()
+					Text("\(gameStatusData.players_CONFIG.count)人")
+					Spacer()
+					Text("　　")
+				}
+				.font(.system(.title, design: .serif))
+				.fontWeight(.bold)
+				
+				HStack(alignment:.top){
+					Spacer()
+					Button(action: {
+						gameStatusData.isReorderingViewShown = true
+					}) {
+						Image(systemName: "pencil.and.list.clipboard")
+						
+							.font(.largeTitle)
+							.foregroundColor(Color(red:0.2, green:0.2, blue:1.0))
+					}
+					.myButtonBounce()
+					.bouncingUI(interval: 3)
+					.padding()
+				}
+			}
+			
+			VStack(alignment: .center){
+				ForEach(gameStatusData.players_CONFIG) { player in
+					ZStack{
+						HStack{
+							Text("  ")
+							Text("\(player.player_order+1). ")
+							Spacer()
+						}
+						HStack{
+							Text("        ")
+							Text(player.player_name)
+								.fontWeight(.bold)
+						}
+					}
+					.font(.system(.title, design: .serif))
+					.padding(4)
+				}
+			}
+		}
+		.opacity(0.80)
+		.foregroundColor(.black)
+		.padding()
+		.border(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.8), width: 4)
+		.background(
+			ZStack{
+				Image(gameStatusData.currentTheme.textBackgroundImage)
+					.opacity(0.8)
+				Color(red: 0.25, green: 0.15, blue: 0.0, opacity: 0.3)
+			}
+		)
+		.clipped()
+		.padding()
+		.onChange(of: gameStatusData.players_CONFIG.count) { _ in
+			gameStatusData.update_role_CONFIG()
+		}
+		.homeCardAnimation(screenWidth: 0, screenHeight: gameStatusData.fullScreenSize.height, imageIndex: 4, isPlayerInfoView: true,
+						   UIspeed: 1.8)
 	}
 }

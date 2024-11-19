@@ -273,6 +273,8 @@ class GameStatusData: ObservableObject {
 	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	@Published var soundTheme: SoundTheme = .mixed
 	@Published var soundMuted: Bool = false
+	@Published var isReorderingViewShown = false
+	@Published var threeOffSetTab: CGFloat = 0
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存
@@ -311,7 +313,6 @@ class GameStatusData: ObservableObject {
 	func calc_roles_count(){
 		self.num_player_with_role = self.werewolf_Count_CONFIG + self.seer_Count_CONFIG + self.hunter_Count_CONFIG + self.medium_Count_CONFIG + self.madman_Count_CONFIG + self.trainee_Count_CONFIG
 		self.villager_Count_CONFIG = self.players_CONFIG.count - self.num_player_with_role
-	
 	}
 	
 	func init_player_CONFIG(){

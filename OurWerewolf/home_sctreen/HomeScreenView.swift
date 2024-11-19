@@ -57,7 +57,7 @@ struct TransitionLoopBackGround: View {
 				.opacity(opacity)
 		}
 		.ignoresSafeArea()
-
+		
 	}
 	
 	func startScrolling() {
@@ -82,9 +82,7 @@ struct HomeScreenView: View {
 	@State var offsetTab0: CGFloat
 	@State private var offsetTab1: CGFloat = 0
 	@State var offsetTab2: CGFloat
-	@State var threeOffSetTab: CGFloat
 	@State private var showingSettings = false
-	@State private var isReorderingViewShown = false
 	@State private var iconOffsetTab0: CGFloat = 3
 	@State private var iconOffsetTab1: CGFloat = 3
 	@State private var iconOffsetTab2: CGFloat = 3
@@ -97,30 +95,29 @@ struct HomeScreenView: View {
 		AudioPlayerView()
 		
 		ZStack{
-			
 			VStack(spacing: 0){
 				HomeScreenMenu(showingSettings: $showingSettings)
 				
 				TabView(selection: $currentTab) {
-					GameSettingView(isReorderingViewShown: $isReorderingViewShown)
+					GameSettingView()
 						.tag(0)
 						.overlay(
 							OffsetProxy()
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
 							self.offsetTab0 = offset
-							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
+							calcOffsetThreeTab()
 							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
 						}
 					
-					BeforeGameView(threeOffSetTab: $threeOffSetTab)
+					BeforeGameView()
 						.tag(1)
 						.overlay(
 							OffsetProxy()
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
 							self.offsetTab1 = offset
-							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
+							calcOffsetThreeTab()
 							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
 						}
 					
@@ -131,42 +128,42 @@ struct HomeScreenView: View {
 						)
 						.onPreferenceChange(OffsetKey.self) { offset in
 							self.offsetTab2 = offset
-							calcOffsetThreeTab(threeOffset: $threeOffSetTab)
+							calcOffsetThreeTab()
 							calcIconOffset(arg_iconOffsetTab0: $iconOffsetTab0, arg_iconOffsetTab1: $iconOffsetTab1, arg_iconOffsetTab2: $iconOffsetTab2, arg_iconSize0: $iconSize0, arg_iconSize1: $iconSize1, arg_iconSize2: $iconSize2, arg_tabOffsetTab0: $offsetTab0, arg_tabOffsetTab1: $offsetTab1, arg_tabOffsetTab2: $offsetTab2)
 						}
 				}
 				.tabViewStyle(.page(indexDisplayMode: .never))
 				.animation(.easeInOut, value: currentTab)
 				
-				if isReorderingViewShown == false {
-					ScrollBarView(currentTab: $currentTab, threeOffSetTab: $threeOffSetTab, iconOffsetTab0: $iconOffsetTab0,
+				if gameStatusData.isReorderingViewShown == false {
+					ScrollBarView(currentTab: $currentTab, iconOffsetTab0: $iconOffsetTab0,
 								  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
 								  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
 					.frame(height: 50)
 				}
 			}
 			.disabled(showingSettings)
-			.disabled(isReorderingViewShown)
+			.disabled(gameStatusData.isReorderingViewShown)
 			
 			if showingSettings == true{
 				SettingsView(showingSettings: $showingSettings)
 			}
-			if isReorderingViewShown == true {
-				ReorderingPlayerView(isReorderingViewShown: $isReorderingViewShown)  // wanna fix in this View
+			if gameStatusData.isReorderingViewShown == true {
+				ReorderingPlayerView()  // wanna fix in this View
 				
 			}
 		}
 	}
 	
-	func calcOffsetThreeTab(threeOffset: Binding<CGFloat>) {
+	func calcOffsetThreeTab() {
 		if self.offsetTab0 >= 0{
-			threeOffset.wrappedValue = 0
+			gameStatusData.threeOffSetTab = 0
 		} else if self.offsetTab0 < 0 && self.offsetTab1 >= 0 {
-			threeOffset.wrappedValue = -(self.offsetTab0)
+			gameStatusData.threeOffSetTab = -(self.offsetTab0)
 		} else if self.offsetTab1 < 0 && self.offsetTab2 >= 0 {
-			threeOffset.wrappedValue = (gameStatusData.fullScreenSize.width) - self.offsetTab1
+			gameStatusData.threeOffSetTab = (gameStatusData.fullScreenSize.width) - self.offsetTab1
 		} else {
-			threeOffset.wrappedValue = (2*(gameStatusData.fullScreenSize.width))
+			gameStatusData.threeOffSetTab = (2*(gameStatusData.fullScreenSize.width))
 		}
 	}
 	
@@ -210,6 +207,24 @@ struct SettingsView: View {
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var showingSettings: Bool
 	let viewColor: Color = Color(red: 0.1, green: 0.1, blue: 0.1)
+	@State var isBGMPlayed: Bool = true
+	@State var isENVPlayed: Bool = true
+	
+	func controllSounds(){
+		if isBGMPlayed == true && isENVPlayed == true{
+			gameStatusData.soundMuted = false
+			gameStatusData.soundTheme = .mixed
+		}else if isBGMPlayed == true && isENVPlayed == false{
+			gameStatusData.soundMuted = false
+			gameStatusData.soundTheme = .only_BGM
+		}else if isBGMPlayed == false && isENVPlayed == true{
+			gameStatusData.soundMuted = false
+			gameStatusData.soundTheme = .only_ENV
+		}else{
+			gameStatusData.soundMuted = true
+		}
+		let _ = print("current theme: \(gameStatusData.soundTheme)")
+	}
 	
 	var body: some View{
 		ZStack{  // for darken background View
@@ -227,7 +242,7 @@ struct SettingsView: View {
 						
 						VStack{
 							ZStack{
-								Text("環境設定")
+								Text("アプリ設定画面")
 									.font(.title)
 									.foregroundColor(.white)
 									.padding()
@@ -244,6 +259,25 @@ struct SettingsView: View {
 								}
 							}
 							Spacer()
+							Toggle(isOn: $isBGMPlayed) {
+								Text("BGMを流す")
+									.font(.title2)
+									.foregroundColor(.white)
+							}
+							.padding()
+							.onChange(of: isBGMPlayed){ new in
+								controllSounds()
+							}
+							
+							Toggle(isOn: $isENVPlayed) {
+								Text("環境音を流す")
+									.font(.title2)
+									.foregroundColor(.white)
+							}
+							.padding()
+							.onChange(of: isENVPlayed){ new in
+								controllSounds()
+							}
 							
 							Toggle(isOn: $gameStatusData.isAnimeShown) {
 								Text("背景アニメを動かす")
@@ -280,7 +314,7 @@ struct HomeScreenMenu: View {
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	
 	var body: some View{
-		HStack{
+		HStack(alignment: .center){
 			Button(action: {
 				isAlertShown = true
 			}){
@@ -303,21 +337,16 @@ struct HomeScreenMenu: View {
 			}
 			Spacer()
 			
-			VStack{
-				Rectangle()
-					.fill(.clear)
-					.frame(width: 2, height: 2)
-				HStack(spacing: 1){
-					Text("プレイヤー数：")
-						.foregroundStyle(.white)
-					Text("\(gameStatusData.players_CONFIG.count)")
-						.foregroundStyle(highlightColor)
-					Text("人")
-						.foregroundStyle(.white)
-				}
-				.fontWeight(.semibold)
-				.font(.title3)
+			HStack(spacing: 1){
+				Text("プレイヤー数：")
+					.foregroundStyle(.white)
+				Text("\(gameStatusData.players_CONFIG.count)")
+					.foregroundStyle(highlightColor)
+				Text("人")
+					.foregroundStyle(.white)
 			}
+			.fontWeight(.semibold)
+			.font(.title3)
 			
 			Spacer()
 			
@@ -343,7 +372,6 @@ struct HomeScreenMenu: View {
 			.foregroundColor(Color(red: 0.95, green: 0.9, blue: 0.80, opacity: 1.0))
 			.frame(height: 2)
 			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.1)
-		
 	}
 }
 
@@ -352,7 +380,6 @@ struct ScrollBarView: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@Binding var currentTab: Int
-	@Binding var threeOffSetTab: CGFloat
 	@Binding var iconOffsetTab0: CGFloat
 	@Binding var iconOffsetTab1: CGFloat
 	@Binding var iconOffsetTab2: CGFloat
@@ -391,7 +418,7 @@ struct ScrollBarView: View{
 			Rectangle()
 				.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
 				.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
-				.offset(x: (threeOffSetTab/3) - (gameStatusData.fullScreenSize.width/3))
+				.offset(x: (gameStatusData.threeOffSetTab/3) - (gameStatusData.fullScreenSize.width/3))
 			
 			ZStack{  // for code readability
 				if iconSize0 != 30 {
@@ -489,7 +516,6 @@ struct BeforeHomeScreen: View {
 					
 					HomeScreenView(offsetTab0: -gameStatusData.fullScreenSize.width,
 								   offsetTab2: gameStatusData.fullScreenSize.width,
-								   threeOffSetTab: gameStatusData.fullScreenSize.width,
 								   thresholdIcon: gameStatusData.fullScreenSize.width/6)
 				}
 			}

@@ -23,10 +23,11 @@ enum GameView_display_status{
 struct GameView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
+	@State var showingSettings: Bool = false
 	
 	var body: some View {
 		VStack{
-			MenuDuringGameView()
+			MenuDuringGameView(showingSettings: $showingSettings)
 			Spacer()
 			ZStack{
 				
@@ -62,6 +63,10 @@ struct GameView: View {
 				}else if gameProgress.stageView == .Night_time{
 					NightTime(whole_players_index: gameProgress.get_survivors_list()[0], survivors_list:gameProgress.get_survivors_list())
 					
+				}
+				
+				if showingSettings == true{
+					SettingsView(showingSettings: $showingSettings)
 				}
 			}
 			BottomButtonGameView()
@@ -101,6 +106,8 @@ struct MenuDuringGameView: View{
 	@EnvironmentObject var gameProgress: GameProgress
 	@State private var isAlertShown = false
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	@State var gearImageName = "gearshape"
+	@Binding var showingSettings: Bool
 	
 	var body: some View{
 		VStack{
@@ -111,6 +118,7 @@ struct MenuDuringGameView: View{
 					Image(systemName: "stop.circle")
 						.font(.largeTitle)
 				}
+				.padding(8)
 				.alert("進行中のゲームを終了しますか？", isPresented: $isAlertShown){
 					Button("はい"){
 						gameStatusData.update_role_CONFIG()
@@ -155,6 +163,22 @@ struct MenuDuringGameView: View{
 					.font(.title)
 					.foregroundStyle(.white)
 				Spacer()
+				
+				Button(action: {
+					showingSettings = true
+				}){
+					Image(systemName: gearImageName)
+						.resizable()
+						.frame(width: 30, height: 30)
+						.font(.largeTitle)
+				}
+				.simultaneousGesture(LongPressGesture().onChanged { _ in
+					gearImageName = "gearshape.fill"
+				})
+				.simultaneousGesture(TapGesture().onEnded {
+					gearImageName = "gearshape"
+				})
+				.padding(8)
 			}
 			Rectangle()  // a bar below TITLE, CONFIG UI
 				.foregroundColor(Color(red: 0.95, green: 0.9, blue: 0.80, opacity: 1.0))

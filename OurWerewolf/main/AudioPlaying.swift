@@ -21,6 +21,12 @@ struct AudioPlayerView: View {
 		instanceForSound.numberOfLoops = -1
 	}
 	
+	private func continuePlayingSound(){
+		instanceForSound.stop()
+		instanceForSound.play()
+		instanceForSound.numberOfLoops = -1
+	}
+	
 	private func stopSound(){
 		instanceForSound.stop()
 	}
@@ -39,6 +45,7 @@ struct AudioPlayerView: View {
 				self.videoFileName = gameStatusData.soundTheme.villagerWinScreen
 			}
 		}
+		let _ = print("file name: \(videoFileName)")
 	}
 	
 	var body: some View {
@@ -49,6 +56,19 @@ struct AudioPlayerView: View {
 				detectsFilename()
 				instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
 				playSound()
+			}
+			.onChange(of: gameStatusData.soundMuted){ new in
+				if new == true{
+					stopSound()
+				}else{
+					playSound()
+				}
+			}
+			.onChange(of: gameStatusData.soundTheme){ new in
+				stopSound()
+				detectsFilename()
+				instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+				continuePlayingSound()
 			}
 			.onDisappear {
 				stopSound()

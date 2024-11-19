@@ -4,16 +4,13 @@ import SwiftUI
 struct GameSettingView: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@State var isAlertShown = false
-	@Binding var isReorderingViewShown: Bool
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	//private let secondsRange: [Int] = Array(0..<60)
 	//private let minutesRange: [Int] = Array(0..<60)
 	
-	init(isReorderingViewShown: Binding<Bool>){
+	init(){
 		UIStepper.appearance().setDecrementImage(UIImage(systemName: "minus"), for: .normal)
 		UIStepper.appearance().setIncrementImage(UIImage(systemName: "plus"), for: .normal)
-		//@Binding var GamseSettingViewOffset: CGFloat
-		self._isReorderingViewShown = isReorderingViewShown
 	}
 	
 	var body: some View {
@@ -22,9 +19,10 @@ struct GameSettingView: View{
 				.resizable()
 				.frame(maxWidth: .infinity, maxHeight:.infinity)
 				.allowsHitTesting(false)
+				.opacity(0.85)
 			
 			FadingScrollView(fadeHeight: 30){
-				Text("ゲームルール設定")
+				Text("役職人数")
 					.font(.system(.largeTitle, design: .serif))
 					.fontWeight(.bold)
 					.foregroundStyle(.black)
@@ -33,39 +31,6 @@ struct GameSettingView: View{
 				
 				VStack{
 					VStack{
-						VStack{
-							VStack(alignment: .leading){
-								ZStack{
-									HStack {
-										Text("参加プレイヤー数:")
-											.font(.title)
-										Spacer()
-										Text("\(gameStatusData.players_CONFIG.count)人")
-											.font(.title)
-											.foregroundStyle(highlightColor)
-										Spacer()
-										Spacer()
-										Spacer()
-									}
-									HStack{
-										Spacer()
-										Button(action: {
-											isReorderingViewShown = true
-										}) {
-											Image(systemName: "rectangle.and.pencil.and.ellipsis.rtl")
-												.font(.largeTitle)
-												.foregroundColor(.blue)
-										}
-										.myButtonBounce()
-										.bouncingUI(interval: 3)
-										.padding()
-									}
-								}
-							}
-							.onChange(of: gameStatusData.players_CONFIG.count) { _ in
-								gameStatusData.update_role_CONFIG()
-							}
-						}
 						
 						if gameStatusData.num_player_with_role > gameStatusData.players_CONFIG.count{
 							Text("※役職人数を減らしてください")
@@ -188,7 +153,7 @@ struct GameSettingView: View{
 				Rectangle()
 					.fill(.clear)
 					.frame(width: 10, height: 10)
-				Text("その他ゲーム設定")
+				Text("議論時間")
 					.font(.system(.largeTitle, design: .serif))
 					.fontWeight(.bold)
 					.foregroundStyle(.black)
@@ -196,8 +161,6 @@ struct GameSettingView: View{
 				
 				VStack{
 					HStack{
-						Text("ゲーム内議論時間: ")
-							.font(.title2)
 						Text("\(gameStatusData.discussion_minutes_CONFIG)分 \(gameStatusData.discussion_seconds_CONFIG)秒")
 							.foregroundStyle(highlightColor)
 							.font(.title)
@@ -226,13 +189,19 @@ struct GameSettingView: View{
 				}
 				.textFrameDesignProxy()
 				
-				Text(" ")
-					.font(.title)
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 10, height: 10)
+				Text("その他ゲーム設定")
+					.font(.system(.largeTitle, design: .serif))
+					.fontWeight(.bold)
+					.foregroundStyle(.black)
+					.padding()
 				
 				VStack{
 					HStack{
 						VStack(alignment: .leading){
-							Text("「見習い占」")
+							Text("「見習い占」の")
 							Text("占い成功確率")
 						}
 						Text("：")
@@ -264,14 +233,17 @@ struct GameSettingView: View{
 					.padding()
 					
 					Toggle(isOn: $gameStatusData.isConsecutiveProtectionAllowed) {
-						Text("狩人の同一人物連続ガードを有効にする")
+						Text("狩人が連続で同一人物を守ることを可能にする")
+							.font(.title3)
+							.foregroundColor(.white)
+						Text("※オフの場合はランダムに決定")
 							.font(.title3)
 							.foregroundColor(.white)
 					}
 					.padding()
 					
 					Toggle(isOn: $gameStatusData.requiresRunoffVote) {
-						Text("処刑投票で同票の場合に決選投票をする")
+						Text("処刑投票で同票の場合に決選投票を行う")
 							.font(.title3)
 							.foregroundColor(.white)
 					}
