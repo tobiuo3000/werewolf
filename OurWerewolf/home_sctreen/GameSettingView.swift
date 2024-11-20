@@ -201,7 +201,7 @@ struct GameSettingView: View{
 				VStack{
 					HStack{
 						VStack(alignment: .leading){
-							Text("「見習い占」の")
+							Text("見習い占の")
 							Text("占い成功確率")
 						}
 						Text("：")

@@ -54,8 +54,15 @@ struct AudioPlayerView: View {
 			}
 			.onAppear(){
 				detectsFilename()
-				instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
-				instanceForSound.setVolume(0.01, fadeDuration: 0.1)
+				do {
+					instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+				} catch {
+					print("Failed to initialize AVAudioPlayer: \(error)")
+				}
+				NotificationCenter.default.addObserver(forName: UIApplication.willEnterForegroundNotification, object: nil, queue: .main) { _ in
+					instanceForSound?.play()
+				}
+				instanceForSound.setVolume(0.05, fadeDuration: 0.4)
 				playSound()
 			}
 			.onChange(of: gameStatusData.soundMuted){ new in
@@ -69,10 +76,12 @@ struct AudioPlayerView: View {
 				stopSound()
 				detectsFilename()
 				instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+				instanceForSound.setVolume(0.35, fadeDuration: 0.4)
 				continuePlayingSound()
 			}
 			.onDisappear {
 				stopSound()
+				NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
 			}
 		}
 	}

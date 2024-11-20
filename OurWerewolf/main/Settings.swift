@@ -275,6 +275,8 @@ class GameStatusData: ObservableObject {
 	@Published var soundMuted: Bool = false
 	@Published var isReorderingViewShown = false
 	@Published var threeOffSetTab: CGFloat = 0
+	@Published var isBGMPlayed: Bool = true
+	@Published var isENVPlayed: Bool = true
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存

@@ -73,6 +73,9 @@ struct BeforeGameView: View {
 					}
 				}
 				Spacer()
+				Rectangle()
+					.fill(.clear)
+					.frame(width: 10, height: 10)
 			}
 			.onAppear(){
 				if isParameterSet == false {
@@ -167,7 +170,7 @@ struct playerInfoView: View{
 				}
 			}
 		}
-		.opacity(0.80)
+		.opacity(0.95)
 		.foregroundColor(.black)
 		.padding()
 		.border(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.8), width: 4)
