@@ -28,7 +28,6 @@ struct GameSettingView: View{
 					.foregroundStyle(.black)
 					.padding()
 				
-				
 				VStack{
 					VStack{
 						
@@ -161,6 +160,7 @@ struct GameSettingView: View{
 				
 				VStack{
 					HStack{
+						Spacer()
 						Text("\(gameStatusData.discussion_minutes_CONFIG)分 \(gameStatusData.discussion_seconds_CONFIG)秒")
 							.foregroundStyle(highlightColor)
 							.font(.title)

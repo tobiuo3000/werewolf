@@ -55,6 +55,7 @@ struct AudioPlayerView: View {
 			.onAppear(){
 				detectsFilename()
 				instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+				instanceForSound.setVolume(0.01, fadeDuration: 0.1)
 				playSound()
 			}
 			.onChange(of: gameStatusData.soundMuted){ new in

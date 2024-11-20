@@ -133,6 +133,7 @@ struct ListSurviversView: View{
 		}
 		.font(.title2)
 		.textFrameDesignProxy()
+		
 		FadingScrollView(fadeHeight: 50){
 			ForEach(0..<gameProgress.players.count, id: \.self) { index in
 				if gameProgress.players[index].isAlive == true{
@@ -155,6 +156,7 @@ struct ListSurviversView: View{
 			}
 		}
 		.textFrameDesignProxy()
+
 	}
 }
 

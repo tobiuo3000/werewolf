@@ -159,6 +159,7 @@ struct playerInfoView: View{
 							Text("        ")
 							Text(player.player_name)
 								.fontWeight(.bold)
+								.underline()
 						}
 					}
 					.font(.system(.title, design: .serif))

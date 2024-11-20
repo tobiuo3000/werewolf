@@ -444,9 +444,9 @@ struct ScrollBarView: View{
 						.offset(x: +triangleConst, y: iconOffsetTab0-8)
 						.flickeringUI(interval: intervalTriangle)
 				}
-				Image(systemName: iconSize1 == 30 ? "gamecontroller" : "gamecontroller.fill")
-					.foregroundColor(.white)
-					.font(.system(size: iconSize1))
+				Image(iconSize1 == 30 ? "wolf_tabIcon" : "wolf_tabIcon_fill")
+					.resizable()
+					.frame(width: iconSize1*(1.4), height: iconSize1*(1.4))  // 1.4 to make adjustments to the image size
 					.offset(x: 0, y: iconOffsetTab1)
 			}
 			
