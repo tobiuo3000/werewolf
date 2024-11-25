@@ -31,16 +31,8 @@ struct ContentView: View {
 						}
 						ScrollView{
 						}
-						VStack{
+						
 							GameView()
-							
-							if proxy_ContentView.safeAreaInsets.bottom > 0 {  // temporal solution
-								Rectangle()
-									.fill(.black)
-									.frame(width: .infinity, height: 34)
-							}
-						}
-						.ignoresSafeArea(edges: [.bottom])
 						
 					}
 					

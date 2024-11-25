@@ -72,6 +72,5 @@ struct GameStartView: View{
 				Spacer()
 			}
 		}
-		.ignoresSafeArea()
 	}
 }

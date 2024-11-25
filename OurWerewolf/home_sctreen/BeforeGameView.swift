@@ -28,60 +28,57 @@ struct BeforeGameView: View {
 						
 						Rectangle()
 							.fill(.clear)
-							.frame(height: 30)
+							.frame(height: gameStatusData.fullScreenSize.height/2)
 					}
 				}
 				
-				VStack{
-					Spacer()
-					
-					ZStack{
-						HStack{
-							Spacer()
+				
+				
+				ZStack{
+					HStack{
+						Spacer()
+						Button("ゲームスタート"){
+							isAlertShown = true
+						}
+						.font(.system(.title2, design: .rounded))
+						.fontWeight(.bold)
+						.myTextBackground()
+						.myButtonBounce()
+						.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
 							Button("ゲームスタート"){
-								isAlertShown = true
-							}
-							.font(.system(.title2, design: .rounded))
-							.fontWeight(.bold)
-							.myTextBackground()
-							.myButtonBounce()
-							.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
-								Button("ゲームスタート"){
-									initiateGameProgress()
-									DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
-										gameStatusData.game_status = .gameScreen
-										gameProgress.game_start_flag = false
-									}
-								}
-								Button("キャンセル", role: .cancel){
+								initiateGameProgress()
+								DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
+									gameStatusData.game_status = .gameScreen
+									gameProgress.game_start_flag = false
 								}
 							}
-							.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
-							Spacer()
+							Button("キャンセル", role: .cancel){
+							}
 						}
-						
-						HStack{
-							Spacer()
-							Button(action: {
-								showAllText.toggle()
-							}) {
-								HStack(spacing:1){
-									if showAllText{
-										Image(systemName: "rectangle.3.offgrid.bubble.left.fill")
-									}else{
-										Image(systemName: "rectangle.3.offgrid.bubble.left")
-									}
-									Text("ROLE")
-								}
-							}
-							.myButtonBounce()
-							.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
-						}
+						.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
+						Spacer()
 					}
-					Rectangle()
-						.fill(.clear)
-						.frame(width: 10, height: 10)
+					
+					HStack{
+						Spacer()
+						Button(action: {
+							showAllText.toggle()
+						}) {
+							HStack(spacing:1){
+								if showAllText{
+									Image(systemName: "rectangle.3.offgrid.bubble.left.fill")
+								}else{
+									Image(systemName: "rectangle.3.offgrid.bubble.left")
+								}
+								Text("ROLE")
+							}
+						}
+						.myButtonBounce()
+						.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
+					}
 				}
+				.position(CGPoint(x: Int(gameStatusData.fullScreenSize.width/2),
+								  y: Int(gameStatusData.fullScreenSize.height/16*13)))
 			}
 		}
 		.onAppear(){

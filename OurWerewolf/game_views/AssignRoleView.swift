@@ -71,6 +71,7 @@ struct BeforeOnePlayerRole: View{
 			
 			Spacer()
 			Button("次へ") {
+				gameStatusData.buttonSE()
 				isAlertShown = true
 			}
 			.myTextBackground()
@@ -176,6 +177,9 @@ struct OnePlayerRoleShown: View {
 							if gameProgress.players[Temp_index_num].role_name == Role.seer{
 								if gameStatusData.isFirstNightRandomSeer{
 									VStack{
+										Text("夜時間の行動で、選んだプレイヤーが「村人」か「人狼」かを知ることができます。")
+											.fixedSize(horizontal: false, vertical: true)
+										Text("")
 										Text("初日ランダム占い結果：")
 										HStack{
 											Text("\(tmpPlayer_seer.player_name)")
@@ -188,8 +192,11 @@ struct OnePlayerRoleShown: View {
 								}
 							}else if gameProgress.players[Temp_index_num].role_name == Role.trainee{
 								VStack{
-									Text("間違っているかもしれませんが...")
+									Text("夜時間の行動で、選んだプレイヤーが「村人」か「人狼」かを知ることができます。この占い結果は間違っているかもしれません。")
+										.fixedSize(horizontal: false, vertical: true)
+									Text("")
 									Text("初日ランダム占い結果：")
+									Text("間違っているかもしれませんが...")
 									HStack{
 										Text("\(tmpPlayer_trainee.player_name)")
 											.foregroundStyle(highlightColor)
@@ -206,7 +213,50 @@ struct OnePlayerRoleShown: View {
 									}
 								}
 								.textFrameDesignProxy()
+							}else if gameProgress.players[Temp_index_num].role_name == Role.villager{
+								VStack{
+									Text("特殊能力のないプレイヤーです。")
+										.fixedSize(horizontal: false, vertical: true)
+									Text("処刑の投票を通して、村人陣営の勝利に導きましょう。")
+										.fixedSize(horizontal: false, vertical: true)
+								}
+								.textFrameDesignProxy()
+							}else if gameProgress.players[Temp_index_num].role_name == Role.hunter{
+								VStack{
+									Text("夜時間の行動で、選んだプレイヤーを人狼の襲撃から守ることができます。")
+										.fixedSize(horizontal: false, vertical: true)
+									Text("人狼があなたの守ったプレイヤーを襲撃した場合、襲撃は失敗します。")
+										.fixedSize(horizontal: false, vertical: true)
+								}
+								.textFrameDesignProxy()
+							}else if gameProgress.players[Temp_index_num].role_name == Role.werewolf{
+								VStack{
+									Text("夜時間の行動で、村人を一人襲撃して殺害できます。")
+										.fixedSize(horizontal: false, vertical: true)
+									Text("周囲に人狼だと悟られないように、村人陣営を減らしていきましょう。")
+										.fixedSize(horizontal: false, vertical: true)
+									Text("人狼と村人の数が同数になれば勝利です。")
+										.fixedSize(horizontal: false, vertical: true)
+								}
+								.textFrameDesignProxy()
+							}else if gameProgress.players[Temp_index_num].role_name == Role.madman{
+								VStack{
+									Text("あなたは特別な能力のない人間ですが人狼陣営です。")
+										.fixedSize(horizontal: false, vertical: true)
+									Text("占い師などに占われても村人と判定されます。人数カウントも村人としてカウントされます。")
+										.fixedSize(horizontal: false, vertical: true)
+									Text("ゲームを通して人狼をサポートしましょう。")
+										.fixedSize(horizontal: false, vertical: true)
+								}
+								.textFrameDesignProxy()
+							}else if gameProgress.players[Temp_index_num].role_name == Role.medium{
+								VStack{
+									Text("夜時間の際に、直前に処刑されたプレイヤーが「村人」か「人狼」か知ることができます。")
+										.fixedSize(horizontal: false, vertical: true)
+								}
+								.textFrameDesignProxy()
 							}
+							
 							
 							Text(" ")
 								.font(.title)
@@ -262,20 +312,41 @@ struct TempTexts: View {
 				if isRoleNameShown == true{
 					VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/){
 						Text("「\(gameProgress.players[Temp_index_num].player_name)」さん")
-						Text("役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+						HStack{
+							Text("役職： ")
+							Text(gameProgress.players[Temp_index_num].role_name.japaneseName)
+								.foregroundStyle(gameStatusData.highlightColor)
+						}
+						if gameProgress.players[Temp_index_num].role_name == Role.werewolf || gameProgress.players[Temp_index_num].role_name == Role.madman{
+							
+							HStack{
+								Text("陣営： ")
+								Text("人狼陣営")
+									.foregroundStyle(gameStatusData.highlightColor)
+							}
+						}else{
+							HStack{
+								Text("陣営： ")
+								Text("村人陣営")
+									.foregroundStyle(gameStatusData.highlightColor)
+							}
+						}
 					}
 					.textFrameDesignProxy()
 					.opacity(textOpacity)
 				}else{
-					VStack(alignment: /*@START_MENU_TOKEN@*/.center/*@END_MENU_TOKEN@*/){
-						Text("「\(gameProgress.players[Temp_index_num].player_name)」さん")
-						Text("役職： \(gameProgress.players[Temp_index_num].role_name.japaneseName)")
+					VStack{
+						Text("~~さん")
+						
+						Text("役職： ◯◯")
+						Text("陣営： ◯◯")
 					}
 					.foregroundStyle(Color(.clear))
 				}
 			}
-			Text(" ")
+			
 		}
+		Text(" ")
 	}
 }
 

@@ -93,6 +93,11 @@ struct HomeScreenView: View {
 	
 	var body: some View {
 		AudioPlayerView()
+			.onAppear(){  // to init iconSize Variables
+				iconSize0 = gameStatusData.fullScreenSize.height/20
+				iconSize1 = gameStatusData.fullScreenSize.height/20
+				iconSize2 = gameStatusData.fullScreenSize.height/20
+			}
 		
 		ZStack{
 			VStack(spacing: 0){
@@ -134,16 +139,17 @@ struct HomeScreenView: View {
 				}
 				.tabViewStyle(.page(indexDisplayMode: .never))
 				.animation(.easeInOut, value: currentTab)
-				
-				if gameStatusData.isReorderingViewShown == false {
-					ScrollBarView(currentTab: $currentTab, iconOffsetTab0: $iconOffsetTab0,
-								  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
-								  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
-					.frame(height: 50)
-				}
 			}
 			.disabled(showingSettings)
 			.disabled(gameStatusData.isReorderingViewShown)
+			
+			if gameStatusData.isReorderingViewShown == false {
+				ScrollBarView(currentTab: $currentTab, iconOffsetTab0: $iconOffsetTab0,
+							  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
+							  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
+				.position(CGPoint(x: Int(gameStatusData.fullScreenSize.width/2),
+								  y: Int(gameStatusData.fullScreenSize.height/32*31)))
+			}
 			
 			if showingSettings == true{
 				SettingsView(showingSettings: $showingSettings)
@@ -167,14 +173,6 @@ struct HomeScreenView: View {
 		}
 	}
 	
-	func _calcIconOffset(iconOffset: Binding<CGFloat>, tabOffset: Binding<CGFloat>){
-		if (-self.thresholdIcon <= tabOffset.wrappedValue) && (tabOffset.wrappedValue <= self.thresholdIcon) {
-			iconOffset.wrappedValue = (abs(tabOffset.wrappedValue)/self.thresholdIcon)*6 - 6  // positive num: up, negative: down
-		} else {
-			iconOffset.wrappedValue = 3
-		}
-	}
-	
 	func calcIconOffset(arg_iconOffsetTab0: Binding<CGFloat>,
 						arg_iconOffsetTab1: Binding<CGFloat>,
 						arg_iconOffsetTab2: Binding<CGFloat>,
@@ -190,6 +188,16 @@ struct HomeScreenView: View {
 		_calcIconSize(iconSize: arg_iconSize0, tabOffset: arg_tabOffsetTab0)
 		_calcIconSize(iconSize: arg_iconSize1, tabOffset: arg_tabOffsetTab1)
 		_calcIconSize(iconSize: arg_iconSize2, tabOffset: arg_tabOffsetTab2)
+	}
+	
+	func _calcIconOffset(iconOffset: Binding<CGFloat>, tabOffset: Binding<CGFloat>){
+		if (-self.thresholdIcon <= tabOffset.wrappedValue) && (tabOffset.wrappedValue <= self.thresholdIcon) {
+			iconOffset.wrappedValue = (abs(tabOffset.wrappedValue)/self.thresholdIcon)*6 - 6
+			// positive num: up, negative: down
+			// thresholdIcon: gameStatusData.fullScreenSize.width/6
+		} else {
+			iconOffset.wrappedValue = 3
+		}
 	}
 	
 	func _calcIconSize(iconSize: Binding<CGFloat>, tabOffset: Binding<CGFloat>){
@@ -214,156 +222,66 @@ struct HomeScreenMenu: View {
 	let highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	
 	var body: some View{
-		HStack(alignment: .center){
-			Button(action: {
-				isAlertShown = true
-			}){
-				HStack(spacing: 2){
-					Image(systemName: "arrowshape.turn.up.left")
-						.font(.title2)
-					Text("TITLE")
-						.font(.title)
+		VStack(spacing:0){
+			HStack(alignment: .center){
+				Button(action: {
+					isAlertShown = true
+				}){
+					HStack(spacing: 2){
+						Image(systemName: "arrowshape.turn.up.left")
+							.font(.title2)
+						Text("TITLE")
+							.font(.title)
+					}
+					.frame(height: 30)
+					.fontWeight(.semibold)
+					.foregroundColor(.blue)
 				}
-				.frame(height: 30)
+				.alert("タイトルに戻りますか？", isPresented: $isAlertShown){
+					Button("はい"){
+						gameStatusData.game_status = .toTitleScreen
+						isAlertShown = false
+					}
+					Button("いいえ", role:.cancel){}
+				}
+				Spacer()
+				
+				HStack(spacing: 1){
+					Text("プレイヤー数：")
+						.foregroundStyle(.white)
+					Text("\(gameStatusData.players_CONFIG.count)")
+						.foregroundStyle(highlightColor)
+					Text("人")
+						.foregroundStyle(.white)
+				}
 				.fontWeight(.semibold)
-				.foregroundColor(.blue)
-			}
-			.alert("タイトルに戻りますか？", isPresented: $isAlertShown){
-				Button("はい"){
-					gameStatusData.game_status = .toTitleScreen
-					isAlertShown = false
+				.font(.title3)
+				
+				Spacer()
+				
+				Button(action: {
+					showingSettings = true
+				}){
+					Image(systemName: gearImageName)
+						.resizable()
+						.frame(width: 30, height: 30)
 				}
-				Button("いいえ", role:.cancel){}
+				.simultaneousGesture(LongPressGesture().onChanged { _ in
+					gearImageName = "gearshape.fill"
+				})
+				.simultaneousGesture(TapGesture().onEnded {
+					gearImageName = "gearshape"
+				})
 			}
-			Spacer()
+			.padding()
+			.background(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.5))
+			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.2)
 			
-			HStack(spacing: 1){
-				Text("プレイヤー数：")
-					.foregroundStyle(.white)
-				Text("\(gameStatusData.players_CONFIG.count)")
-					.foregroundStyle(highlightColor)
-				Text("人")
-					.foregroundStyle(.white)
-			}
-			.fontWeight(.semibold)
-			.font(.title3)
-			
-			Spacer()
-			
-			Button(action: {
-				showingSettings = true
-			}){
-				Image(systemName: gearImageName)
-					.resizable()
-					.frame(width: 30, height: 30)
-			}
-			.simultaneousGesture(LongPressGesture().onChanged { _ in
-				gearImageName = "gearshape.fill"
-			})
-			.simultaneousGesture(TapGesture().onEnded {
-				gearImageName = "gearshape"
-			})
+			Rectangle()  // a bar below TITLE, CONFIG UI
+				.foregroundColor(Color(red: 0.95, green: 0.9, blue: 0.80, opacity: 1.0))
+				.frame(height: 2)
+				.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.1)
 		}
-		.padding()
-		.background(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 0.5))
-		.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.2)
-		
-		Rectangle()  // a bar below TITLE, CONFIG UI
-			.foregroundColor(Color(red: 0.95, green: 0.9, blue: 0.80, opacity: 1.0))
-			.frame(height: 2)
-			.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.1)
-	}
-}
-
-
-struct ScrollBarView: View{
-	@EnvironmentObject var gameStatusData: GameStatusData
-	@EnvironmentObject var gameProgress: GameProgress
-	@Binding var currentTab: Int
-	@Binding var iconOffsetTab0: CGFloat
-	@Binding var iconOffsetTab1: CGFloat
-	@Binding var iconOffsetTab2: CGFloat
-	@Binding var iconSize0: CGFloat
-	@Binding var iconSize1: CGFloat
-	@Binding var iconSize2: CGFloat
-	@State var isBounced: Bool = true
-	let triangleConst:CGFloat = 46
-	let intervalTriangle: CGFloat = 0.8
-	
-	var body: some View{
-		//let _ = print("\(threeOffSetTab), SIZE(\(gameStatusData.fullScreenSize.width))")
-		
-		ZStack{
-			HStack(spacing: 0){
-				Rectangle()
-					.fill(Color(red: 0.2, green: 0.2, blue: 0.2))
-					.frame(width: gameStatusData.fullScreenSize.width/3, height: 50)
-					.onTapGesture {
-						currentTab = 0
-					}
-				Rectangle()
-					.fill(Color(red: 0.2, green: 0.2, blue: 0.2))
-					.frame(width: gameStatusData.fullScreenSize.width/3, height: 50)
-					.onTapGesture {
-						currentTab = 1
-					}
-				Rectangle()
-					.fill(Color(red: 0.2, green: 0.2, blue: 0.2))
-					.frame(width: gameStatusData.fullScreenSize.width/3, height: 50)
-					.onTapGesture {
-						currentTab = 2
-					}
-			}
-			
-			Rectangle()
-				.fill(Color(red: 0.5, green: 0.5, blue: 0.8))
-				.frame(width: (gameStatusData.fullScreenSize.width/3), height: 50)
-				.offset(x: (gameStatusData.threeOffSetTab/3) - (gameStatusData.fullScreenSize.width/3))
-			
-			ZStack{  // for code readability
-				if iconSize0 != 30 {
-					Image(systemName: "arrowtriangle.right.fill")
-						.foregroundColor(.white)
-						.offset(x: -(gameStatusData.fullScreenSize.width/6)*2+triangleConst, y: iconOffsetTab0)
-						.flickeringUI(interval: intervalTriangle)
-				}
-				Image(systemName: iconSize0 == 30 ? "square.and.pencil.circle" : "square.and.pencil.circle.fill")
-					.foregroundColor(.white)
-					.font(.system(size: iconSize0))
-					.offset(x: -(gameStatusData.fullScreenSize.width/6)*2, y: iconOffsetTab0)
-			}
-			
-			ZStack{  // for code readability
-				if iconSize1 != 30 {
-					Image(systemName: "arrowtriangle.backward.fill")
-						.foregroundColor(.white)
-						.offset(x: -triangleConst, y: iconOffsetTab0-8)
-						.flickeringUI(interval: intervalTriangle)
-					Image(systemName: "arrowtriangle.right.fill")
-						.foregroundColor(.white)
-						.offset(x: +triangleConst, y: iconOffsetTab0-8)
-						.flickeringUI(interval: intervalTriangle)
-				}
-				Image(iconSize1 == 30 ? "wolf_tabIcon" : "wolf_tabIcon_fill")
-					.resizable()
-					.frame(width: iconSize1*(1.4), height: iconSize1*(1.4))  // 1.4 to make adjustments to the image size
-					.offset(x: 0, y: iconOffsetTab1)
-			}
-			
-			ZStack{  // for code readability
-				if iconSize2 != 30 {
-					Image(systemName: "arrowtriangle.backward.fill")
-						.foregroundColor(.white)
-						.offset(x: (gameStatusData.fullScreenSize.width/6)*2-triangleConst, y: iconOffsetTab2)
-						.flickeringUI(interval: intervalTriangle)
-				}
-				Image(systemName: iconSize2 == 30 ? "text.book.closed" : "text.book.closed.fill")
-					.foregroundColor(.white)
-					.font(.system(size: iconSize2))
-					.offset(x: (gameStatusData.fullScreenSize.width/6)*2 ,y: iconOffsetTab2)
-			}
-		}
-		.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.4)
 	}
 }
 
