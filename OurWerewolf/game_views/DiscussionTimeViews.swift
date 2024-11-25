@@ -10,7 +10,7 @@ import SwiftUI
 
 
 struct Before_discussion: View{
-	@EnvironmentObject var GameStatusData: GameStatusData
+	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
 	@State var isAlertShown: Bool = false
@@ -22,14 +22,15 @@ struct Before_discussion: View{
 			
 			Spacer()
 			Button("議論開始") {
+				gameStatusData.buttonSE()
 				isAlertShown = true
 			}
 			.myTextBackground()
 			.myButtonBounce()
-			.alert("\(GameStatusData.discussion_minutes_CONFIG)分\(GameStatusData.discussion_seconds_CONFIG)秒間の議論が開始します", isPresented: $isAlertShown){
+			.alert("\(gameStatusData.discussion_minutes_CONFIG)分\(gameStatusData.discussion_seconds_CONFIG)秒間の議論が開始します", isPresented: $isAlertShown){
 				Button("議論を開始する"){
 					gameProgress.reset_suspected_count()
-					gameProgress.discussion_time = GameStatusData.discussion_time_CONFIG
+					gameProgress.discussion_time = gameStatusData.discussion_time_CONFIG
 					gameProgress.stageView = .Discussion_time
 					let _ = print(gameProgress.get_diary_cur_day())
 					let _ = print(gameProgress.get_diary_cur_day().day)
@@ -50,6 +51,7 @@ struct Before_discussion: View{
 
 
 struct Discussion_time: View{
+	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress
 	@State var discussion_time: Int
 	@State var isAlertShown: Bool = false
@@ -97,6 +99,7 @@ struct Discussion_time: View{
 			Spacer()
 			
 			Button("議論終了") {
+				gameStatusData.buttonSE()
 				isAlertShown = true
 			}
 			.myTextBackground()

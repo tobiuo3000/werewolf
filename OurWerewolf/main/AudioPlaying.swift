@@ -11,7 +11,7 @@ import AVFoundation
 
 class AudioPlayerManager: ObservableObject {
 	var instanceForSound: AVAudioPlayer?
-
+	
 	@objc func myInit(fileName: String) {
 		do {
 			instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: fileName)!.data)
@@ -20,7 +20,7 @@ class AudioPlayerManager: ObservableObject {
 		} catch {
 			print("Failed to initialize AVAudioPlayer: \(error)")
 		}
-
+		
 		NotificationCenter.default.addObserver(self, selector: #selector(playSound), name: UIApplication.willEnterForegroundNotification, object: nil)
 	}
 	
@@ -33,11 +33,11 @@ class AudioPlayerManager: ObservableObject {
 			print("Failed to initialize AVAudioPlayer: \(error)")
 		}
 	}
-
+	
 	@objc private func playSound() {
 		instanceForSound?.play()
 	}
-
+	
 	deinit {
 		NotificationCenter.default.removeObserver(self, name: UIApplication.willEnterForegroundNotification, object: nil)
 	}
@@ -120,4 +120,31 @@ struct AudioPlayerView: View {
 		}
 	}
 }
+
+
+struct ButtonSEStruct {
+	var videoFileName: String
+	var instanceForSound: AVAudioPlayer!
+	
+	init(videoFileName: String = "buttonPushed") {
+		self.videoFileName = videoFileName
+		do{
+			instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+		}
+		catch{
+			let _ = print("file not found error")
+		}
+	}
+	
+	func playSound(){
+		let _ = print("button sound")
+		
+	}
+	
+	func stopSound(){
+		instanceForSound.stop()
+	}
+}
+
+
 

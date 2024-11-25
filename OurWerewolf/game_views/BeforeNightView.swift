@@ -35,6 +35,7 @@ struct Before_night_time: View{
 			Spacer()
 			
 			Button("次へ") {
+				gameStatusData.buttonSE()
 				isAlertShown = true
 			}
 			.myTextBackground()

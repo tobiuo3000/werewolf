@@ -60,6 +60,7 @@ struct MorningView: View {
 			}
 			Spacer()
 			Button("次へ") {
+				gameStatusData.buttonSE()
 				isAlertShown = true
 			}
 			.myTextBackground()

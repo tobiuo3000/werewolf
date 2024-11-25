@@ -108,6 +108,7 @@ struct VoteTime: View {
 				
 				Spacer()
 				Button("次へ") {
+					gameStatusData.buttonSE()
 					voteDone = false
 					if survivors_index+1 == gameProgress.get_num_survivors(){
 						gameProgress.stageView = .Vote_result
@@ -223,6 +224,7 @@ struct RunoffView: View{
 				
 				Spacer()
 				Button("次へ") {
+					gameStatusData.buttonSE()
 					voteDone = false
 					if survivors_index+1 == gameProgress.get_num_survivors(){
 						gameProgress.stageView = .RunoffVote_result
@@ -320,6 +322,7 @@ struct RunoffVoteResult: View{
 				.textFrameDesignProxy()
 				Spacer()
 				Button("次へ") {
+					gameStatusData.buttonSE()
 					gameProgress.sentence_to_death(suspect_id: tmpPlayer.id)
 					gameProgress.get_diary_cur_day().executedPlayer = tmpPlayer
 					gameProgress.reset_vote_count()

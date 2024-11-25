@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import AVFoundation
 
 
 /*
@@ -272,11 +273,12 @@ class GameStatusData: ObservableObject {
 	@Published var requiresRunoffVote: Bool = true
 	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	@Published var soundTheme: SoundTheme = .mixed
-	@Published var soundMuted: Bool = false
+	@Published var soundMuted: Bool = true
 	@Published var isReorderingViewShown = false
 	@Published var threeOffSetTab: CGFloat = 0
-	@Published var isBGMPlayed: Bool = true
-	@Published var isENVPlayed: Bool = true
+	@Published var isBGMPlayed: Bool = false
+	@Published var isENVPlayed: Bool = false
+	@Published var instanceForSound: AVAudioPlayer!
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存
@@ -358,6 +360,18 @@ class GameStatusData: ObservableObject {
 		}
 		return tempPlayersList
 	}
+	
+	
+	func buttonSE(videoFileName: String = "buttonPushed"){
+		do{
+			instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+		}
+		catch{
+			let _ = print("file not found error")
+		}
+		instanceForSound.play()
+ }
+
 }
 
 

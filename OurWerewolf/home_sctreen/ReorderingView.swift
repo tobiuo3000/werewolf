@@ -93,16 +93,15 @@ struct ReorderingPlayerView: View {
 						.background(baseColor)
 						
 						List {
-							HStack{
-								Text("プレイ順序")
-									.foregroundStyle(.white)
-									.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
-									.font(.title2)
-								Text("プレイヤー名")
-									.foregroundStyle(.white)
-									.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
-									.font(.title2)
+							ZStack{  // this ZStack was for making a line separator in List
+								HStack{
+									Text("プレイ順序")
+									Text("プレイヤー名")
+								}
 							}
+							.foregroundStyle(.white)
+							.frame(maxWidth: gameStatusData.fullScreenSize.width, alignment: .leading)
+							.font(.title2)
 							.listRowBackground(viewColor)
 							.padding(lineWidth)
 							
@@ -128,6 +127,7 @@ struct ReorderingPlayerView: View {
 							}
 							.onDelete(perform: confirmDelete)
 							.listRowBackground(viewColor)
+							.listRowSeparatorTint(.white)
 						}
 						.listStyle(PlainListStyle())
 						.alert("プレイヤーを4名以下にすることはできません", isPresented: $isAlertShown) {

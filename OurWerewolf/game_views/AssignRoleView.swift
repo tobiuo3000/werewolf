@@ -212,6 +212,7 @@ struct OnePlayerRoleShown: View {
 								.font(.title)
 							
 							Button("役職を確認した"){
+								gameStatusData.buttonSE()
 								isAlertShown = true
 							}
 							.myTextBackground()

@@ -19,85 +19,91 @@ struct BeforeGameView: View {
 			Color.black
 				.opacity(blackOpacity)
 			
-			VStack{
-				ScrollView{
-					playerInfoView()
-					
-					CardGalleryView(showAllText: $showAllText)
-				}
-				
-				ZStack{
-					HStack{
-						Spacer()
-						Button("ゲームスタート"){
-							isAlertShown = true
-						}
-						.font(.system(.title2, design: .rounded))
-						.fontWeight(.bold)
-						.myTextBackground()
-						.myButtonBounce()
-						.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
-							Button("ゲームスタート"){
-								initiateGameProgress()
-								DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
-									gameStatusData.game_status = .gameScreen
-									gameProgress.game_start_flag = false
-								}
-							}
-							Button("キャンセル", role: .cancel){
-							}
-						}
-						.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
-						Spacer()
-					}
-					
-					HStack{
-						Spacer()
-						Button(action: {
-							showAllText.toggle()
-						}) {
-							HStack(spacing:1){
-								if showAllText{
-									Image(systemName: "rectangle.3.offgrid.bubble.left.fill")
-								}else{
-									Image(systemName: "rectangle.3.offgrid.bubble.left")
-								}
-								Text("ROLE")
-							}
-						}
-						.myButtonBounce()
-						.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
+			ZStack{
+				VStack{
+					ScrollView{
+						playerInfoView()
+						
+						CardGalleryView(showAllText: $showAllText)
+						
 						Rectangle()
 							.fill(.clear)
-							.frame(width: 10, height: 10)
+							.frame(height: 30)
 					}
 				}
-				Spacer()
-				Rectangle()
-					.fill(.clear)
-					.frame(width: 10, height: 10)
-			}
-			.onAppear(){
-				if isParameterSet == false {
-					gameStatusData.calc_roles_count()
-					isParameterSet = true
+				
+				VStack{
+					Spacer()
+					
+					ZStack{
+						HStack{
+							Spacer()
+							Button("ゲームスタート"){
+								isAlertShown = true
+							}
+							.font(.system(.title2, design: .rounded))
+							.fontWeight(.bold)
+							.myTextBackground()
+							.myButtonBounce()
+							.alert("この設定でゲームスタートしますか？", isPresented: $isAlertShown){
+								Button("ゲームスタート"){
+									initiateGameProgress()
+									DispatchQueue.main.asyncAfter(deadline: .now() + delayBeforeStartingGame) {
+										gameStatusData.game_status = .gameScreen
+										gameProgress.game_start_flag = false
+									}
+								}
+								Button("キャンセル", role: .cancel){
+								}
+							}
+							.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
+							Spacer()
+						}
+						
+						HStack{
+							Spacer()
+							Button(action: {
+								showAllText.toggle()
+							}) {
+								HStack(spacing:1){
+									if showAllText{
+										Image(systemName: "rectangle.3.offgrid.bubble.left.fill")
+									}else{
+										Image(systemName: "rectangle.3.offgrid.bubble.left")
+									}
+									Text("ROLE")
+								}
+							}
+							.myButtonBounce()
+							.uiAnimationRToL(animationFlag: $gameProgress.game_start_flag, delay: 0.3)
+						}
+					}
+					Rectangle()
+						.fill(.clear)
+						.frame(width: 10, height: 10)
 				}
 			}
-			.disabled(gameStatusData.villager_Count_CONFIG < 0)
-			
-			if gameStatusData.villager_Count_CONFIG < 0{
-				ZStack{
-					Color.black.opacity(0.3)
-					VStack{
-						Text("※役職人数が")
-						Text("プレイヤー数を超えています")
-					}
-					.font(.title)
-					.foregroundColor(highlightColor)
-					.background(){
-						Color.white.frame(width: gameStatusData.fullScreenSize.width-20, height: 100)
-							.cornerRadius(14)
-					}
+		}
+		.onAppear(){
+			if isParameterSet == false {
+				gameStatusData.calc_roles_count()
+				isParameterSet = true
+			}
+		}
+		.disabled(gameStatusData.villager_Count_CONFIG < 0)
+		
+		if gameStatusData.villager_Count_CONFIG < 0{
+			ZStack{
+				Color.black.opacity(0.3)
+				VStack{
+					Text("※役職人数が")
+					Text("プレイヤー数を超えています")
+				}
+				.font(.title)
+				.foregroundColor(highlightColor)
+				.background(){
+					Color.white.frame(width: gameStatusData.fullScreenSize.width-20, height: 100)
+						.cornerRadius(14)
 				}
 			}
 		}
@@ -127,7 +133,7 @@ struct playerInfoView: View{
 					Spacer()
 					Text("参加人数:")
 					Spacer()
-					Text("\(gameStatusData.players_CONFIG.count)人")
+					Text("\(gameStatusData.players_CONFIG.count)名")
 					Spacer()
 					Text("　　")
 				}

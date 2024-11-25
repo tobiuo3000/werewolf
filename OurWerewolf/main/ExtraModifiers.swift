@@ -501,52 +501,9 @@ struct  FlickeringUI: ViewModifier {
 }
 
 
-struct ButtonSEModifier: ViewModifier {
-	@EnvironmentObject var gameStatusData: GameStatusData
-	var soundFlag: Bool
-	var videoFileName: String
-	let instanceForSound: AVAudioPlayer
-	@State var isPlayed: Bool = false
-	
-	init(videoFileName: String, soundFlag: Bool) {
-		self.videoFileName = videoFileName
-		//self.videoFileType = videoFileType
-		instanceForSound = try!  AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
-		self.soundFlag = soundFlag
-	}
-	
-	private func playSound(){
-		instanceForSound.stop()
-		instanceForSound.currentTime = 0.0
-		instanceForSound.play()
-	}
-	
-	private func stopSound(){
-		instanceForSound.stop()
-	}
-	
-	func body(content: Content) -> some View {
-		content
-			.onTapGesture {newValue in
-				if isPlayed == false{
-					playSound()
-					let _ = print("\(isPlayed)")
-					let _ = print("now")
-					isPlayed = true
-				}
-			}
-			
-	}
-}
-
-
 extension View {
 	func myButtonBounce() -> some View {
 		self.modifier(ButtonAnimationModifier())
-	}
-	
-	func buttonSEModifier(filename: String = "buttonPushed", soundFlag: Bool) -> some View {
-		self.modifier(ButtonSEModifier(videoFileName: filename, soundFlag: soundFlag))
 	}
 	
 	func myTextBackground(outerSquare: CGFloat = 12, innerSquare: CGFloat = 10) -> some View {

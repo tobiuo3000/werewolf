@@ -35,6 +35,7 @@
 		17DA07A82CC77FB000F4B720 /* VoteViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A72CC77FB000F4B720 /* VoteViews.swift */; };
 		17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A92CC783F000F4B720 /* VoteResultView.swift */; };
 		17F94C852CD321790020D32D /* BeforeNightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F94C842CD321790020D32D /* BeforeNightView.swift */; };
+		17FF36652CF051E800160FA7 /* gameStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FF36642CF051E800160FA7 /* gameStartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -67,6 +68,7 @@
 		17DA07A72CC77FB000F4B720 /* VoteViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViews.swift; sourceTree = "<group>"; };
 		17DA07A92CC783F000F4B720 /* VoteResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteResultView.swift; sourceTree = "<group>"; };
 		17F94C842CD321790020D32D /* BeforeNightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeNightView.swift; sourceTree = "<group>"; };
+		17FF36642CF051E800160FA7 /* gameStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameStartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 			isa = PBXGroup;
 			children = (
 				1749BD312BEBBB44005E9560 /* ContentView.swift */,
+				17FF36642CF051E800160FA7 /* gameStartView.swift */,
 				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
 				1749BD372BEBBB80005E9560 /* Settings.swift */,
 				1779FCF02CD1296B001D4248 /* utils.swift */,
@@ -247,6 +250,7 @@
 				176B029E2CCFA13F00DE4E2E /* MorningView.swift in Sources */,
 				17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */,
 				1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */,
+				17FF36652CF051E800160FA7 /* gameStartView.swift in Sources */,
 				1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */,
 				1779FCF12CD1296B001D4248 /* utils.swift in Sources */,
 				1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */,

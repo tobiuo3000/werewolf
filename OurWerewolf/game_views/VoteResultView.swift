@@ -36,6 +36,7 @@ struct VoteResult: View{
 				
 				Spacer()
 				Button("次へ") {
+					gameStatusData.buttonSE()
 					gameProgress.sentence_to_death(suspect_id: randomlySelectedPlayer.id)
 					gameProgress.get_diary_cur_day().executedPlayer = randomlySelectedPlayer
 					gameProgress.reset_vote_count()
@@ -154,6 +155,7 @@ struct RandomExecutionView: View{
 			
 			Spacer()
 			Button("次へ") {
+				gameStatusData.buttonSE()
 				gameProgress.sentence_to_death(suspect_id: randomlySelectedPlayer.id)
 				gameProgress.get_diary_cur_day().executedPlayer = randomlySelectedPlayer
 				gameProgress.reset_vote_count()

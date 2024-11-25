@@ -41,7 +41,8 @@ struct GameOverView: View {
 							.foregroundColor(.white)
 							.opacity(opacity_text)
 						
-						Button("改めてゲームスタート") {
+						Button("ホーム画面に戻る") {
+							gameStatusData.buttonSE()
 							gameProgress.init_player()
 							gameStatusData.game_status = .homeScreen
 						}
@@ -80,6 +81,7 @@ struct GameOverView: View {
 								.opacity(opacity_text)
 						}
 						Button("ホーム画面に戻る") {
+							gameStatusData.buttonSE()
 							gameProgress.init_player()
 							gameStatusData.game_status = .homeScreen
 						}

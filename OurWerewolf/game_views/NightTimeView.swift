@@ -68,6 +68,7 @@ struct Night_Action_EachPlayer_View: View{
 			
 			if isTargetConfirmed == true{
 				Button("行動を終える") {
+					gameStatusData.buttonSE()
 					isTargetConfirmed = false
 					isActionDone = true
 				}
@@ -111,6 +112,7 @@ struct Night_Between_EachPlayer_View: View{
 				Spacer()  // to keep objects' position elevated
 				
 				Button("次へ") {
+					gameStatusData.buttonSE()
 					proceedToNextPlayer = true
 				}
 				.myTextBackground()
@@ -138,6 +140,7 @@ struct Night_Between_EachPlayer_View: View{
 				
 				Spacer()  // to keep objects' position elevated
 				Button("次へ") {
+					gameStatusData.buttonSE()
 					gameProgress.highestWerewolvesTargets = gameProgress.get_list_highest_werewolvesTarget()
 					gameProgress.get_diary_cur_day().werewolvesTarget = gameProgress.choose_one_random_player(highestList: gameProgress.highestWerewolvesTargets)!
 					
