@@ -148,7 +148,7 @@ struct HomeScreenView: View {
 							  iconOffsetTab1: $iconOffsetTab1, iconOffsetTab2: $iconOffsetTab2,
 							  iconSize0: $iconSize0, iconSize1: $iconSize1, iconSize2: $iconSize2)
 				.position(CGPoint(x: Int(gameStatusData.fullScreenSize.width/2),
-								  y: Int(gameStatusData.fullScreenSize.height/32*31)))
+								  y: Int(gameStatusData.fullScreenSize.height/32*31)+5))  // 5 is for adjustment
 			}
 			
 			if showingSettings == true{

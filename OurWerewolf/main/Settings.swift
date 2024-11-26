@@ -281,6 +281,11 @@ class GameStatusData: ObservableObject {
 	@Published var instanceForSound: AVAudioPlayer!
 	
 	init() {
+		let defaults = UserDefaults.standard
+		defaults.set(25, forKey: "Age")
+		let savedArray = defaults.object(forKey: "SavedArray") as? [String] ?? [String]()
+		
+		
 		// UIWindowSceneから画面サイズを取得して保存
 		if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
 			if let mainWindow = windowScene.windows.first {
