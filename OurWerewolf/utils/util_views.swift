@@ -5,7 +5,6 @@
 //  Created by Masanori Sudo on 2024/10/29.
 //
 
-
 import Foundation
 import SwiftUI
 

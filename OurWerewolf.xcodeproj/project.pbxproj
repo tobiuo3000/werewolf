@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		170EB5772D06F7B000C6B81C /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170EB5762D06F7B000C6B81C /* GameOverView.swift */; };
+		170EB5792D06F7D600C6B81C /* SurviverListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170EB5782D06F7D600C6B81C /* SurviverListView.swift */; };
+		170EB57B2D06F82B00C6B81C /* TransitionToTitle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170EB57A2D06F82B00C6B81C /* TransitionToTitle.swift */; };
 		1725D1C52CE5C8CF00A2B961 /* AudioPlaying.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */; };
 		172F9CF52CEE162700AA3F3F /* SystemSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172F9CF42CEE162700AA3F3F /* SystemSettingView.swift */; };
 		1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */; };
@@ -18,7 +21,6 @@
 		1749BD2D2BEBBAFD005E9560 /* CardViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD2C2BEBBAFD005E9560 /* CardViews.swift */; };
 		1749BD302BEBBB33005E9560 /* AssignRoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */; };
 		1749BD322BEBBB44005E9560 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD312BEBBB44005E9560 /* ContentView.swift */; };
-		1749BD342BEBBB5A005E9560 /* EachView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD332BEBBB5A005E9560 /* EachView.swift */; };
 		1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */; };
 		1749BD382BEBBB80005E9560 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD372BEBBB80005E9560 /* Settings.swift */; };
 		1749BD3A2BEBBB97005E9560 /* GameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD392BEBBB97005E9560 /* GameViews.swift */; };
@@ -27,7 +29,7 @@
 		176B029C2CCF8A5300DE4E2E /* DiscussionTimeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176B029B2CCF8A5300DE4E2E /* DiscussionTimeViews.swift */; };
 		176B029E2CCFA13F00DE4E2E /* MorningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176B029D2CCFA13F00DE4E2E /* MorningView.swift */; };
 		176B02A02CCFC10E00DE4E2E /* Wolf.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 176B029F2CCFB9D000DE4E2E /* Wolf.mp4 */; };
-		1779FCF12CD1296B001D4248 /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1779FCF02CD1296B001D4248 /* utils.swift */; };
+		1779FCF12CD1296B001D4248 /* util_views.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1779FCF02CD1296B001D4248 /* util_views.swift */; };
 		178807D02CCFEA3A001042E9 /* Table.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 178807CE2CCFEA39001042E9 /* Table.mp4 */; };
 		178807D12CCFEA3A001042E9 /* loghouse.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 178807CF2CCFEA3A001042E9 /* loghouse.mp4 */; };
 		179C66972CD38830000ED726 /* ReorderingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179C66962CD38830000ED726 /* ReorderingView.swift */; };
@@ -40,6 +42,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		170EB5762D06F7B000C6B81C /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
+		170EB5782D06F7D600C6B81C /* SurviverListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurviverListView.swift; sourceTree = "<group>"; };
+		170EB57A2D06F82B00C6B81C /* TransitionToTitle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionToTitle.swift; sourceTree = "<group>"; };
 		1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlaying.swift; sourceTree = "<group>"; };
 		172F9CF42CEE162700AA3F3F /* SystemSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemSettingView.swift; sourceTree = "<group>"; };
 		1749BD102BEBB9E5005E9560 /* OurWerewolf.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OurWerewolf.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,7 +57,6 @@
 		1749BD2C2BEBBAFD005E9560 /* CardViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardViews.swift; sourceTree = "<group>"; };
 		1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignRoleView.swift; sourceTree = "<group>"; };
 		1749BD312BEBBB44005E9560 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		1749BD332BEBBB5A005E9560 /* EachView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EachView.swift; sourceTree = "<group>"; };
 		1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraModifiers.swift; sourceTree = "<group>"; };
 		1749BD372BEBBB80005E9560 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		1749BD392BEBBB97005E9560 /* GameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViews.swift; sourceTree = "<group>"; };
@@ -61,7 +65,7 @@
 		176B029B2CCF8A5300DE4E2E /* DiscussionTimeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTimeViews.swift; sourceTree = "<group>"; };
 		176B029D2CCFA13F00DE4E2E /* MorningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorningView.swift; sourceTree = "<group>"; };
 		176B029F2CCFB9D000DE4E2E /* Wolf.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Wolf.mp4; sourceTree = "<group>"; };
-		1779FCF02CD1296B001D4248 /* utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = utils.swift; sourceTree = "<group>"; };
+		1779FCF02CD1296B001D4248 /* util_views.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = util_views.swift; sourceTree = "<group>"; };
 		178807CE2CCFEA39001042E9 /* Table.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Table.mp4; sourceTree = "<group>"; };
 		178807CF2CCFEA3A001042E9 /* loghouse.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = loghouse.mp4; sourceTree = "<group>"; };
 		179C66962CD38830000ED726 /* ReorderingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderingView.swift; sourceTree = "<group>"; };
@@ -84,6 +88,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		170EB5752D06F20B00C6B81C /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
+				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
+				1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */,
+				1779FCF02CD1296B001D4248 /* util_views.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		1749BD072BEBB9E5005E9560 = {
 			isa = PBXGroup;
 			children = (
@@ -105,8 +120,9 @@
 			children = (
 				1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */,
 				1749BD2E2BEBBB1A005E9560 /* main */,
+				170EB5752D06F20B00C6B81C /* utils */,
 				177585212C7EE49C0007D386 /* game_views */,
-				1749BD232BEBBA80005E9560 /* home_sctreen */,
+				1749BD232BEBBA80005E9560 /* home_sctreen_views */,
 				1749BD192BEBB9E6005E9560 /* Assets.xcassets */,
 				176B029F2CCFB9D000DE4E2E /* Wolf.mp4 */,
 				178807CF2CCFEA3A001042E9 /* loghouse.mp4 */,
@@ -116,7 +132,7 @@
 			path = OurWerewolf;
 			sourceTree = "<group>";
 		};
-		1749BD232BEBBA80005E9560 /* home_sctreen */ = {
+		1749BD232BEBBA80005E9560 /* home_sctreen_views */ = {
 			isa = PBXGroup;
 			children = (
 				1749BD262BEBBABB005E9560 /* HomeScreenView.swift */,
@@ -129,7 +145,7 @@
 				1749BD2A2BEBBAE9005E9560 /* Theme_Config.swift */,
 				1749BD2C2BEBBAFD005E9560 /* CardViews.swift */,
 			);
-			path = home_sctreen;
+			path = home_sctreen_views;
 			sourceTree = "<group>";
 		};
 		1749BD2E2BEBBB1A005E9560 /* main */ = {
@@ -137,11 +153,7 @@
 			children = (
 				1749BD312BEBBB44005E9560 /* ContentView.swift */,
 				17FF36642CF051E800160FA7 /* gameStartView.swift */,
-				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
 				1749BD372BEBBB80005E9560 /* Settings.swift */,
-				1779FCF02CD1296B001D4248 /* utils.swift */,
-				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
-				1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */,
 			);
 			path = main;
 			sourceTree = "<group>";
@@ -164,7 +176,9 @@
 				17DA07A72CC77FB000F4B720 /* VoteViews.swift */,
 				1749BD2F2BEBBB33005E9560 /* AssignRoleView.swift */,
 				1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */,
-				1749BD332BEBBB5A005E9560 /* EachView.swift */,
+				170EB5762D06F7B000C6B81C /* GameOverView.swift */,
+				170EB5782D06F7D600C6B81C /* SurviverListView.swift */,
+				170EB57A2D06F82B00C6B81C /* TransitionToTitle.swift */,
 			);
 			path = game_views;
 			sourceTree = "<group>";
@@ -247,7 +261,6 @@
 				1749BD302BEBBB33005E9560 /* AssignRoleView.swift in Sources */,
 				1749BD3A2BEBBB97005E9560 /* GameViews.swift in Sources */,
 				1749BD2B2BEBBAE9005E9560 /* Theme_Config.swift in Sources */,
-				1749BD342BEBBB5A005E9560 /* EachView.swift in Sources */,
 				179C66972CD38830000ED726 /* ReorderingView.swift in Sources */,
 				1749BD292BEBBAD7005E9560 /* GameSettingView.swift in Sources */,
 				1749BD322BEBBB44005E9560 /* ContentView.swift in Sources */,
@@ -255,10 +268,12 @@
 				17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */,
 				1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */,
 				17FF36652CF051E800160FA7 /* gameStartView.swift in Sources */,
+				170EB5792D06F7D600C6B81C /* SurviverListView.swift in Sources */,
 				1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */,
-				1779FCF12CD1296B001D4248 /* utils.swift in Sources */,
+				1779FCF12CD1296B001D4248 /* util_views.swift in Sources */,
 				1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */,
 				1749BD382BEBBB80005E9560 /* Settings.swift in Sources */,
+				170EB57B2D06F82B00C6B81C /* TransitionToTitle.swift in Sources */,
 				172F9CF52CEE162700AA3F3F /* SystemSettingView.swift in Sources */,
 				1749BD2D2BEBBAFD005E9560 /* CardViews.swift in Sources */,
 				176B029C2CCF8A5300DE4E2E /* DiscussionTimeViews.swift in Sources */,
@@ -266,6 +281,7 @@
 				1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */,
 				1725D1C52CE5C8CF00A2B961 /* AudioPlaying.swift in Sources */,
 				17DA07A82CC77FB000F4B720 /* VoteViews.swift in Sources */,
+				170EB5772D06F7B000C6B81C /* GameOverView.swift in Sources */,
 				1749BD272BEBBABB005E9560 /* HomeScreenView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

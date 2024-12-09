@@ -242,57 +242,169 @@ class DailyLog: Identifiable, NSCopying{
 
 class GameStatusData: ObservableObject {
 	@Published var game_status: gameStatus = .titleScreen
-	@Published var players_CONFIG: [Player] = []
+	@Published var players_CONFIG: [Player] {
+		didSet {
+			UserDefaults.standard.set(players_CONFIG, forKey: "players_CONFIG")
+		}
+	}
 	@Published var view_status_CONFIG: Int = 0
-	@Published var discussion_minutes_CONFIG: Int = 2
-	@Published var discussion_seconds_CONFIG: Int = 0
+	@Published var discussion_minutes_CONFIG: Int {
+		didSet {
+			UserDefaults.standard.set(discussion_minutes_CONFIG, forKey: "discussion_minutes_CONFIG")
+		}
+	}
+	@Published var discussion_seconds_CONFIG: Int {
+		didSet {
+			UserDefaults.standard.set(discussion_seconds_CONFIG, forKey: "discussion_seconds_CONFIG")
+		}
+	}
 	@Published var discussion_time_CONFIG: Int = 0
 	@Published var num_player_with_role: Int = 0
-	@Published var villager_Count_CONFIG: Int = 0
-	@Published var werewolf_Count_CONFIG: Int = 1
-	@Published var seer_Count_CONFIG: Int = 0
-	@Published var medium_Count_CONFIG: Int = 0
-	@Published var hunter_Count_CONFIG: Int = 0
-	@Published var madman_Count_CONFIG: Int = 0
-	@Published var trainee_Count_CONFIG: Int = 0
-	@Published var trainee_Probability: Int = 60
+	@Published var villager_Count_CONFIG: Int {
+		didSet {
+			UserDefaults.standard.set(villager_Count_CONFIG, forKey: "villager_Count_CONFIG")
+		}
+	}
+	@Published var werewolf_Count_CONFIG: Int = 1 {
+		didSet {
+			UserDefaults.standard.set(werewolf_Count_CONFIG, forKey: "werewolf_Count_CONFIG")
+		}
+	}
+	@Published var seer_Count_CONFIG: Int = 0 {
+		didSet {
+			UserDefaults.standard.set(seer_Count_CONFIG, forKey: "seer_Count_CONFIG")
+		}
+	}
+	@Published var medium_Count_CONFIG: Int = 0 {
+		didSet {
+			UserDefaults.standard.set(medium_Count_CONFIG, forKey: "medium_Count_CONFIG")
+		}
+	}
+	@Published var hunter_Count_CONFIG: Int = 0 {
+		didSet {
+			UserDefaults.standard.set(hunter_Count_CONFIG, forKey: "hunter_Count_CONFIG")
+		}
+	}
+	@Published var madman_Count_CONFIG: Int = 0 {
+		didSet {
+			UserDefaults.standard.set(madman_Count_CONFIG, forKey: "madman_Count_CONFIG")
+		}
+	}
+	@Published var trainee_Count_CONFIG: Int = 0 {
+		didSet {
+			UserDefaults.standard.set(trainee_Count_CONFIG, forKey: "trainee_Count_CONFIG")
+		}
+	}
+	@Published var trainee_Probability: Int = 60 {
+		didSet {
+			UserDefaults.standard.set(trainee_Probability, forKey: "trainee_Probability")
+		}
+	}
 	@Published var _Count_CONFIG: Int = 0
 	@Published var max_werewolf_CONFIG: Int = 1
 	@Published var max_trainee_CONFIG: Int = 1
 	@Published var existsPlayerWithoutRole: Bool = true
-	@Published var currentTheme: AppTheme = .std_theme
+	@Published var currentTheme: AppTheme = .std_theme {
+		didSet {
+			UserDefaults.standard.set(currentTheme, forKey: "currentTheme")
+		}
+	}
+	
 	@Published var textSize: CGSize = .zero
 	@Published var titleTextSize: CGSize = .zero
 	@Published var fullScreenSize: CGSize = .zero
 	@Published var cardSize: CGSize = CGSize(width: 630, height: 880)
-	@Published var isAnimeShown: Bool = true
-	@Published var isConsecutiveProtectionAllowed: Bool = false
-	@Published var isFirstNightRandomSeer: Bool = true
-	@Published var isVoteCountVisible: Bool = false
+	
+	@Published var isAnimeShown: Bool {
+		didSet {
+			UserDefaults.standard.set(isAnimeShown, forKey: "isAnimeShown")
+		}
+	}
+	@Published var isConsecutiveProtectionAllowed: Bool {
+		didSet {
+			UserDefaults.standard.set(isConsecutiveProtectionAllowed, forKey: "isConsecutiveProtectionAllowed")
+		}
+	}
+	@Published var isFirstNightRandomSeer: Bool {
+		didSet {
+			UserDefaults.standard.set(isFirstNightRandomSeer, forKey: "isFirstNightRandomSeer")
+		}
+	}
+	@Published var isVoteCountVisible: Bool {
+		didSet {
+			UserDefaults.standard.set(isVoteCountVisible, forKey: "isVoteCountVisible")
+		}
+	}
 	@Published var isCardRoleImageShown: Bool = true
-	@Published var requiresRunoffVote: Bool = true
+	@Published var requiresRunoffVote: Bool {
+		didSet {
+			UserDefaults.standard.set(requiresRunoffVote, forKey: "requiresRunoffVote")
+		}
+	}
 	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
-	@Published var soundTheme: SoundTheme = .mixed
-	@Published var soundMuted: Bool = true
+	@Published var soundTheme: SoundTheme {
+		didSet {
+			UserDefaults.standard.set(soundTheme, forKey: "soundTheme")
+		}
+	}
+	@Published var soundMuted: Bool {
+		didSet {
+			UserDefaults.standard.set(soundMuted, forKey: "soundMuted")
+		}
+	}
 	@Published var isReorderingViewShown = false
 	@Published var threeOffSetTab: CGFloat = 0
-	@Published var isBGMPlayed: Bool = false
-	@Published var isENVPlayed: Bool = false
+	@Published var isBGMPlayed: Bool {
+		didSet {
+			UserDefaults.standard.set(isBGMPlayed, forKey: "isBGMPlayed")
+		}
+	}
+	@Published var isENVPlayed: Bool {
+		didSet {
+			UserDefaults.standard.set(isENVPlayed, forKey: "isENVPlayed")
+		}
+	}
 	@Published var instanceForSound: AVAudioPlayer!
 	
 	init() {
-		let defaults = UserDefaults.standard
-		defaults.set(25, forKey: "Age")
-		let savedArray = defaults.object(forKey: "SavedArray") as? [String] ?? [String]()
-		
-		
 		// UIWindowSceneから画面サイズを取得して保存
 		if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
 			if let mainWindow = windowScene.windows.first {
 				self.fullScreenSize = mainWindow.bounds.size
 			}
 		}
+		
+		// Load UserDefautl Variavles
+		players_CONFIG = UserDefaults.standard.object(forKey: "players_CONFIG") as? [Player] ?? [Player]()
+		discussion_minutes_CONFIG = UserDefaults.standard.object(forKey: "discussion_minutes_CONFIG") as? Int ?? 2
+		discussion_seconds_CONFIG = UserDefaults.standard.object(forKey: "discussion_seconds_CONFIG") as? Int ?? 0
+		villager_Count_CONFIG = UserDefaults.standard.object(forKey: "villager_Count_CONFIG") as? Int ?? 0
+		werewolf_Count_CONFIG = UserDefaults.standard.object(forKey: "werewolf_Count_CONFIG") as? Int ?? 0
+		madman_Count_CONFIG = UserDefaults.standard.object(forKey: "madman_Count_CONFIG") as? Int ?? 0
+		seer_Count_CONFIG = UserDefaults.standard.object(forKey: "seer_Count_CONFIG") as? Int ?? 0
+		trainee_Count_CONFIG = UserDefaults.standard.object(forKey: "trainee_Count_CONFIG") as? Int ?? 0
+		hunter_Count_CONFIG = UserDefaults.standard.object(forKey: "hunter_Count_CONFIG") as? Int ?? 0
+		medium_Count_CONFIG = UserDefaults.standard.object(forKey: "medium_Count_CONFIG") as? Int ?? 0
+		trainee_Probability = UserDefaults.standard.object(forKey: "trainee_Probability") as? Int ?? 80
+		currentTheme = UserDefaults.standard.object(forKey: "currentTheme") as? AppTheme ?? .std_theme
+		isAnimeShown = UserDefaults.standard.object(forKey: "isAnimeShown") as? Bool ?? true
+		isConsecutiveProtectionAllowed = UserDefaults.standard.object(forKey: "isConsecutiveProtectionAllowed") as? Bool ?? false
+		isFirstNightRandomSeer = UserDefaults.standard.object(forKey: "isFirstNightRandomSeer") as? Bool ?? true
+		isVoteCountVisible = UserDefaults.standard.object(forKey: "isVoteCountVisible") as? Bool ?? false
+		requiresRunoffVote = UserDefaults.standard.object(forKey: "requiresRunoffVote") as? Bool ?? true
+		soundTheme = UserDefaults.standard.object(forKey: "soundTheme") as? SoundTheme ?? .mixed
+		soundMuted = UserDefaults.standard.object(forKey: "soundMuted") as? Bool ?? false
+		isBGMPlayed = UserDefaults.standard.object(forKey: "isBGMPlayed") as? Bool ?? true
+		isENVPlayed = UserDefaults.standard.object(forKey: "isENVPlayed") as? Bool ?? true
+		do{
+			instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: "buttonPushed")!.data)
+		}
+		catch{
+			let _ = print("file not found error")
+		}
+		
 		self.players_CONFIG = self.makePlayerList(playersNum: 4)
+		
 	}
 	
 	func changeTheme(to theme: AppTheme) {
@@ -368,11 +480,13 @@ class GameStatusData: ObservableObject {
 	
 	
 	func buttonSE(videoFileName: String = "buttonPushed"){
-		do{
-			instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
-		}
-		catch{
-			let _ = print("file not found error")
+		if videoFileName != "buttonPushed"{
+			do{
+				instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: videoFileName)!.data)
+			}
+			catch{
+				let _ = print("file not found error")
+			}
 		}
 		instanceForSound.play()
  }
