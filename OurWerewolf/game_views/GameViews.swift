@@ -31,7 +31,6 @@ struct GameView: View {
 			MenuDuringGameView(showingSettings: $showingSettings)
 			Spacer()
 			ZStack{
-				
 				AudioPlayerView()
 				
 				if gameProgress.stageView == .Show_player_role {
@@ -69,33 +68,6 @@ struct GameView: View {
 				if showingSettings == true{
 					SettingsView(showingSettings: $showingSettings)
 				}
-			}
-			BottomButtonGameView()
-		}
-	}
-}
-
-
-struct BottomButtonGameView: View{
-	@EnvironmentObject var gameStatusData: GameStatusData
-	@EnvironmentObject var gameProgress: GameProgress
-	
-	var body: some View{
-		VStack{
-			if gameProgress.stageView == .Show_player_role {
-				
-			}else if gameProgress.stageView == .Before_discussion {
-				
-			}else if gameProgress.stageView == .Discussion_time {
-				
-			}else if gameProgress.stageView == .Vote_time {
-				
-			}else if gameProgress.stageView == .Vote_result {
-				
-			}else if gameProgress.stageView == .Before_night_time {
-				
-			}else if gameProgress.stageView == .Night_time {
-				
 			}
 		}
 	}
