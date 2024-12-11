@@ -5,7 +5,7 @@
 //  Created by Masanori Sudo on 2024/12/09.
 //
 
-import SwiftUi
+import SwiftUI
 
 struct GameOverView: View {
 	@EnvironmentObject var gameStatusData: GameStatusData

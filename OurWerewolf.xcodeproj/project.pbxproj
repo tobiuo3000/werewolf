@@ -38,7 +38,7 @@
 		17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A92CC783F000F4B720 /* VoteResultView.swift */; };
 		17ECE2BD2CF48AA800025631 /* GlobalmenuHomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17ECE2BC2CF48AA800025631 /* GlobalmenuHomeScreen.swift */; };
 		17F94C852CD321790020D32D /* BeforeNightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F94C842CD321790020D32D /* BeforeNightView.swift */; };
-		17FF36652CF051E800160FA7 /* gameStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FF36642CF051E800160FA7 /* gameStartView.swift */; };
+		17FF36652CF051E800160FA7 /* GameStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FF36642CF051E800160FA7 /* GameStartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -74,7 +74,7 @@
 		17DA07A92CC783F000F4B720 /* VoteResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteResultView.swift; sourceTree = "<group>"; };
 		17ECE2BC2CF48AA800025631 /* GlobalmenuHomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalmenuHomeScreen.swift; sourceTree = "<group>"; };
 		17F94C842CD321790020D32D /* BeforeNightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeNightView.swift; sourceTree = "<group>"; };
-		17FF36642CF051E800160FA7 /* gameStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = gameStartView.swift; sourceTree = "<group>"; };
+		17FF36642CF051E800160FA7 /* GameStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,10 +119,8 @@
 			isa = PBXGroup;
 			children = (
 				1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */,
-				1749BD2E2BEBBB1A005E9560 /* main */,
-				170EB5752D06F20B00C6B81C /* utils */,
-				177585212C7EE49C0007D386 /* game_views */,
-				1749BD232BEBBA80005E9560 /* home_sctreen_views */,
+				177A9AE62D09E04E0046F467 /* Settings */,
+				177A9AE52D09E0320046F467 /* Views */,
 				1749BD192BEBB9E6005E9560 /* Assets.xcassets */,
 				176B029F2CCFB9D000DE4E2E /* Wolf.mp4 */,
 				178807CF2CCFEA3A001042E9 /* loghouse.mp4 */,
@@ -148,16 +146,6 @@
 			path = home_sctreen_views;
 			sourceTree = "<group>";
 		};
-		1749BD2E2BEBBB1A005E9560 /* main */ = {
-			isa = PBXGroup;
-			children = (
-				1749BD312BEBBB44005E9560 /* ContentView.swift */,
-				17FF36642CF051E800160FA7 /* gameStartView.swift */,
-				1749BD372BEBBB80005E9560 /* Settings.swift */,
-			);
-			path = main;
-			sourceTree = "<group>";
-		};
 		1749BD402BEBBE4E005E9560 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
@@ -181,6 +169,26 @@
 				170EB57A2D06F82B00C6B81C /* TransitionToTitle.swift */,
 			);
 			path = game_views;
+			sourceTree = "<group>";
+		};
+		177A9AE52D09E0320046F467 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD312BEBBB44005E9560 /* ContentView.swift */,
+				17FF36642CF051E800160FA7 /* GameStartView.swift */,
+				1749BD232BEBBA80005E9560 /* home_sctreen_views */,
+				177585212C7EE49C0007D386 /* game_views */,
+				170EB5752D06F20B00C6B81C /* utils */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		177A9AE62D09E04E0046F467 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				1749BD372BEBBB80005E9560 /* Settings.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -267,7 +275,7 @@
 				176B029E2CCFA13F00DE4E2E /* MorningView.swift in Sources */,
 				17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */,
 				1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */,
-				17FF36652CF051E800160FA7 /* gameStartView.swift in Sources */,
+				17FF36652CF051E800160FA7 /* GameStartView.swift in Sources */,
 				170EB5792D06F7D600C6B81C /* SurviverListView.swift in Sources */,
 				1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */,
 				1779FCF12CD1296B001D4248 /* util_views.swift in Sources */,

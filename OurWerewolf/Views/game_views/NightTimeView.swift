@@ -1,6 +1,5 @@
 import SwiftUI
 
-
 private let fade_ScrollView_variable: CGFloat = 50
 
 
