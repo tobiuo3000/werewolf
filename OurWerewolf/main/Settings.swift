@@ -9,7 +9,6 @@ import AVFoundation
 */
 
 
-
 enum AppTheme: String, CaseIterable {
 	case std_theme, simple_theme, theme3 // テーマを追加していく
 	
@@ -138,7 +137,7 @@ enum Role {
 	case medium
 	case madman
 	case trainee
-	
+
 	var image_name: String {
 		switch self {
 		case .noRole:
@@ -492,9 +491,6 @@ class GameStatusData: ObservableObject {
  }
 
 }
-
-
-
 
 
 class GameProgress: ObservableObject {

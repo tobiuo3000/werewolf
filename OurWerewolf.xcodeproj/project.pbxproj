@@ -23,7 +23,7 @@
 		1749BD322BEBBB44005E9560 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD312BEBBB44005E9560 /* ContentView.swift */; };
 		1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */; };
 		1749BD382BEBBB80005E9560 /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD372BEBBB80005E9560 /* Settings.swift */; };
-		1749BD3A2BEBBB97005E9560 /* GameViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD392BEBBB97005E9560 /* GameViews.swift */; };
+		1749BD3A2BEBBB97005E9560 /* GameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD392BEBBB97005E9560 /* GameView.swift */; };
 		1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */; };
 		1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */; };
 		176B029C2CCF8A5300DE4E2E /* DiscussionTimeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 176B029B2CCF8A5300DE4E2E /* DiscussionTimeViews.swift */; };
@@ -59,7 +59,7 @@
 		1749BD312BEBBB44005E9560 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtraModifiers.swift; sourceTree = "<group>"; };
 		1749BD372BEBBB80005E9560 /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
-		1749BD392BEBBB97005E9560 /* GameViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViews.swift; sourceTree = "<group>"; };
+		1749BD392BEBBB97005E9560 /* GameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameView.swift; sourceTree = "<group>"; };
 		1749BD3B2BEBBBB4005E9560 /* NightTimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NightTimeView.swift; sourceTree = "<group>"; };
 		1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayingView.swift; sourceTree = "<group>"; };
 		176B029B2CCF8A5300DE4E2E /* DiscussionTimeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscussionTimeViews.swift; sourceTree = "<group>"; };
@@ -168,7 +168,7 @@
 		177585212C7EE49C0007D386 /* game_views */ = {
 			isa = PBXGroup;
 			children = (
-				1749BD392BEBBB97005E9560 /* GameViews.swift */,
+				1749BD392BEBBB97005E9560 /* GameView.swift */,
 				17F94C842CD321790020D32D /* BeforeNightView.swift */,
 				176B029D2CCFA13F00DE4E2E /* MorningView.swift */,
 				176B029B2CCF8A5300DE4E2E /* DiscussionTimeViews.swift */,
@@ -259,7 +259,7 @@
 				179C66992CD38886000ED726 /* ReorderingView2.swift in Sources */,
 				1749BD252BEBBA9D005E9560 /* BeforeGameView.swift in Sources */,
 				1749BD302BEBBB33005E9560 /* AssignRoleView.swift in Sources */,
-				1749BD3A2BEBBB97005E9560 /* GameViews.swift in Sources */,
+				1749BD3A2BEBBB97005E9560 /* GameView.swift in Sources */,
 				1749BD2B2BEBBAE9005E9560 /* Theme_Config.swift in Sources */,
 				179C66972CD38830000ED726 /* ReorderingView.swift in Sources */,
 				1749BD292BEBBAD7005E9560 /* GameSettingView.swift in Sources */,
