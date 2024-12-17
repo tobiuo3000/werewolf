@@ -32,6 +32,13 @@
 		177A9AE92D0B004E0046F467 /* Wolf.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 177A9AE82D0B004E0046F467 /* Wolf.mp4 */; };
 		177A9AEB2D0B00670046F467 /* Table.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 177A9AEA2D0B00670046F467 /* Table.mp4 */; };
 		177A9AED2D0B00850046F467 /* Loghouse.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 177A9AEC2D0B00850046F467 /* Loghouse.mp4 */; };
+		177A9AEF2D0BB5550046F467 /* PersistanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A9AEE2D0BB5550046F467 /* PersistanceController.swift */; };
+		177A9AF22D0BD9F10046F467 /* UserDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 177A9AF02D0BD9F10046F467 /* UserDataModel.xcdatamodeld */; };
+		177A9AF62D1131850046F467 /* BeforeHomeScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A9AF52D1131850046F467 /* BeforeHomeScreenView.swift */; };
+		177A9AF82D1131B00046F467 /* HomeScreenMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A9AF72D1131B00046F467 /* HomeScreenMenuView.swift */; };
+		177A9AFA2D1131EC0046F467 /* TransitionAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A9AF92D1131EC0046F467 /* TransitionAnimationView.swift */; };
+		177A9AFC2D1134580046F467 /* GameStatusData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A9AFB2D1134580046F467 /* GameStatusData.swift */; };
+		177A9AFE2D11346C0046F467 /* GameProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177A9AFD2D11346C0046F467 /* GameProgress.swift */; };
 		179C66972CD38830000ED726 /* ReorderingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179C66962CD38830000ED726 /* ReorderingView.swift */; };
 		179C66992CD38886000ED726 /* ReorderingView2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179C66982CD38886000ED726 /* ReorderingView2.swift */; };
 		17DA07A82CC77FB000F4B720 /* VoteViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DA07A72CC77FB000F4B720 /* VoteViews.swift */; };
@@ -68,6 +75,13 @@
 		177A9AE82D0B004E0046F467 /* Wolf.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Wolf.mp4; sourceTree = "<group>"; };
 		177A9AEA2D0B00670046F467 /* Table.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Table.mp4; sourceTree = "<group>"; };
 		177A9AEC2D0B00850046F467 /* Loghouse.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Loghouse.mp4; sourceTree = "<group>"; };
+		177A9AEE2D0BB5550046F467 /* PersistanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistanceController.swift; sourceTree = "<group>"; };
+		177A9AF12D0BD9F10046F467 /* UserDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = UserDataModel.xcdatamodel; sourceTree = "<group>"; };
+		177A9AF52D1131850046F467 /* BeforeHomeScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeforeHomeScreenView.swift; sourceTree = "<group>"; };
+		177A9AF72D1131B00046F467 /* HomeScreenMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenMenuView.swift; sourceTree = "<group>"; };
+		177A9AF92D1131EC0046F467 /* TransitionAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransitionAnimationView.swift; sourceTree = "<group>"; };
+		177A9AFB2D1134580046F467 /* GameStatusData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameStatusData.swift; sourceTree = "<group>"; };
+		177A9AFD2D11346C0046F467 /* GameProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProgress.swift; sourceTree = "<group>"; };
 		179C66962CD38830000ED726 /* ReorderingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderingView.swift; sourceTree = "<group>"; };
 		179C66982CD38886000ED726 /* ReorderingView2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReorderingView2.swift; sourceTree = "<group>"; };
 		17DA07A72CC77FB000F4B720 /* VoteViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoteViews.swift; sourceTree = "<group>"; };
@@ -91,6 +105,8 @@
 		170EB5752D06F20B00C6B81C /* utils */ = {
 			isa = PBXGroup;
 			children = (
+				1749BD2C2BEBBAFD005E9560 /* CardViews.swift */,
+				177A9AF92D1131EC0046F467 /* TransitionAnimationView.swift */,
 				1749BD352BEBBB6F005E9560 /* ExtraModifiers.swift */,
 				1749BD3D2BEBBBCD005E9560 /* VideoPlayingView.swift */,
 				1725D1C42CE5C8CF00A2B961 /* AudioPlaying.swift */,
@@ -119,6 +135,7 @@
 			isa = PBXGroup;
 			children = (
 				1749BD132BEBB9E5005E9560 /* werewolf_ver5App.swift */,
+				177A9AF32D0BDA510046F467 /* coredata */,
 				177A9AE62D09E04E0046F467 /* settings */,
 				177A9AE52D09E0320046F467 /* views */,
 				177A9AE72D0AFFF90046F467 /* video_assets */,
@@ -131,15 +148,12 @@
 		1749BD232BEBBA80005E9560 /* home_sctreen_views */ = {
 			isa = PBXGroup;
 			children = (
+				177A9AF52D1131850046F467 /* BeforeHomeScreenView.swift */,
 				1749BD262BEBBABB005E9560 /* HomeScreenView.swift */,
-				17ECE2BC2CF48AA800025631 /* GlobalmenuHomeScreen.swift */,
-				172F9CF42CEE162700AA3F3F /* SystemSettingView.swift */,
 				1749BD242BEBBA9D005E9560 /* BeforeGameView.swift */,
 				1749BD282BEBBAD7005E9560 /* GameSettingView.swift */,
-				179C66962CD38830000ED726 /* ReorderingView.swift */,
-				179C66982CD38886000ED726 /* ReorderingView2.swift */,
 				1749BD2A2BEBBAE9005E9560 /* Theme_Config.swift */,
-				1749BD2C2BEBBAFD005E9560 /* CardViews.swift */,
+				177A9AF42D1130270046F467 /* home_screen_component_views */,
 			);
 			path = home_sctreen_views;
 			sourceTree = "<group>";
@@ -185,6 +199,8 @@
 			isa = PBXGroup;
 			children = (
 				1749BD372BEBBB80005E9560 /* Settings.swift */,
+				177A9AFB2D1134580046F467 /* GameStatusData.swift */,
+				177A9AFD2D11346C0046F467 /* GameProgress.swift */,
 			);
 			path = settings;
 			sourceTree = "<group>";
@@ -197,6 +213,27 @@
 				177A9AEC2D0B00850046F467 /* Loghouse.mp4 */,
 			);
 			path = video_assets;
+			sourceTree = "<group>";
+		};
+		177A9AF32D0BDA510046F467 /* coredata */ = {
+			isa = PBXGroup;
+			children = (
+				177A9AEE2D0BB5550046F467 /* PersistanceController.swift */,
+				177A9AF02D0BD9F10046F467 /* UserDataModel.xcdatamodeld */,
+			);
+			path = coredata;
+			sourceTree = "<group>";
+		};
+		177A9AF42D1130270046F467 /* home_screen_component_views */ = {
+			isa = PBXGroup;
+			children = (
+				17ECE2BC2CF48AA800025631 /* GlobalmenuHomeScreen.swift */,
+				177A9AF72D1131B00046F467 /* HomeScreenMenuView.swift */,
+				172F9CF42CEE162700AA3F3F /* SystemSettingView.swift */,
+				179C66962CD38830000ED726 /* ReorderingView.swift */,
+				179C66982CD38886000ED726 /* ReorderingView2.swift */,
+			);
+			path = home_screen_component_views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -272,6 +309,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				17ECE2BD2CF48AA800025631 /* GlobalmenuHomeScreen.swift in Sources */,
+				177A9AFC2D1134580046F467 /* GameStatusData.swift in Sources */,
 				179C66992CD38886000ED726 /* ReorderingView2.swift in Sources */,
 				1749BD252BEBBA9D005E9560 /* BeforeGameView.swift in Sources */,
 				1749BD302BEBBB33005E9560 /* AssignRoleView.swift in Sources */,
@@ -283,16 +321,22 @@
 				176B029E2CCFA13F00DE4E2E /* MorningView.swift in Sources */,
 				17DA07AA2CC783F000F4B720 /* VoteResultView.swift in Sources */,
 				1749BD3E2BEBBBCD005E9560 /* VideoPlayingView.swift in Sources */,
+				177A9AF82D1131B00046F467 /* HomeScreenMenuView.swift in Sources */,
+				177A9AF22D0BD9F10046F467 /* UserDataModel.xcdatamodeld in Sources */,
 				17FF36652CF051E800160FA7 /* GameStartView.swift in Sources */,
+				177A9AFE2D11346C0046F467 /* GameProgress.swift in Sources */,
 				170EB5792D06F7D600C6B81C /* SurviverListView.swift in Sources */,
 				1749BD3C2BEBBBB4005E9560 /* NightTimeView.swift in Sources */,
 				1779FCF12CD1296B001D4248 /* util_views.swift in Sources */,
+				177A9AEF2D0BB5550046F467 /* PersistanceController.swift in Sources */,
 				1749BD142BEBB9E5005E9560 /* werewolf_ver5App.swift in Sources */,
 				1749BD382BEBBB80005E9560 /* Settings.swift in Sources */,
+				177A9AF62D1131850046F467 /* BeforeHomeScreenView.swift in Sources */,
 				170EB57B2D06F82B00C6B81C /* TransitionToTitle.swift in Sources */,
 				172F9CF52CEE162700AA3F3F /* SystemSettingView.swift in Sources */,
 				1749BD2D2BEBBAFD005E9560 /* CardViews.swift in Sources */,
 				176B029C2CCF8A5300DE4E2E /* DiscussionTimeViews.swift in Sources */,
+				177A9AFA2D1131EC0046F467 /* TransitionAnimationView.swift in Sources */,
 				17F94C852CD321790020D32D /* BeforeNightView.swift in Sources */,
 				1749BD362BEBBB6F005E9560 /* ExtraModifiers.swift in Sources */,
 				1725D1C52CE5C8CF00A2B961 /* AudioPlaying.swift in Sources */,
@@ -510,6 +554,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		177A9AF02D0BD9F10046F467 /* UserDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				177A9AF12D0BD9F10046F467 /* UserDataModel.xcdatamodel */,
+			);
+			currentVersion = 177A9AF12D0BD9F10046F467 /* UserDataModel.xcdatamodel */;
+			path = UserDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 1749BD082BEBB9E5005E9560 /* Project object */;
 }

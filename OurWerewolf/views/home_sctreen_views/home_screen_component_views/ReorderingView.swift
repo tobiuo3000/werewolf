@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import CoreData
 
 
 struct ReorderingPlayerView: View {
@@ -19,6 +20,19 @@ struct ReorderingPlayerView: View {
 	@State private var borderColor = Color(red: 1.0, green: 0.94, blue: 0.98)
 	@FocusState private var isTextFieldFocused: Bool
 	@Environment(\.editMode) var editMode
+	
+	
+	@Environment(\.managedObjectContext) private var viewContext
+	
+	lazy var persistentContainer: NSPersistentContainer = {
+		let container = NSPersistentContainer(name: "UserDataModel")
+		container.loadPersistentStores { (storeDescription, error) in
+			if let error = error as NSError? {
+				// エラー処理
+			}
+		}
+		return container
+	}()
 	
 	
 	var body: some View{
@@ -61,7 +75,6 @@ struct ReorderingPlayerView: View {
 									Spacer()
 								}
 								HStack{
-									
 									Spacer()
 									VStack{
 										Text("プレイヤー編集")
@@ -139,6 +152,14 @@ struct ReorderingPlayerView: View {
 							HStack{
 								Spacer()
 								Button(action: {
+									
+									do {
+										try savePlayers(players: gameStatusData.players_CONFIG, context: viewContext)
+										print("Saved successfully!")
+									} catch {
+										print("Failed to save: \(error)")
+									}
+									
 									gameStatusData.isReorderingViewShown = false
 									}){
 										Image(systemName: "checkmark.circle")
@@ -181,7 +202,30 @@ struct ReorderingPlayerView: View {
 	
 	func deleteItems(at offsets: IndexSet) {
 		gameStatusData.players_CONFIG.remove(atOffsets: offsets)
+	}
+	
+	func savePlayers(players: [Player], context: NSManagedObjectContext) throws {
+		let fetchRequest: NSFetchRequest<NSFetchRequestResult> = PlayerEntity.fetchRequest()
+		let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+		try context.execute(deleteRequest)
 		
+		for p in players {
+			let entity = PlayerEntity(context: viewContext)
+			entity.id = p.id
+			entity.player_order = Int64(p.player_order)
+			entity.player_name = p.player_name
+			entity.role_name = p.role_name.rawValue
+			entity.isAlive = p.isAlive
+			entity.isInspectedBySeer = p.isInspectedBySeer
+			entity.voteCount = Int64(p.voteCount)
+			entity.werewolvesTargetCount = Int64(p.werewolvesTargetCount)
+			entity.suspectedCount = Int64(p.suspectedCount)
+		}
+		do{
+			try viewContext.save()
+		}catch{
+			print("Failed to save: \(error)")
+		}
 	}
 }
 
