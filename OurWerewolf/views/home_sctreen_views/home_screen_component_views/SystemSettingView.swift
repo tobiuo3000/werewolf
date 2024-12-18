@@ -14,7 +14,6 @@ struct SettingsView: View {
 	@Binding var showingSettings: Bool
 	let viewColor: Color = Color(red: 0.1, green: 0.1, blue: 0.1)
 	
-	
 	func controllSounds(){
 		if gameStatusData.isBGMPlayed == true && gameStatusData.isENVPlayed == true{
 			gameStatusData.soundMuted = false

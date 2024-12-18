@@ -7,7 +7,6 @@
 
 
 import SwiftUI
-import CoreData
 
 
 struct ReorderingPlayerView: View {
@@ -21,19 +20,8 @@ struct ReorderingPlayerView: View {
 	@FocusState private var isTextFieldFocused: Bool
 	@Environment(\.editMode) var editMode
 	
-	
 	@Environment(\.managedObjectContext) private var viewContext
-	
-	lazy var persistentContainer: NSPersistentContainer = {
-		let container = NSPersistentContainer(name: "UserDataModel")
-		container.loadPersistentStores { (storeDescription, error) in
-			if let error = error as NSError? {
-				// エラー処理
-			}
-		}
-		return container
-	}()
-	
+	@FetchRequest (sortDescriptors: [NSSortDescriptor(key: "player_order", ascending: true)]) var players_CONFIG_saved: FetchedResults<PlayerEntity>
 	
 	var body: some View{
 		ZStack{
@@ -50,7 +38,7 @@ struct ReorderingPlayerView: View {
 					VStack{
 						VStack{
 							ZStack{
-								HStack{  // EditButton
+								HStack{  // HStack for EditButton
 									Spacer()
 									EditButton()
 										.foregroundColor(.blue)
@@ -148,26 +136,28 @@ struct ReorderingPlayerView: View {
 							}
 						}
 						
+						
 						if isTextFieldFocused == false{
 							HStack{
 								Spacer()
 								Button(action: {
 									
 									do {
-										try savePlayers(players: gameStatusData.players_CONFIG, context: viewContext)
+										try savePlayers(players: gameStatusData.players_CONFIG)
 										print("Saved successfully!")
 									} catch {
 										print("Failed to save: \(error)")
 									}
 									
 									gameStatusData.isReorderingViewShown = false
-									}){
-										Image(systemName: "checkmark.circle")
-											.font(.largeTitle)
-									}
-									.myButtonBounce()
-									.bouncingUI(interval: 3)
-									.padding(8)
+								}
+								){
+									Image(systemName: "checkmark.circle")
+										.font(.largeTitle)
+								}
+								.myButtonBounce()
+								.bouncingUI(interval: 3)
+								.padding(8)
 								Rectangle()
 									.fill(baseColor)
 									.frame(width: 10, height: 10)
@@ -179,7 +169,6 @@ struct ReorderingPlayerView: View {
 					.overlay(
 						RoundedRectangle(cornerRadius: 18)
 							.stroke(borderColor, lineWidth: 8)
-						//.frame(width: gameStatusData.fullScreenSize.width, height: gameStatusData.fullScreenSize.height*(29/32))
 					)
 				}
 				.cornerRadius(18)
@@ -204,10 +193,9 @@ struct ReorderingPlayerView: View {
 		gameStatusData.players_CONFIG.remove(atOffsets: offsets)
 	}
 	
-	func savePlayers(players: [Player], context: NSManagedObjectContext) throws {
-		let fetchRequest: NSFetchRequest<NSFetchRequestResult> = PlayerEntity.fetchRequest()
-		let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-		try context.execute(deleteRequest)
+	func savePlayers(players: [Player]) throws {
+		//let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+		//try viewContext.execute(deleteRequest)
 		
 		for p in players {
 			let entity = PlayerEntity(context: viewContext)

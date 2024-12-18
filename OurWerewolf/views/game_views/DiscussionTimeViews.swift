@@ -8,7 +8,6 @@
 import SwiftUI
 
 
-
 struct Before_discussion: View{
 	@EnvironmentObject var gameStatusData: GameStatusData
 	@EnvironmentObject var gameProgress: GameProgress

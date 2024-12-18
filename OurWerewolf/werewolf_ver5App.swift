@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct wolf_ver5App: App {
-	let persistenceController = PersistenceController.shared
+	let persistenceController = PersistenceController()
 	
 	var body: some Scene {
 		WindowGroup {
 			ContentView()
-				.environment(\.managedObjectContext, persistenceController.viewContext)
+				.environment(\.managedObjectContext, persistenceController.persistentContainer.viewContext)
 				.environmentObject(GameStatusData())
 				.environmentObject(GameProgress())
 		}

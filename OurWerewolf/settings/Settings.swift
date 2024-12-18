@@ -10,7 +10,7 @@ import AVFoundation
 
 
 enum AppTheme: String, CaseIterable {
-	case std_theme, simple_theme, theme3 // テーマを追加していく
+	case std_theme, simple_theme, theme3 // planning to make more themes availavle
 	
 	var backgroundImage: String {
 		switch self {

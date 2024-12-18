@@ -70,10 +70,10 @@ class GameStatusData: ObservableObject {
 		}
 	}
 	
-	@Published var textSize: CGSize = .zero
-	@Published var titleTextSize: CGSize = .zero
-	@Published var fullScreenSize: CGSize = .zero
-	@Published var cardSize: CGSize = CGSize(width: 630, height: 880)
+	var textSize: CGSize = .zero
+	var titleTextSize: CGSize = .zero
+	var fullScreenSize: CGSize = .zero
+	var cardSize: CGSize = CGSize(width: 630, height: 880)
 	
 	@Published var isAnimeShown: Bool {
 		didSet {
@@ -101,7 +101,6 @@ class GameStatusData: ObservableObject {
 			UserDefaults.standard.set(requiresRunoffVote, forKey: "requiresRunoffVote")
 		}
 	}
-	@Published var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
 	@Published var soundTheme: SoundTheme {
 		didSet {
 			UserDefaults.standard.set(soundTheme, forKey: "soundTheme")
@@ -125,6 +124,12 @@ class GameStatusData: ObservableObject {
 		}
 	}
 	@Published var instanceForSound: AVAudioPlayer!
+	var highlightColor: Color = Color(red: 0.8, green: 0.5, blue: 0.6)
+	@Published var isFirstrun: Bool {
+		didSet {
+			UserDefaults.standard.set(isFirstrun, forKey: "isFirstrun")
+		}
+	}
 	
 	init() {
 		// UIWindowSceneから画面サイズを取得して保存
@@ -155,6 +160,8 @@ class GameStatusData: ObservableObject {
 		soundMuted = UserDefaults.standard.object(forKey: "soundMuted") as? Bool ?? false
 		isBGMPlayed = UserDefaults.standard.object(forKey: "isBGMPlayed") as? Bool ?? true
 		isENVPlayed = UserDefaults.standard.object(forKey: "isENVPlayed") as? Bool ?? true
+		isFirstrun = UserDefaults.standard.object(forKey: "isFirstrun") as? Bool ?? true
+		
 		do{
 			instanceForSound = try AVAudioPlayer(data: NSDataAsset(name: "buttonPushed")!.data)
 		}

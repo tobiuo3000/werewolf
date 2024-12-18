@@ -2,8 +2,6 @@
 import CoreData
 
 class PersistenceController {
-	static let shared = PersistenceController()
-	
 	let persistentContainer: NSPersistentContainer
 	
 	init() {
@@ -13,9 +11,5 @@ class PersistenceController {
 				fatalError("Unresolved error \(error), \(error.userInfo)")
 			}
 		}
-	}
-
-	var viewContext: NSManagedObjectContext {
-		return persistentContainer.viewContext
 	}
 }

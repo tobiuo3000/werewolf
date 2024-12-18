@@ -7,7 +7,7 @@ struct ContentView: View {
 	@Environment(\.managedObjectContext) private var viewContext
 	@State private var isFirstAppearance = true
 	
-	@FetchRequest (sortDescriptors: []) var players_CONFIG_saved: FetchedResults<PlayerEntity>
+	@FetchRequest (sortDescriptors: [NSSortDescriptor(key: "player_order", ascending: true)]) var players_CONFIG_saved: FetchedResults<PlayerEntity>
 	
 	var body: some View {
 		GeometryReader{ proxy_ContentView in
@@ -35,7 +35,7 @@ struct ContentView: View {
 								.clipped()
 						}
 						ScrollView{
-						}	
+						}
 						GameView()
 					}
 				}else if gameStatusData.game_status == .gameOverScreen{
@@ -48,9 +48,16 @@ struct ContentView: View {
 				gameStatusData.threeOffSetTab = gameStatusData.fullScreenSize.width
 				let _ = print("SCREEN SIZE: \(gameStatusData.fullScreenSize)")
 				
-				if isFirstAppearance {
+				if gameStatusData.isFistrun {
+					gameStatusData.players_CONFIG.removeAll()
+					gameStatusData.players_CONFIG = gameStatusData.makePlayerList(playersNum: 4)
+				}
+				
+				if !(gameStatusData.isFirstrun) {
 					do {
+						gameStatusData.players_CONFIG.removeAll()
 						gameStatusData.players_CONFIG = try loadPlayers(context: viewContext)
+						print("loaded successfully")
 					} catch {
 						print("Failed to load: \(error)")
 					}
@@ -65,20 +72,18 @@ struct ContentView: View {
 	func loadPlayers(context: NSManagedObjectContext) throws -> [Player] {
 		return players_CONFIG_saved.compactMap { entity in
 			let name = entity.player_name as? String ?? "error"
-			let roleRaw = entity.role_name as? String ?? "error"
+			let roleRaw = entity.role_name as? String ?? "noRole"
 			let role = Role(rawValue: roleRaw)!
 			let player_order = Int(entity.player_order)
 			let isAlive = entity.isAlive
 			let isInspectedBySeer = entity.isInspectedBySeer
-			let voteCount = entity.voteCount
-			let werewolvesTargetCount = entity.werewolvesTargetCount
-			let suspectedCount = entity.suspectedCount
+			let voteCount = Int(entity.voteCount)
+			let werewolvesTargetCount = Int(entity.werewolvesTargetCount)
+			let suspectedCount = Int(entity.suspectedCount)
 			
 			return Player(player_order: player_order, role: role, player_name: name)
 		}
 	}
-
-
 }
 
 
