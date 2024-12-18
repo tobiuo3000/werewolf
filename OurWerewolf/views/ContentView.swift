@@ -48,9 +48,10 @@ struct ContentView: View {
 				gameStatusData.threeOffSetTab = gameStatusData.fullScreenSize.width
 				let _ = print("SCREEN SIZE: \(gameStatusData.fullScreenSize)")
 				
-				if gameStatusData.isFistrun {
+				if gameStatusData.isFirstrun {
 					gameStatusData.players_CONFIG.removeAll()
 					gameStatusData.players_CONFIG = gameStatusData.makePlayerList(playersNum: 4)
+					gameStatusData.isFirstrun = false
 				}
 				
 				if !(gameStatusData.isFirstrun) {

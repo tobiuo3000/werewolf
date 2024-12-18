@@ -194,8 +194,9 @@ struct ReorderingPlayerView: View {
 	}
 	
 	func savePlayers(players: [Player]) throws {
-		//let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-		//try viewContext.execute(deleteRequest)
+		for p in players_CONFIG_saved {
+			viewContext.delete(p)
+		}
 		
 		for p in players {
 			let entity = PlayerEntity(context: viewContext)
