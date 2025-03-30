@@ -6,7 +6,7 @@ iOS向け人狼アプリのソースコードです。
 
 使用言語: Swift
 
-使用フレームワーク: SwiftUI, SwiftData
+使用フレームワーク: SwiftUI, CoreData
 
 
 
